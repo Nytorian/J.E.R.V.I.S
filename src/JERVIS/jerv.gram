@@ -1,0 +1,15 @@
+#JSGF V1.0;
+
+grammar dialog;
+
+<menu_command> =  JERVIS                     |
+                  HELLO                     |
+                  ROXANICA		 |
+                  how are you        |
+                  what is your name |
+                  who do you love |
+                  go away           |
+                  recognise language model |
+                  exit [[the] program]       ;
+
+public <command> = <menu_command>;
