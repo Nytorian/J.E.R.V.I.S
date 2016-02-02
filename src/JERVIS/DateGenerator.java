@@ -27,26 +27,14 @@ public final class DateGenerator {
         "",
         " ten",
         " twenty",
-        " thirty",
-        " forty",
-        " fifty",
-        " sixty",
-        " seventy",
-        " eighty",
-        " ninety"
+        " thirty"
     };
     
     private static final String[] ordninalTensNames = {
         "",
         " tenth",
         " twentieth",
-        " thirtieth",
-        " fortieth",
-        " fiftieth",
-        " sixtieth",
-        " seventieth",
-        " eightieth",
-        " ninetieth"
+        " thirtieth"
     };
 
     private static final String[] numNames = {
@@ -129,24 +117,41 @@ public final class DateGenerator {
     ***************************************************************************/
     public static String readTodayDate(){
         
-        //TODO: apply the ordinal numbers, extend this method 
-        
         if(readTodayDate.isEmpty()){
-            String tmp;//temporary string holder
 
-            tmp = todayDate.replace("0", "");
-            String finalDate[] = tmp.split("/");
+            String finalDate[] = todayDate.split("/");
+            finalDate[1] = finalDate[1].replace("0", "");
             
             DateFormatSymbols dfs = new DateFormatSymbols();
             String[] months = dfs.getMonths();
 
+            char[] charTmpArray = finalDate[0].toCharArray();
+            
+            if(charTmpArray[1] == '0'){
+                finalDate[0] = 
+                    ordninalTensNames[Character.getNumericValue(charTmpArray[0])];
+            } 
+            else {
+                
+                if (Integer.parseInt(finalDate[0]) <= 19){
+                    finalDate[0] =
+                        ordinalNumNames[Character.getNumericValue(charTmpArray[1])];
+                } 
+                else {
+                    finalDate[0] = 
+                        tensNames[Character.getNumericValue(charTmpArray[0])] +
+                        " " +
+                        ordinalNumNames[Character.getNumericValue(charTmpArray[1])];  
+                }
+            }
+            
             int i = Integer.parseInt(finalDate[1]);
 
             if (i >= 1 && i <= 12 ) {
                 finalDate[1] = months[i - 1];
             }
             
-            readTodayDate = finalDate[0] + "of" + finalDate[1] + finalDate[2];
+            readTodayDate = finalDate[0] + " of " + finalDate[1] + " " + finalDate[2];
         }
                 
         return readTodayDate;

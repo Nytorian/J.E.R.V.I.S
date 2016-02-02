@@ -11,9 +11,9 @@
 *******************************************************************************/
 package JERVIS;
 
-public class QuotesFinder {
+public final class QuotesFinder {
     
-    public QuotesFinder(){
+    public static void initQuotesFinder(){
         
         //connect to google with the phrase said
         //if no internet connection, say no internet connection, unable to proceed

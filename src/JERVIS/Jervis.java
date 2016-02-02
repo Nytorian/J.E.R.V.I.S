@@ -84,10 +84,6 @@ public class Jervis {
                 voice.speak("My name is Jervis, a digital being");
                 Thread.sleep(1000);
             }
-            else if (utterance.startsWith("who do you")) {
-                voice.speak("I love Roxanica");
-                Thread.sleep(1000);
-            }
             
             else if (utterance.contains("date")) {
                 voice.speak("Today's date is " + DateGenerator.readTodayDate());
