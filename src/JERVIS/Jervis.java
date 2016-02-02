@@ -86,54 +86,49 @@ public class Jervis {
         
         while (true) {
             utterance = jsgfRecognizer.getResult().getHypothesis();
-            
-            if(!utterance.equals(prevUtterance)){
-                prevUtterance = utterance;
 
-                System.out.println(utterance);//debug
-                
-                if (utterance.contains("go away")){
-                    voice.speak("Ok, I am gone, sir, Goodbye");
-                    exit(0);
-                }
-                else if (utterance.equals("JERVIS")) {//delays for the time he speaks
-                    voice.speak("Yes, sir?");
-                    Thread.sleep(1000);
-                }
-                else if (utterance.equals("HELLO")) {
-                    voice.speak("Good day! Sir, how is life?");
-                    Thread.sleep(1000);
-                }
-                else if (utterance.startsWith("how are")) {
-                    voice.speak("I am great, thank you. What about yourself?");
-                    Thread.sleep(1000);
-                }
-                else if (utterance.startsWith("what is your")) {
-                    voice.speak("My name is Jervis, a digital being");
-                    Thread.sleep(1000);
-                }
-                else if (utterance.startsWith("who do you")) {
-                    voice.speak("I love Roxanica");
-                    Thread.sleep(1000);
-                }
-                else if (utterance.startsWith("recognise language model")) {
-                    voice.speak("Ok sir, language model will be now used for recognition");
+            System.out.println(utterance);//debug
+
+            if (utterance.contains("go away")){
+                voice.speak("Ok, I am gone, sir, Goodbye");
+                exit(0);
+            }
+            else if (utterance.equals("JERVIS")) {//delays for the time he speaks
+                voice.speak("Yes, sir?");
+                Thread.sleep(1000);
+            }
+            else if (utterance.equals("HELLO")) {
+                voice.speak("Good day! Sir, how is life?");
+                Thread.sleep(1000);
+            }
+            else if (utterance.startsWith("how are")) {
+                voice.speak("I am great, thank you. What about yourself?");
+                Thread.sleep(1000);
+            }
+            else if (utterance.contains("what is your name")) {
+                voice.speak("My name is Jervis, a digital being");
+                Thread.sleep(1000);
+            }
+            else if (utterance.startsWith("who do you")) {
+                voice.speak("I love Roxanica");
+                Thread.sleep(1000);
+            }
+            else if (utterance.startsWith("recognise language model")) {
+                voice.speak("Ok sir, language model will be now used for recognition");
+                Thread.sleep(1200);
+
+                jsgfRecognizer.closeRecognitionLine();
+                jsgfRecognizer.stopRecognition();
+                lmRecognizer.openRecognitionLine();
+                lmRecognizer.startRecognition(true);
+
+                while (true) {
+                    utterance = lmRecognizer.getResult().getHypothesis();
                     Thread.sleep(1200);
-                    
-                    jsgfRecognizer.closeRecognitionLine();
-                    jsgfRecognizer.stopRecognition();
-                    lmRecognizer.openRecognitionLine();
-                    lmRecognizer.startRecognition(true);
-                    
-                    while (true) {
-                        utterance = lmRecognizer.getResult().getHypothesis();
-                        Thread.sleep(1200);
-                        
-                        System.out.println(utterance);
-                    }
+
+                    System.out.println(utterance);
                 }
             }
         }
-    }
-    
+    }   
 }
