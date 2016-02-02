@@ -19,6 +19,11 @@ import com.sun.speech.freetts.VoiceManager;
 import javax.sound.sampled.LineUnavailableException;
 import static TextBase.Enumerations.*;
 import static java.lang.System.*;
+import java.text.DateFormat;
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Jervis {
 
@@ -85,6 +90,34 @@ public class Jervis {
                 voice.speak("I love Roxanica");
                 Thread.sleep(1000);
             }
+            
+            else if (utterance.contains("date")) {
+                 
+                // Create an instance of SimpleDateFormat used for formatting 
+                // the string representation of date (month/day/year)
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+
+                // Get the date today using Calendar object.
+                Date today = Calendar.getInstance().getTime();        
+                // Using DateFormat format method we can create a string 
+                // representation of a date with the defined format.
+                String reportDate = df.format(today);
+                reportDate = reportDate.replace("0", "");
+                String finalDate[] = reportDate.split("/");
+                       
+                DateFormatSymbols dfs = new DateFormatSymbols();
+                String[] months = dfs.getMonths();
+        
+                int i = Integer.parseInt(finalDate[1]);
+                if (i >= 1 && i <= 12 ) {
+                    finalDate[1] = months[i - 1];
+                }
+                
+                voice.speak("Today's date is " + finalDate[0]+ finalDate[1] +
+                        finalDate[2]);
+                Thread.sleep(1000);
+            }
+                        
             else if (utterance.startsWith("recognise language model")) {
                 voice.speak("Ok sir, language model will be now used for recognition");
                 Thread.sleep(2000);
