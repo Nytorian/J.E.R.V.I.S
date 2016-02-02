@@ -10,6 +10,10 @@ grammar dialog;
                   who do you love            |
                   go away [Jervis]           |
                   recognise language model   |
+                  what is the date today     |
+                  today's date               |
+                  date today                 |
+                  today's date               |
                   exit [[the] program]       ;
 
 public <command> = <menu_command>;
