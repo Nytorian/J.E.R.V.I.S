@@ -12,41 +12,35 @@
 
 package JERVIS;
 
-import com.sun.speech.freetts.Voice;
-import com.sun.speech.freetts.VoiceManager;
-import edu.cmu.sphinx.api.Configuration;
-import edu.cmu.sphinx.api.LiveSpeechRecognizer;
 import java.io.IOException;
 import javax.swing.JFrame;
-import static java.lang.System.exit;
+import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.VoiceManager;
 import javax.sound.sampled.LineUnavailableException;
+import static TextBase.Enumerations.*;
+import static java.lang.System.*;
 
 public class Jervis {
-    
-    private static final String ACOUSTIC_MODEL = 
-            "resource:/edu/cmu/sphinx/models/en-us/en-us";
-    private static final String DICTIONARY_PATH =
-            "resource:/JERVIS/cmudict-en-us.dict";
-    private static final String GRAMMAR_PATH =
-            "resource:/JERVIS/";
-    private static final String LANGUAGE_MODEL = 
-            "resource:/edu/cmu/sphinx/demo/dialog/weather.lm";
 
     /*  main *******************************************************************
     **  15/01/2016  M.Michalski Initial Version
     **  15/01/2016  M.Michalski Added GUI support
     **  25/01/2016  M.Michalski Added grammar recogniser and FreeTTS support
     **  27/01/2016  M.Michalski Added language model recogniser
+    **  02/02/2016  M.Michalski Moved speech recognisers to its own class
     ***************************************************************************/
     /**Description: Main function for Jervis
      * @throws java.io.IOException
      * @param args *  
-     * @throws java.lang.InterruptedException  
      * @throws javax.sound.sampled.LineUnavailableException  
+     * @throws java.lang.InterruptedException  
     ****************************************************************************/
-    public static void main(String[] args) throws IOException, InterruptedException, LineUnavailableException {
+    public static void main(String[] args) throws IOException,
+            LineUnavailableException, InterruptedException {
+        
         JFrame mainFrame = new JFrame("J.E.R.V.I.S");
         mainFrame.getContentPane().add(new JPanelWithBackground("img/JervisBG.jpg"));
+        mainFrame.setResizable(false);
         mainFrame.setSize( 1000, 778 );
         mainFrame.setVisible(true);
         
@@ -58,34 +52,12 @@ public class Jervis {
         voice = vm.getVoice(Voice);
         voice.allocate();
         
-        //voice.speak("Hi,I am Jervis, I was created by Mataeoosh Mihalski.");
-        //voice.speak("I would like to serve you in anything you need");
-        
-        Configuration configuration = new Configuration();
-        
-        /* Initialise the grammar model recogniser for jerv */
-        configuration.setAcousticModelPath(ACOUSTIC_MODEL);
-        configuration.setDictionaryPath(DICTIONARY_PATH);
-        configuration.setGrammarPath(GRAMMAR_PATH);
-        String utterance, prevUtterance = "";
-        configuration.setUseGrammar(true);
-        configuration.setGrammarName("jerv");
-        LiveSpeechRecognizer jsgfRecognizer =
-            new LiveSpeechRecognizer(configuration);
-        jsgfRecognizer.closeRecognitionLine();
-        
-        /* Initialise the language model recogniser */
-        configuration.setUseGrammar(false);
-        configuration.setLanguageModelPath(LANGUAGE_MODEL);
-        LiveSpeechRecognizer lmRecognizer =
-            new LiveSpeechRecognizer(configuration);
-        lmRecognizer.closeRecognitionLine();
-        
-        jsgfRecognizer.openRecognitionLine();
-        jsgfRecognizer.startRecognition(true);
+        SpeechRecogniser speechRecogniser = new SpeechRecogniser();
+        speechRecogniser.startRecognition();
+        String utterance;
         
         while (true) {
-            utterance = jsgfRecognizer.getResult().getHypothesis();
+            utterance = speechRecogniser.getResult();
 
             System.out.println(utterance);//debug
 
@@ -93,11 +65,11 @@ public class Jervis {
                 voice.speak("Ok, I am gone, sir, Goodbye");
                 exit(0);
             }
-            else if (utterance.equals("JERVIS")) {//delays for the time he speaks
+            else if (utterance.equals("jervis")) {//delays for the time he speaks
                 voice.speak("Yes, sir?");
                 Thread.sleep(1000);
             }
-            else if (utterance.equals("HELLO")) {
+            else if (utterance.equals("hello")) {
                 voice.speak("Good day! Sir, how is life?");
                 Thread.sleep(1000);
             }
@@ -115,15 +87,13 @@ public class Jervis {
             }
             else if (utterance.startsWith("recognise language model")) {
                 voice.speak("Ok sir, language model will be now used for recognition");
-                Thread.sleep(1200);
+                Thread.sleep(2000);
 
-                jsgfRecognizer.closeRecognitionLine();
-                jsgfRecognizer.stopRecognition();
-                lmRecognizer.openRecognitionLine();
-                lmRecognizer.startRecognition(true);
+                speechRecogniser.setRecogniser(eLM_RECOGNISER);
+                speechRecogniser.startRecognition();
 
                 while (true) {
-                    utterance = lmRecognizer.getResult().getHypothesis();
+                    utterance = speechRecogniser.getResult();
                     Thread.sleep(1200);
 
                     System.out.println(utterance);
