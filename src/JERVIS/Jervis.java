@@ -88,8 +88,7 @@ public class Jervis {
             else if (utterance.contains("date")) {
                 voice.speak("Today's date is " + DateGenerator.readTodayDate());
                 Thread.sleep(1000);
-            }
-                        
+            }    
             else if (utterance.startsWith("recognise language model")) {
                 voice.speak("Ok sir, language model will be now used for recognition");
                 Thread.sleep(2000);
