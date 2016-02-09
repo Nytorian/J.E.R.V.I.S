@@ -2,18 +2,56 @@
 
 grammar dialog;
 
-<menu_command> =  jervis                     |
-                  hello                      |
-                  roxanica		     |
-                  how are you                |
-                  what is your name          |
-                  who do you love            |
-                  go away [Jervis]           |
-                  recognise language model   |
-                  what is the date today     |
-                  today's date               |
-                  date today                 |
-                  today's date               |
-                  exit [[the] program]       ;
+<menu_command> = ( jervis                     
+                   | hello [jervis]             
+                   | how are you                
+                   | what is your name          
+                   | who do you love            
+                   | [ok]go away [jervis]       
+                   | recognise language model   
+                   | what is the date today     
+                   | today's date               
+                   | date today                 
+                   | today's date               
+                   | i am [feeling] 
+                   | i like
+                   | (that's | that [is | was]) funny
+                   | ([what is | what's] the weather [today | tomorrow])
+                   | exit [[the] program]       
+                );
 
-public <command> = <menu_command>;
+<feeling> =
+                ( great
+                | excellent
+                | precious
+                | fenomenal
+                | extraordinary
+                | happy
+                | satisfied
+                | sarcastic
+                | cheerful
+                | joyful
+                | relaxed
+                | fascinated
+                | fed [up]
+                | excited
+                | scared
+                | terrible
+                | bad
+                | paranoid
+                | mental
+                );
+
+<noun> =
+                ( comedy
+                | film
+                | people
+                | nature
+                | surroundings
+                | my mum
+                | my neighbours
+                | studying
+                );
+
+
+public <command> = <menu_command> [ <feeling> | <noun> ];

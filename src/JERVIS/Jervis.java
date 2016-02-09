@@ -29,6 +29,8 @@ public class Jervis {
     **  27/01/2016  M.Michalski Added language model recogniser
     **  02/02/2016  M.Michalski Moved speech recognisers to its own class
     **  02/02/2016  M.Michalski Added what's the date query 
+    **  09/02/2016  M.Michalski Chat support (quote finder) 
+    **  09/02/2016  M.Michalski Weather forecast support
     ***************************************************************************/
     /**Description: Main function for Jervis
      * @throws java.io.IOException
@@ -83,6 +85,35 @@ public class Jervis {
             else if (utterance.contains("what is your name")) {
                 voice.speak("My name is Jervis, a digital being");
                 Thread.sleep(1000);
+            }
+            
+            else if (utterance.contains("i am") ||
+                     utterance.contains("i like")){
+                voice.speak(InformationFinder.quotesFinder(utterance.replace(' ', '+')));
+                Thread.sleep(1000);
+            }
+            
+            else if(utterance.contains("the weather")){
+                //voice.speak("Where about, sir?");
+
+                speechRecogniser.stopRecognition();
+                speechRecogniser.setRecogniser(ePLACE_GRAMMAR_RECOGNISER);
+                speechRecogniser.startRecognition();
+                
+                utterance = speechRecogniser.getResult();
+                Thread.sleep(1200);
+                voice.speak(InformationFinder.weatherForecast(InformationFinder.Place.ePORTSMOUTH, 
+                        InformationFinder.Period.eOUTLOOK));
+                
+                speechRecogniser.stopRecognition();
+                speechRecogniser.setRecogniser(eINITIAL_GRAMMAR_RECOGNISER);
+                speechRecogniser.startRecognition();
+            }
+            
+            else if (utterance.contains("that was funny") ||
+                     utterance.contains("that's funny")   ||
+                     utterance.contains("that's funny")){
+                voice.speak("Thank you, sir");
             }
             
             else if (utterance.contains("date")) {

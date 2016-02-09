@@ -7,5 +7,6 @@ public enum Enumerations {
      */
     
     eINITIAL_GRAMMAR_RECOGNISER,
+    ePLACE_GRAMMAR_RECOGNISER,
     eLM_RECOGNISER
 };

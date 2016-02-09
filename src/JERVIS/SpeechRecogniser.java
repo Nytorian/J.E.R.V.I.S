@@ -34,6 +34,7 @@ public class SpeechRecogniser {
             
     LiveSpeechRecognizer currentRecogniser;
     LiveSpeechRecognizer initialGramRecognizer;
+    LiveSpeechRecognizer placeGramRecognizer;
     LiveSpeechRecognizer lmRecognizer;
     
     /*  Constructor ************************************************************
@@ -59,6 +60,11 @@ public class SpeechRecogniser {
         initialGramRecognizer = new LiveSpeechRecognizer(configuration);
         initialGramRecognizer.closeRecognitionLine();
         
+        configuration.setUseGrammar(true);
+        configuration.setGrammarName("places");
+        placeGramRecognizer = new LiveSpeechRecognizer(configuration);
+        placeGramRecognizer.closeRecognitionLine();
+        
         /* Initialise the language model recogniser */
         configuration.setUseGrammar(false);
         configuration.setLanguageModelPath(LANGUAGE_MODEL);
@@ -82,6 +88,9 @@ public class SpeechRecogniser {
         switch(eRecogniser){
             case eINITIAL_GRAMMAR_RECOGNISER:
                 currentRecogniser = initialGramRecognizer;
+                break;
+            case ePLACE_GRAMMAR_RECOGNISER:
+                currentRecogniser = placeGramRecognizer;
                 break;
             case eLM_RECOGNISER:
                 currentRecogniser = lmRecognizer;
