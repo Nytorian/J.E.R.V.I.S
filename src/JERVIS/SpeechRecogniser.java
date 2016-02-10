@@ -35,6 +35,7 @@ public class SpeechRecogniser {
     LiveSpeechRecognizer currentRecogniser;
     LiveSpeechRecognizer initialGramRecognizer;
     LiveSpeechRecognizer placeGramRecognizer;
+    LiveSpeechRecognizer conversationGramRecognizer;
     LiveSpeechRecognizer lmRecognizer;
     
     /*  Constructor ************************************************************
@@ -50,7 +51,7 @@ public class SpeechRecogniser {
         
         configuration = new Configuration();
         
-        /* Initialise the grammar model recogniser for jerv */
+        /* Initialise the grammar model recognisers */
         configuration.setAcousticModelPath(ACOUSTIC_MODEL);
         configuration.setDictionaryPath(DICTIONARY_PATH);
         configuration.setGrammarPath(GRAMMAR_PATH);
@@ -64,6 +65,11 @@ public class SpeechRecogniser {
         configuration.setGrammarName("places");
         placeGramRecognizer = new LiveSpeechRecognizer(configuration);
         placeGramRecognizer.closeRecognitionLine();
+        
+        configuration.setUseGrammar(true);
+        configuration.setGrammarName("conversation");
+        conversationGramRecognizer = new LiveSpeechRecognizer(configuration);
+        conversationGramRecognizer.closeRecognitionLine();
         
         /* Initialise the language model recogniser */
         configuration.setUseGrammar(false);
@@ -86,11 +92,14 @@ public class SpeechRecogniser {
         currentRecogniser.closeRecognitionLine();
                         
         switch(eRecogniser){
-            case eINITIAL_GRAMMAR_RECOGNISER:
+            case eINIT_GRMR_RCGNSR:
                 currentRecogniser = initialGramRecognizer;
                 break;
-            case ePLACE_GRAMMAR_RECOGNISER:
+            case ePLACE_GRMR_RCGNSR:
                 currentRecogniser = placeGramRecognizer;
+                break;
+            case eCNVRS_GRMR_REGNSR:
+                currentRecogniser = conversationGramRecognizer;
                 break;
             case eLM_RECOGNISER:
                 currentRecogniser = lmRecognizer;

@@ -1,0 +1,71 @@
+#JSGF V1.0;
+
+grammar conversation;
+
+<person> = (  i am*                   
+            | you are*            
+            | he is* 
+            | she is* 
+            | it is* 
+            | we are* 
+            | you are* 
+            | they are*
+            | my
+            | your
+            | yours
+            | his
+            | her
+            | hers
+            | their
+            | theirs
+            | our
+            | ours
+         );
+
+<tense> = (
+              is
+            | are
+         );
+
+<verb> = ( [feel | feeling]
+         | [experience | experiencing]
+         | [like | liking]
+          );
+<feeling> =
+                ( great
+                | excellent
+                | precious
+                | fenomenal
+                | extraordinary
+                | happy
+                | satisfied
+                | sarcastic
+                | cheerful
+                | joyful
+                | relaxed
+                | fascinated
+                | fed [up]
+                | excited
+                | scared
+                | terrible
+                | bad
+                | paranoid
+                | mental
+                | joy
+                | [difficulty | difficulties]
+                );
+
+<noun> =
+                ( comedy
+                | film
+                | life
+                | people
+                | nature
+                | surroundings
+                | my mum
+                | my neighbours
+                | studying
+                );
+
+
+public <command> = <person> (<verb> | <noun>) [ <tense>* <feeling> | <noun> ];

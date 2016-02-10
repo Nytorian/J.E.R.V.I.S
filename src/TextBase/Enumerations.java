@@ -4,9 +4,16 @@ public enum Enumerations {
 
     /**
      *  enumerations for comparison purposes
+     *//**
+     *  enumerations for comparison purposes
+     *//**
+     *  enumerations for comparison purposes
+     *//**
+     *  enumerations for comparison purposes
      */
     
-    eINITIAL_GRAMMAR_RECOGNISER,
-    ePLACE_GRAMMAR_RECOGNISER,
+    eINIT_GRMR_RCGNSR,
+    ePLACE_GRMR_RCGNSR,
+    eCNVRS_GRMR_REGNSR,
     eLM_RECOGNISER
 };

@@ -70,56 +70,73 @@ public class Jervis {
                 voice.speak("Ok, I am gone, sir, Goodbye");
                 exit(0);
             }
-            else if (utterance.equals("jervis")) {//delays for the time he speaks
-                voice.speak("Yes, sir?");
-                Thread.sleep(1000);
-            }
-            else if (utterance.equals("hello")) {
-                voice.speak("Good day! Sir, how is life?");
-                Thread.sleep(1000);
-            }
-            else if (utterance.startsWith("how are")) {
-                voice.speak("I am great, thank you. What about yourself?");
-                Thread.sleep(1000);
+                
+            else if (utterance.equals("jervis")  ||
+                     utterance.equals("hello")   ||
+                     utterance.contains("good")  ||
+                     utterance.startsWith("how are"))
+            {
+                switch (utterance) {
+                    case "jervis":
+                        //delays for the time he speaks
+                        voice.speak("Yes, sir?");
+                        break;
+                    case "hello":
+                    case "good" :
+                        voice.speak("Good day! Sir, how is life?");
+                        break;
+                    case "how are":
+                        voice.speak("Always great, thank you. What about yourself?");
+                        break;
+                    default:
+                        break;
+                }
+
+                speechRecogniser.stopRecognition();
+                speechRecogniser.setRecogniser(eCNVRS_GRMR_REGNSR);
+                speechRecogniser.startRecognition();
+                
+                utterance = speechRecogniser.getResult();
+                
+                System.out.println(utterance);
+                voice.speak(InformationFinder.quotesFinder(utterance.replace(' ', '+')));
+
+                speechRecogniser.stopRecognition();
+                speechRecogniser.setRecogniser(eINIT_GRMR_RCGNSR);
+                speechRecogniser.startRecognition();
             }
             else if (utterance.contains("what is your name")) {
                 voice.speak("My name is Jervis, a digital being");
                 Thread.sleep(1000);
             }
-            
-            else if (utterance.contains("i am") ||
-                     utterance.contains("i like")){
-                voice.speak(InformationFinder.quotesFinder(utterance.replace(' ', '+')));
-                Thread.sleep(1000);
-            }
-            
             else if(utterance.contains("the weather")){
                 //voice.speak("Where about, sir?");
 
                 speechRecogniser.stopRecognition();
-                speechRecogniser.setRecogniser(ePLACE_GRAMMAR_RECOGNISER);
+                speechRecogniser.setRecogniser(ePLACE_GRMR_RCGNSR);
                 speechRecogniser.startRecognition();
-                
-                utterance = speechRecogniser.getResult();
-                Thread.sleep(1200);
+
+                //utterance = speechRecogniser.getResult();
                 voice.speak(InformationFinder.weatherForecast(InformationFinder.Place.ePORTSMOUTH, 
                         InformationFinder.Period.eOUTLOOK));
-                
+                Thread.sleep(1000);
+
                 speechRecogniser.stopRecognition();
-                speechRecogniser.setRecogniser(eINITIAL_GRAMMAR_RECOGNISER);
+                speechRecogniser.setRecogniser(eINIT_GRMR_RCGNSR);
                 speechRecogniser.startRecognition();
             }
-            
+
             else if (utterance.contains("that was funny") ||
                      utterance.contains("that's funny")   ||
                      utterance.contains("that's funny")){
                 voice.speak("Thank you, sir");
             }
-            
+
             else if (utterance.contains("date")) {
                 voice.speak("Today's date is " + DateGenerator.readTodayDate());
                 Thread.sleep(1000);
-            }    
+            }
+    
             else if (utterance.startsWith("recognise language model")) {
                 voice.speak("Ok sir, language model will be now used for recognition");
                 Thread.sleep(2000);
