@@ -3,13 +3,13 @@
 grammar dialog;
 
 <menu_command> = ( jervis                     
-                   | hello [jervis]    
+                   | hello jervis    
                    | good morning [jervis] 
                    | good afternoon [jervis] 
                    | good evening [jervis] 
                    | how are you                
                    | what is your name          
-                   | who do you love            
+                   | who do you love
                    | [ok]go away [jervis]       
                    | recognise language model   
                    | what is the date today     
@@ -19,8 +19,12 @@ grammar dialog;
                    | i am [feeling] 
                    | i like
                    | (that's | that [is | was]) funny
-                   | ([what is | what's] the weather [today | tomorrow])
-                   | exit [[the] program]       
+                   | ( [what is | what's] the weather [in my location] )
+                   | exit [[the] program]
+                   | make a note
+                   | short
+                   | medium
+                   | long
                 );
 
 public <command> = <menu_command>;

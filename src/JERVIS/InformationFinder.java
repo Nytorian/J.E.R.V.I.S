@@ -30,20 +30,22 @@ public final class InformationFinder {
     ***************************************************************************/
     public static String quotesFinder(String key){
         
-        Document doc;
-        String resultText = "";
-        
-        try {
-            doc = Jsoup.connect("http://www.brainyquote.com/search_results.html?q="+ key)
-                      .userAgent("Mozilla")
-                      .cookie("auth", "token")
-                      .timeout(3000)
-                      .get();
-            resultText = doc.select("span[class=bqQuoteLink]").first().text();
-        } catch (IOException e) {
+        if(key != null){
+            Document doc;
+            String resultText = "";
+
+            try {
+                doc = Jsoup.connect("http://www.brainyquote.com/search_results.html?q="+ key)
+                          .userAgent("Mozilla")
+                          .cookie("auth", "token")
+                          .timeout(3000)
+                          .get();
+                resultText = doc.select("span[class=bqQuoteLink]").first().text();
+            } catch (IOException e) {
+            }
+            return(resultText);
         }
-        
-        return(resultText);
+        return "";
     }
     
     /*  weatherForecast ********************************************************

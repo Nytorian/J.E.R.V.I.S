@@ -12,11 +12,10 @@
 package JERVIS;
 
 import java.io.IOException;
-import TextBase.Enumerations;
+import TextBase.SpeechRecognisers;
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.LiveSpeechRecognizer;
 import javax.sound.sampled.LineUnavailableException;
-import static TextBase.Enumerations.*;
 
 public class SpeechRecogniser {
     
@@ -87,7 +86,7 @@ public class SpeechRecogniser {
     /**Description: changes the currentRecogniser - multi recogniser extention
      * @param eRecogniser
     ***************************************************************************/
-    public void setRecogniser(Enumerations eRecogniser){
+    public void setRecogniser(SpeechRecognisers eRecogniser){
         
         currentRecogniser.closeRecognitionLine();
                         

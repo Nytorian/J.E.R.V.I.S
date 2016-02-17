@@ -34,6 +34,9 @@ grammar conversation;
 <feeling> =
                 ( great
                 | excellent
+                | awesome
+                | crap
+                | cheerful
                 | precious
                 | fenomenal
                 | extraordinary
@@ -57,15 +60,18 @@ grammar conversation;
 
 <noun> =
                 ( comedy
+                | awesome
                 | film
                 | life
                 | people
                 | nature
                 | surroundings
+                | me
                 | my mum
                 | my neighbours
                 | studying
+                | a joke
                 );
 
 
-public <command> = <person> (<verb> | <noun>) [ <tense>* <feeling> | <noun> ];
+public <command> = <person> <verb>* <feeling>;
