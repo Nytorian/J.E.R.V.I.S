@@ -22,9 +22,13 @@ grammar dialog;
                    | ( [what is | what's] the weather [in my location] )
                    | exit [[the] program]
                    | make a note
-                   | short
-                   | medium
-                   | long
+                   | a* short please*
+                   | a* medium please*
+                   | a* long please*
+                   | remember
+                   | open a website
+                   | thank you
+                   | open a* location
                 );
 
 public <command> = <menu_command>;

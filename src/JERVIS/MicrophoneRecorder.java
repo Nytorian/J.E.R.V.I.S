@@ -1,23 +1,21 @@
-/*
- * Copyright 1999-2004 Carnegie Mellon University.  
- * Portions Copyright 2004 Sun Microsystems, Inc.  
- * Portions Copyright 2004 Mitsubishi Electric Research Laboratories.
- * All Rights Reserved.  Use is subject to license terms.
- * 
- * See the file "license.terms" for information on usage and
- * redistribution of this file, and for a DISCLAIMER OF ALL 
- * WARRANTIES.
- *
- */
+/******************************************************************************/
+/**
+@file          MicrophoneRecorder.java
+@copyright     Mateusz Michalski
+*
+@author        Mateusz Michalski
+*
+@language      Java JDK 1.8
+*
+@Description:  Microphone Recorder - records input from the default microphone 
+*              and encodes it in WAV format.
+*******************************************************************************/
 
 package JERVIS;
 
 import javax.sound.sampled.*;
 import java.io.*;
 
-/**
- * InputStream adapter
- */
 public class MicrophoneRecorder {
     
     // record durations, in milliseconds
@@ -32,54 +30,63 @@ public class MicrophoneRecorder {
     public static TargetDataLine dataLine;
     public static AudioFormat audioFormat;
  
-    /**
-     * Defines an audio af
-     * @return 
-     */
-    public static AudioFormat getAudioFormat() {
-        float sampleRate = 16000;
-        int sampleSizeInBits = 8;
-        int channels = 2;
-        boolean signed = true;
-        boolean bigEndian = true;
-        AudioFormat af = new AudioFormat(sampleRate, sampleSizeInBits,
-                                             channels, signed, bigEndian);
-        return af;
-    }
- 
-    /**
-     * Captures the sound and record into a WAV file
-     */
-    public static void start() {
+    /*  startRecording *********************************************************
+    **  16/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Records the microphone input using WAV encoding
+    ****************************************************************************/  
+    public static void startRecording() {
         try {
             audioFormat = getAudioFormat();
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, audioFormat);
  
-            // checks if system supports the data dataLine
-            if (!AudioSystem.isLineSupported(info)) {
+            if (!AudioSystem.isLineSupported(info)){
                 System.out.println("The data line is not supported");
                 System.exit(0);
             }
+            
             dataLine = (TargetDataLine) AudioSystem.getLine(info);
             dataLine.open(audioFormat);
-            dataLine.start();   // start capturing
+            dataLine.start();
  
             audioInputStream = new AudioInputStream(dataLine);
  
-            System.out.println("Started recording!");
+            System.out.println("Recording Started!");//debug
  
-            // start recording
+            //start recording from the input stream
             AudioSystem.write(audioInputStream, fileType, wavFile);
  
         } catch (LineUnavailableException | IOException ex) {}
     }
+    
+    /*  getAudioFormat *********************************************************
+    **  16/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Defines and returns audio format
+     * @return 
+    ****************************************************************************/  
+    public static AudioFormat getAudioFormat(){
+        
+        float sampleRate  = 16000;
+        int sampleSize    = 8;
+        int nofChannels   = 2;
+        boolean signed    = true;
+        boolean bigEndian = true;
+        
+        AudioFormat af = new AudioFormat(sampleRate, sampleSize, 
+                nofChannels, signed, bigEndian);
+        
+        return af;
+    }
  
-    /**
-     * Closes the target data dataLine to stop capturing and recording
-     */
+    /*  getAudioFormat *********************************************************
+    **  16/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Closes the data line hence stops microphone recording
+    ****************************************************************************/
     public static void stop(){
         dataLine.stop();
         dataLine.close();
-        System.out.println("Stopped recording!");
+        System.out.println("Recording Stopped!");//debug
     }
 }

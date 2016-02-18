@@ -1,10 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/******************************************************************************/
+/**
+@file          GoogleSpeechRecogniser.java
+@copyright     Mateusz Michalski
+*
+@author        Mateusz Michalski
+*
+@language      Java JDK 1.8
+*
+@Description:  Speech to Text Google API wrapper for Jervis.
+*******************************************************************************/
 package JERVIS;
 
+import TextBase.SensitiveData;
 import com.darkprograms.speech.microphone.Microphone;
 import com.darkprograms.speech.recognizer.GSpeechDuplex;
 import com.darkprograms.speech.recognizer.GoogleResponse;
@@ -18,11 +25,11 @@ import javax.sound.sampled.LineUnavailableException;
  *
  * @author Mateusz
  */
-public class GoogleSpeech implements Runnable{
+public class GoogleSpeechRecogniser implements Runnable{
     
     public static String utterance;
     public static boolean bStartRecognition = false;
-    private final String API_KEY = "AIzaSyAFpfD8ZeKM13tolXOGLV5tG0ic7Z10VHQ";
+    private final String API_KEY = SensitiveData.API_KEY;
     
     @Override
     public void run() {

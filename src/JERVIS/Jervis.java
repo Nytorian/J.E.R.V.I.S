@@ -23,6 +23,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import TextBase.NoteLength;
+import java.awt.Desktop;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class Jervis {
     
@@ -95,14 +99,18 @@ public class Jervis {
                 voice.speak("Ok, I am gone, sir, Goodbye");
                 exit(0);
             }
+            if (utterance.equals("jervis")){
+                //delays for the time he speaks
+                voice.speak("Yes, sir?");
+                Thread.sleep(400);
                 
-            else if (
+                if (
                      utterance.equals("hello jervis")   ||
                      utterance.contains("good morning")  ||
                      utterance.contains("good afternoon")  ||
                      utterance.contains("good evening")  ||
-                     utterance.startsWith("how are"))
-            {
+                     utterance.startsWith("how are")){
+                    
                     if (utterance.contains("Hello")){
                         voice.speak("Hello! Sir, how is life?");
                         actionConvers();
@@ -122,15 +130,8 @@ public class Jervis {
                     else if (utterance.contains("how are")){
                         voice.speak("Always great, thank you. What about yourself?");
                         actionConvers();
-                    }
-                    
-            }
-            
-            if (utterance.equals("jervis")){
-                //delays for the time he speaks
-                voice.speak("Yes, sir?");
-                Thread.sleep(400);
-                
+                    }     
+                }
                 utterance = speechRecogniser.getResult();
                 
                 if (utterance.contains("what is your name")) {
@@ -143,9 +144,31 @@ public class Jervis {
                     Thread.sleep(1000);
                 }
                 
+                else if(utterance.contains("remember")){
+                    voice.speak("What date sir?");
+                }
+                
+                else if(utterance.contains("open a website")){
+                    voice.speak("What is the address sir?");
+                    speechRecogniser.stopRecognition();
+                    
+                    String url = WatsonSpeechRecogniser.recognise(NoteLength.eTITLE);
+                    
+                    url = url.replace("dot", ".");
+                    url = url.replace(" ", "");
+                            
+                    try {
+                        Desktop.getDesktop().browse(new URL("http://" + url).toURI());
+                    } catch (URISyntaxException | IOException e) {
+                    }
+                    
+                    speechRecogniser.startRecognition();
+                }
+                
                 else if(utterance.contains("the weather")){
                     actionWeather(utterance);
-                }
+                }     
+                
                 else if(utterance.contains("make a note")){
                     //Future<String> future = (Future<String>) execServise.submit(new GoogleSpeech());
 
@@ -184,12 +207,18 @@ public class Jervis {
                     
                     speechRecogniser.startRecognition();
                 }
+                else if(utterance.contains("open location")){
+                    voice.speak("What is the location?"); 
+                }   
             }
 
             else if (utterance.contains("that was funny") ||
                      utterance.contains("that's funny")   ||
                      utterance.contains("that's funny")){
                 voice.speak("Thank you, sir");
+            }
+            else if(utterance.contains("thank you")){
+                voice.speak("Anytime, sir");
             }
         }
     }

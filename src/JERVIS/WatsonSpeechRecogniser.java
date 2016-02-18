@@ -1,23 +1,41 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/******************************************************************************/
+/**
+@file          WatsonSpeechRecogniser.java
+@copyright     Mateusz Michalski
+*
+@author        Mateusz Michalski
+*
+@language      Java JDK 1.8
+*
+@Description:  Speech to Text Watson API wrapper for Jervis.
+*******************************************************************************/
 package JERVIS;
 
 import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
+import com.ibm.watson.developer_cloud.speech_to_text.v1.RecognizeOptions;
 import TextBase.NoteLength;
 
 public class WatsonSpeechRecogniser {
 
-    static String result;
-    static String[] tmp;
-    static long RECORD_TIME;
+    private static String result;
+    private static long RECORD_TIME;
+    private static final String userName = TextBase.SensitiveData.WATSON_LOGIN;
+    private static final String password = TextBase.SensitiveData.WATSON_PSWD;
+
+    private static String[] tmp;
     
+    /*  recognise **************************************************************
+    **  16/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Starts recognition
+     * @param eLength
+     * @return 
+    ****************************************************************************/
     public static String recognise(NoteLength eLength){
         SpeechToText service = new SpeechToText();
-        service.setUsernameAndPassword("a0e09a7e-92a5-4d62-a553-0ad220d12e8b", "9Q7VBwVcqP1x"); 
+        RecognizeOptions options = new RecognizeOptions().continuous(true);
+        service.setUsernameAndPassword(userName, password); 
 
         switch(eLength){
             case eTITLE:
@@ -30,7 +48,7 @@ public class WatsonSpeechRecogniser {
                 RECORD_TIME = MicrophoneRecorder.RECORD_MEDIUM;
                 break;
             case eLONG:
-                RECORD_TIME = MicrophoneRecorder.RECORD_SHORT;
+                RECORD_TIME = MicrophoneRecorder.RECORD_LONG;
                 break;
             default:
                 break;
@@ -48,10 +66,10 @@ public class WatsonSpeechRecogniser {
 
         stopper.start();
 
-        // start recording
-        MicrophoneRecorder.start();
+        // startRecording recording
+        MicrophoneRecorder.startRecording();
 
-        SpeechResults transcript = service.recognize(MicrophoneRecorder.wavFile);
+        SpeechResults transcript = service.recognize(MicrophoneRecorder.wavFile, options);
 
         result = transcript.toString();
         tmp = result.split(",");
