@@ -8,9 +8,9 @@ grammar dialog;
                    | good afternoon [jervis] 
                    | good evening [jervis] 
                    | how are you                
-                   | what is your name          
-                   | who do you love
-                   | [ok]go away [jervis]       
+                   | what is (your | my) name          
+                   | [ok]go away [jervis] 
+                   | [ok]you can go [jervis]   
                    | recognise language model   
                    | what is the date today     
                    | today's date               
@@ -25,10 +25,13 @@ grammar dialog;
                    | a* short please*
                    | a* medium please*
                    | a* long please*
-                   | remember
                    | open a website
                    | thank you
+                   | thanks [jervis]
                    | open a* location
+                   | translate please*
+                   | please* remember my ( name | sex | profession | email | location | event )
+
                 );
 
 public <command> = <menu_command>;

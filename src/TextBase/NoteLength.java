@@ -10,8 +10,8 @@ public enum NoteLength {
     /**
      *  enumerations for comparison purposes
      */
-    eTITLE,
-    eSHORT,
-    eMEDIUM,
-    eLONG
+    eWord,
+    eSHORT_NOTE,
+    eMEDIUM_NOTE,
+    eLONG_NOTE
 };

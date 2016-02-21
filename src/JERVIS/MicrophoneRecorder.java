@@ -73,10 +73,10 @@ public class MicrophoneRecorder {
         boolean signed    = true;
         boolean bigEndian = true;
         
-        AudioFormat af = new AudioFormat(sampleRate, sampleSize, 
+        AudioFormat format = new AudioFormat(sampleRate, sampleSize, 
                 nofChannels, signed, bigEndian);
         
-        return af;
+        return format;
     }
  
     /*  getAudioFormat *********************************************************

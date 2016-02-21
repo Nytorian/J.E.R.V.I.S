@@ -20,8 +20,8 @@ public class WatsonSpeechRecogniser {
 
     private static String result;
     private static long RECORD_TIME;
-    private static final String userName = TextBase.SensitiveData.WATSON_LOGIN;
-    private static final String password = TextBase.SensitiveData.WATSON_PSWD;
+    private static final String userName = TextBase.SensitiveData.WATSON_STT_LGN;
+    private static final String password = TextBase.SensitiveData.WATSON_STT_PSWD;
 
     private static String[] tmp;
     
@@ -38,16 +38,16 @@ public class WatsonSpeechRecogniser {
         service.setUsernameAndPassword(userName, password); 
 
         switch(eLength){
-            case eTITLE:
+            case eWord:
                 RECORD_TIME = MicrophoneRecorder.RECORD_TITLE;
                 break;
-            case eSHORT:
+            case eSHORT_NOTE:
                 RECORD_TIME = MicrophoneRecorder.RECORD_SHORT;
                 break;
-            case eMEDIUM:
+            case eMEDIUM_NOTE:
                 RECORD_TIME = MicrophoneRecorder.RECORD_MEDIUM;
                 break;
-            case eLONG:
+            case eLONG_NOTE:
                 RECORD_TIME = MicrophoneRecorder.RECORD_LONG;
                 break;
             default:
