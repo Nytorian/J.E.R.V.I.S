@@ -8,7 +8,8 @@ grammar dialog;
                    | good afternoon [jervis] 
                    | good evening [jervis] 
                    | how are you                
-                   | what is (your | my) name          
+                   | what is (your | my) name
+                   | what is my ( name | sex | profession | email | location | event )          
                    | [ok]go away [jervis] 
                    | [ok]you can go [jervis]   
                    | recognise language model   
