@@ -142,8 +142,30 @@ public class Jervis {
                             actionConvers();
                         }     
                     }
-                    else if(utterance.contains("open")){
+                    else if(utterance.contains("open location") ||
+                            utterance.contains("open a location")){
                         
+                        jervisSpeak("Sure, sir, which location?");
+                        speechRecogniser.stopRecognition();
+                        speechRecogniser.setRecogniser(eCMD_GRMR_RCGNSR);
+                        speechRecogniser.startRecognition();
+                        
+                        utterance = speechRecogniser.getResult();
+                        
+                        String dir = ""; 
+                        int i = 0; 
+                        
+                        for (String cmd : command.getCmdList()) {
+                            if(cmd.equals(utterance)){
+                                dir = command.getDir(i);
+                            } i++;
+                        }
+                        
+                        Runtime.getRuntime().exec("explorer.exe /select," + dir);
+                        
+                        speechRecogniser.stopRecognition();
+                        speechRecogniser.setRecogniser(eINIT_GRMR_RCGNSR);
+                        speechRecogniser.startRecognition();
                     }
                     else if (utterance.contains("what is my name")) {
 
@@ -503,7 +525,7 @@ public class Jervis {
     
     public static void actionConvers() throws LineUnavailableException{
         speechRecogniser.stopRecognition();
-        speechRecogniser.setRecogniser(eCNVRS_GRMR_REGNSR);
+        speechRecogniser.setRecogniser(eCNVRS_GRMR_RCGNSR);
         speechRecogniser.startRecognition();
 
         utterance = speechRecogniser.getResult();

@@ -3,8 +3,17 @@
 grammar commands;
 
 <commands> = ( 
-                  my* photos
-                | my* music 
+                photos
+                | music 
+                | movies
+                | programs
+                | root
+                | development
+                | games
+                | notes
+                | documents
+                | temporary
+                | trance
                 );
 
 public <command> = <commands>;

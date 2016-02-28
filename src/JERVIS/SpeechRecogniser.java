@@ -31,10 +31,10 @@ public class SpeechRecogniser {
     
     Configuration configuration;
             
-    LiveSpeechRecognizer currentRecogniser;
-    LiveSpeechRecognizer initialGramRecognizer;
-    LiveSpeechRecognizer placeGramRecognizer;
-    LiveSpeechRecognizer conversationGramRecognizer;
+    LiveSpeechRecognizer currentRecogniser, initialGramRecognizer, 
+            placeGramRecognizer, conversationGramRecognizer,
+            commandGramRecognizer;
+    
     LiveSpeechRecognizer lmRecognizer;
     
     /*  Constructor ************************************************************
@@ -70,6 +70,11 @@ public class SpeechRecogniser {
         conversationGramRecognizer = new LiveSpeechRecognizer(configuration);
         conversationGramRecognizer.closeRecognitionLine();
         
+        configuration.setUseGrammar(true);
+        configuration.setGrammarName("commands");
+        commandGramRecognizer = new LiveSpeechRecognizer(configuration);
+        commandGramRecognizer.closeRecognitionLine();
+        
         /* Initialise the language model recogniser */
         configuration.setUseGrammar(false);
         configuration.setLanguageModelPath(LANGUAGE_MODEL);
@@ -97,8 +102,11 @@ public class SpeechRecogniser {
             case ePLACE_GRMR_RCGNSR:
                 currentRecogniser = placeGramRecognizer;
                 break;
-            case eCNVRS_GRMR_REGNSR:
+            case eCNVRS_GRMR_RCGNSR:
                 currentRecogniser = conversationGramRecognizer;
+                break;
+            case eCMD_GRMR_RCGNSR:
+                currentRecogniser = commandGramRecognizer;
                 break;
             case eLM_RECOGNISER:
                 currentRecogniser = lmRecognizer;

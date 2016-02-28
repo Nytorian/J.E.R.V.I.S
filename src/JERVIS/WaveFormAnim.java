@@ -23,8 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-//http://stackoverflow.com/questions/17480765/refreshing-a-jlabel-icon-image
+
 public class WaveFormAnim implements Runnable{
 
     private static List<BufferedImage> images;
