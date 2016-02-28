@@ -45,8 +45,8 @@ public class SpeechRecogniser {
      * @throws javax.sound.sampled.LineUnavailableException
     ****************************************************************************/            
     public SpeechRecogniser() throws IOException, LineUnavailableException{
-        //voice.speak("Hi,I am Jervis, I was created by Mataeoosh Mihalski.");
-        //voice.speak("I would like to serve you in anything you need");
+        //jervisSpeak("Hi,I am Jervis, I was created by Mataeoosh Mihalski.");
+        //jervisSpeak("I would like to serve you in anything you need");
         
         configuration = new Configuration();
         

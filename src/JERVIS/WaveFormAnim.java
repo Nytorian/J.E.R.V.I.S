@@ -14,6 +14,9 @@ package JERVIS;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,13 +26,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 //http://stackoverflow.com/questions/17480765/refreshing-a-jlabel-icon-image
 public class WaveFormAnim implements Runnable{
-    
-    public static JLabel label;
 
     private static List<BufferedImage> images;
     private static int currentPic = 0;
-     
-    public enum animationStates {eINIT_GRMR_RCGNSR };
+    public static MappedByteBuffer interTaskCom;
+
     /* run *********************************************************************
     ** 09/11/2015  M.Michalski Initial Version
     ***************************************************************************/
@@ -39,6 +40,12 @@ public class WaveFormAnim implements Runnable{
     public void run(){
         
         images = new ArrayList<>(30);
+        try {
+            interTaskCom = new RandomAccessFile("interTaskCom.txt", "rw").getChannel()
+                    .map(FileChannel.MapMode.READ_WRITE, 0, 1);
+        } catch (IOException ex) {
+            Logger.getLogger(WaveFormAnim.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         try {
             images.add(ImageIO.read(new File("img/Voice Animation/s0.jpg")));
@@ -71,31 +78,21 @@ public class WaveFormAnim implements Runnable{
             images.add(ImageIO.read(new File("img/Voice Animation/s27.jpg")));
             images.add(ImageIO.read(new File("img/Voice Animation/s28.jpg")));
             
-        } catch (IOException exp) {
-            exp.printStackTrace();
-        }
-        label = new JLabel();
-        label.setHorizontalAlignment(JLabel.CENTER);
-        label.setVerticalAlignment(JLabel.CENTER); 
-        
+        } catch (IOException exp) {} 
         
         while(true){
             
-            if(Jervis.bAnimationStart)
+            if(Jervis.getStartAnim())
                 currentPic++;
             else
-                try {
-                    Thread.sleep(150);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(WaveFormAnim.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                currentPic = 0;
             
             if (currentPic >= images.size()) {
                 currentPic = 0;
             }
-            label.setIcon(new ImageIcon(images.get(currentPic)));
+            mainGUI.lblAnim.setIcon(new ImageIcon(images.get(currentPic)));
             try {
-                Thread.sleep(150);
+                Thread.sleep(100);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WaveFormAnim.class.getName()).log(Level.SEVERE, null, ex);
             }

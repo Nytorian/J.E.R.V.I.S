@@ -12,10 +12,9 @@
 
 package JERVIS;
 
-import TextBase.JervisStorage;
 import TextBase.JervisStorage.Owner;
+import TextBase.CustomCmd.Command;
 import java.io.IOException;
-import javax.swing.JFrame;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
 import javax.sound.sampled.LineUnavailableException;
@@ -23,18 +22,16 @@ import static TextBase.SpeechRecognisers.*;
 import static java.lang.System.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import TextBase.NoteLength;
 import java.awt.Desktop;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
 public class Jervis {
     
-    private static JFrame mainFrame;
+    private static mainGUI mainFrame;
             
     private static final String Voice = "kevin16";
     private static VoiceManager vm;
@@ -42,13 +39,16 @@ public class Jervis {
     private static String utterance;
     
     private static Owner owner;
-    private static FileOutputStream serialOutput;
+    private static Command command;
+    private static boolean startAnimation = false;
     
-    private static SpeechRecogniser speechRecogniser;
+    private static SpeechRecogniser speechRecogniser;  
     
     static NoteLength noteLength;
     
+    public static FileOutputStream serialOutput;
     public static boolean bAnimationStart = false;
+    public static boolean bListening = true;
    
     /*  main *******************************************************************
     **  15/01/2016  M.Michalski Initial Version
@@ -71,10 +71,7 @@ public class Jervis {
     ****************************************************************************/
     public static void main(String[] args) throws IOException,
             LineUnavailableException, InterruptedException {
-       
-        ExecutorService execServise = Executors.newCachedThreadPool();
-        execServise.execute(new WaveFormAnim());
-        
+
         speechRecogniser = new SpeechRecogniser();
         speechRecogniser.startRecognition();
         
@@ -82,17 +79,11 @@ public class Jervis {
         voice = vm.getVoice(Voice);
         voice.allocate();
         
-        mainFrame = new JFrame("J.E.R.V.I.S");
-        mainFrame.getContentPane().add(new JPanelWithBackground("img/JervisBG.jpg"));
-        mainFrame.setResizable(false);
-        mainFrame.setSize( 1000, 778 );
-        //mainFrame.setLayout(null); 
-        //mainFrame.add(WaveFormAnim.label);
-        //WaveFormAnim.label.setPreferredSize(new Dimension(200, 200));
-        mainFrame.setLocationRelativeTo(null);
-        mainFrame.setVisible(true);
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame = new mainGUI();
         
+        ExecutorService execServise = Executors.newCachedThreadPool();
+        execServise.execute(new WaveFormAnim());
+
                         
         System.setProperty("mbrola.base", "D://J.E.R.V.I.S//Downloaded//mbrola//");     
         
@@ -102,374 +93,386 @@ public class Jervis {
         //ownerBuilder = Owner.newBuilder();
         
         while (true) {
-            utterance = speechRecogniser.getResult();
-
-            System.out.println(utterance);//debug
-
-            Jervis.bAnimationStart = true;
-            if (utterance.contains("go away") ||
-                utterance.contains("you can go")){
-                voice.speak("Ok, I am gone, sir, Goodbye");
-                exit(0);
-            }
-            else if (utterance.equals("jervis")){
-                //delays for the time he speaks
-                voice.speak("Yes, sir?");
-                owner = Owner.parseFrom(new FileInputStream("JervisStorage.ser"));
-                Thread.sleep(300);
-                
+            if(getListening()){
                 utterance = speechRecogniser.getResult();
-                
-                if (
-                     utterance.equals("hello jervis")    ||
-                     utterance.contains("good morning")  ||
-                     utterance.contains("good afternoon")||
-                     utterance.contains("good evening")  ||
-                     utterance.startsWith("how are")){
-                    
-                    if (utterance.contains("Hello")){
-                        voice.speak("Hello! Sir, how is life?");
-                        actionConvers();
-                    }
-                    else if (utterance.contains("morning")){
-                        voice.speak("Good morning! Sir, how is life?");
-                        actionConvers();
-                    }
-                    else if (utterance.contains("afternoon")){
-                        voice.speak("Good afternoon! Sir, how is life?");
-                        actionConvers();
-                    }
-                    else if (utterance.contains("evening")){
-                        voice.speak("Good evening! Sir, how is life?");
-                        actionConvers();
-                    }
-                    else if (utterance.contains("how are")){
-                        voice.speak("Always great, thank you. What about yourself?");
-                        actionConvers();
-                    }     
-                }
-                else if (utterance.contains("what is my name")) {
-                    
-                    if(!owner.hasName() || owner.getName().equals(" ")){
-                        voice.speak("I do not know your name sir, please say your name");
-                        
-                        speechRecogniser.stopRecognition();
-                        String name = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
-                        
-                        Owner editedObject = Owner.newBuilder()
-                                .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                                .setName(name) 
-                                .build();
-                        
-                        serialOutput = new FileOutputStream("JervisStorage.ser");
-                        editedObject.writeTo(serialOutput);
-                        serialOutput.close();
-                        
-                        speechRecogniser.startRecognition(); 
-                    }
-                    else{
-                        voice.speak("Your name is" + owner.getName() + "sir");
-                    }
-                    //*/
-                    
-                    /* debug - loading an initial object
-                    Owner pusheen= Owner.newBuilder()
-                    .setName(" ") 
-                    .setSex(" ") 
-                    .setProfession(" ")
-                    .setEmail(" ")
-                    .setLocation(" ")
-                    .build();
 
-                    serialOutput = new FileOutputStream("JervisStorage.ser");
-                    pusheen.writeTo(serialOutput);
-                    serialOutput.close();
-                    
-                    owner = Owner.parseFrom(new FileInputStream("JervisStorage.ser"));
-                    System.out.println(owner.getName());
-                   */
+                System.out.println(utterance);//debug
+
+                Jervis.bAnimationStart = true;
+                if (utterance.contains("go away") ||
+                    utterance.contains("you can go")){
+                    jervisSpeak("Ok, I am gone, sir, Goodbye");
+                    exit(0);
                 }
-                else if (utterance.contains("what is my sex")) {
-                    
-                    if(!owner.hasSex() || owner.getSex().equals(" ")){
-                        voice.speak("I do not know your sex sir, please say it now");
+                else if (utterance.equals("jervis")){
+
+                    jervisSpeak("Yes, sir?");
+
+                    owner = Owner.parseFrom(new FileInputStream("JervisStorage.ser"));
+                    command = Command.parseFrom(new FileInputStream("CustomCmd.ser"));
+                    Thread.sleep(200);
+
+                    utterance = speechRecogniser.getResult();
+
+                    if (
+                         utterance.equals("hello jervis")    ||
+                         utterance.contains("good morning")  ||
+                         utterance.contains("good afternoon")||
+                         utterance.contains("good evening")  ||
+                         utterance.startsWith("how are")){
+
+                        if (utterance.contains("Hello")){
+                            jervisSpeak("Hello! Sir, how is life?");
+                            actionConvers();
+                        }
+                        else if (utterance.contains("morning")){
+                            jervisSpeak("Good morning! Sir, how is life?");
+                            actionConvers();
+                        }
+                        else if (utterance.contains("afternoon")){
+                            jervisSpeak("Good afternoon! Sir, how is life?");
+                            actionConvers();
+                        }
+                        else if (utterance.contains("evening")){
+                            jervisSpeak("Good evening! Sir, how is life?");
+                            actionConvers();
+                        }
+                        else if (utterance.contains("how are")){
+                            jervisSpeak("Always great, thank you. What about yourself?");
+                            actionConvers();
+                        }     
+                    }
+                    else if(utterance.contains("open")){
                         
-                        speechRecogniser.stopRecognition();
-                        String sex = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
-                        
-                        if(sex.equals("male")  ||
-                           sex.equals("female")||
-                           sex.equals("Male")  ||
-                           sex.equals("Female")){
+                    }
+                    else if (utterance.contains("what is my name")) {
+
+                        if(!owner.hasName() || owner.getName().equals(" ")){
+                            jervisSpeak("I do not know your name sir, please say your name");
+
+                            speechRecogniser.stopRecognition();
+                            String name = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+
                             Owner editedObject = Owner.newBuilder()
                                     .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                                    .setSex(sex) 
+                                    .setName(name) 
                                     .build();
 
                             serialOutput = new FileOutputStream("JervisStorage.ser");
                             editedObject.writeTo(serialOutput);
                             serialOutput.close();
+
+                            speechRecogniser.startRecognition(); 
                         }
                         else{
-                            voice.speak("The sex is invalid, you can be either male or female");
+                            jervisSpeak("Your name is" + owner.getName() + "sir");
                         }
-                        
+                        //*/
+
+                        /* debug - loading an initial object
+                        Owner pusheen= Owner.newBuilder()
+                        .setName(" ") 
+                        .setSex(" ") 
+                        .setProfession(" ")
+                        .setEmail(" ")
+                        .setLocation(" ")
+                        .build();
+
+                        serialOutput = new FileOutputStream("JervisStorage.ser");
+                        pusheen.writeTo(serialOutput);
+                        serialOutput.close();
+
+                        owner = Owner.parseFrom(new FileInputStream("JervisStorage.ser"));
+                        System.out.println(owner.getName());
+                       */
+                    }
+                    else if (utterance.contains("what is my sex")) {
+
+                        if(!owner.hasSex() || owner.getSex().equals(" ")){
+                            jervisSpeak("I do not know your sex sir, please say it now");
+
+                            speechRecogniser.stopRecognition();
+                            String sex = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+
+                            if(sex.equals("male")  ||
+                               sex.equals("female")||
+                               sex.equals("Male")  ||
+                               sex.equals("Female")){
+                                Owner editedObject = Owner.newBuilder()
+                                        .mergeFrom(new FileInputStream("JervisStorage.ser"))
+                                        .setSex(sex) 
+                                        .build();
+
+                                serialOutput = new FileOutputStream("JervisStorage.ser");
+                                editedObject.writeTo(serialOutput);
+                                serialOutput.close();
+                            }
+                            else{
+                                jervisSpeak("The sex is invalid, you can be either male or female");
+                            }
+
+                            speechRecogniser.startRecognition();
+                        }
+                        else{
+                            jervisSpeak("You are a" + owner.getSex() + "sir");
+                        }
+                    }
+                    else if (utterance.contains("what is my profession")) {
+
+                        if(!owner.hasProfession() || owner.getProfession().equals(" ")){
+                            jervisSpeak("I do not know your profession sir, please say it now");
+
+                            speechRecogniser.stopRecognition();
+                            String profession = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+
+                            Owner editedObject = Owner.newBuilder()
+                                    .mergeFrom(new FileInputStream("JervisStorage.ser"))
+                                    .setProfession(profession)
+                                    .build();
+
+                            serialOutput = new FileOutputStream("JervisStorage.ser");
+                            editedObject.writeTo(serialOutput);
+                            serialOutput.close();
+
+                            speechRecogniser.startRecognition(); 
+                        }
+                        else{
+                            jervisSpeak("You are " + owner.getProfession() + "sir");
+                        }
+                    }
+                    else if (utterance.contains("what is my email")) {
+
+                        if(!owner.hasEmail() || owner.getEmail().equals(" ")){
+                            jervisSpeak("I do not know your email sir, please say it now");
+
+                            speechRecogniser.stopRecognition();
+                            String email = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+
+                            Owner editedObject = Owner.newBuilder()
+                                    .mergeFrom(new FileInputStream("JervisStorage.ser"))
+                                    .setEmail(email)
+                                    .build();
+
+                            serialOutput = new FileOutputStream("JervisStorage.ser");
+                            editedObject.writeTo(serialOutput);
+                            serialOutput.close();
+
+                            speechRecogniser.startRecognition(); 
+                        }
+                        else{
+                            jervisSpeak("Your email is " + owner.getEmail() + "sir");
+                        }
+                    }
+                    else if (utterance.contains("what is my location")) {
+
+                        if(!owner.hasLocation() || owner.getLocation().equals(" ")){
+                            jervisSpeak("I do not know your location sir, please say it now");
+
+                            speechRecogniser.stopRecognition();
+                            String location = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+
+                            Owner editedObject = Owner.newBuilder()
+                                    .mergeFrom(new FileInputStream("JervisStorage.ser"))
+                                    .setLocation(location)
+                                    .build();
+
+                            serialOutput = new FileOutputStream("JervisStorage.ser");
+                            editedObject.writeTo(serialOutput);
+                            serialOutput.close();
+
+                            speechRecogniser.startRecognition(); 
+                        }
+                        else{
+                            jervisSpeak("Your location is " + owner.getLocation() + "sir");
+                        }
+                    }
+                    else if (utterance.contains("remember my name")) {
+                        jervisSpeak("Please say your name sir");
+
+                        speechRecogniser.stopRecognition();
+
+                        String name = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+
+                        Owner editedOwner = Owner.newBuilder()
+                                .mergeFrom(new FileInputStream("JervisStorage.ser"))
+                                .setName(name) 
+                                .build();
+
+                        serialOutput = new FileOutputStream("JervisStorage.ser");
+                        editedOwner.writeTo(serialOutput);
+                        serialOutput.close();
+
+                        speechRecogniser.startRecognition(); 
+                    }
+                    else if (utterance.contains("remember my sex")) {
+                        jervisSpeak("Please state your sex sir");
+
+                        speechRecogniser.stopRecognition();
+
+                        String sex = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+
+                        Owner editedOwner = Owner.newBuilder()
+                                .mergeFrom(new FileInputStream("JervisStorage.ser"))
+                                .setSex(sex) 
+                                .build();
+
+                        serialOutput = new FileOutputStream("JervisStorage.ser");
+                        editedOwner.writeTo(serialOutput);
+                        serialOutput.close();
+
+                        speechRecogniser.startRecognition(); 
+                    }
+                    else if (utterance.contains("remember my profession")) {
+                        jervisSpeak("Please state your profession sir");
+
+                        speechRecogniser.stopRecognition();
+
+                        String profession = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+
+                        Owner editedOwner = Owner.newBuilder()
+                                .mergeFrom(new FileInputStream("JervisStorage.ser"))
+                                .setProfession(profession) 
+                                .build();
+
+                        serialOutput = new FileOutputStream("JervisStorage.ser");
+                        editedOwner.writeTo(serialOutput);
+                        serialOutput.close();
+
+                        speechRecogniser.startRecognition(); 
+                    }
+                    else if (utterance.contains("remember my email")) {
+                        jervisSpeak("Please state your email sir");
+
+                        speechRecogniser.stopRecognition();
+
+                        String email = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+
+                        Owner editedOwner = Owner.newBuilder()
+                                .mergeFrom(new FileInputStream("JervisStorage.ser"))
+                                .setEmail(email) 
+                                .build();
+
+                        serialOutput = new FileOutputStream("JervisStorage.ser");
+                        editedOwner.writeTo(serialOutput);
+                        serialOutput.close();
+
+                        speechRecogniser.startRecognition(); 
+                    }
+                    else if (utterance.contains("remember my location")) {
+                        jervisSpeak("Please state your location sir");
+
+                        speechRecogniser.stopRecognition();
+
+                        String location = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+
+                        Owner editedOwner = Owner.newBuilder()
+                                .mergeFrom(new FileInputStream("JervisStorage.ser"))
+                                .setLocation(location) 
+                                .build();
+
+                        serialOutput = new FileOutputStream("JervisStorage.ser");
+                        editedOwner.writeTo(serialOutput);
+                        serialOutput.close();
+
+                        speechRecogniser.startRecognition(); 
+                    }
+                    else if (utterance.contains("what is your name")) {
+                        jervisSpeak("My name is Jervis, a digital being");
+                        Thread.sleep(1000);
+                    }
+                    else if (utterance.contains("the date")) {
+                        jervisSpeak("Today's date is " + DateGenerator.readTodayDate());
+                        Thread.sleep(1000);
+                    }
+                    else if(utterance.contains("remember event")){
+                        jervisSpeak("What date sir?");
+                        //TODO: add the functionality
+                    }
+                    else if(utterance.contains("set new commands")){
+                        jervisSpeak("On it sir");
+                        commandGUI cmdGUI = new commandGUI();
+                    }
+                    else if(utterance.contains("translate")){
+                        jervisSpeak("I am listening for the source text sir");
+                        speechRecogniser.stopRecognition();
+
+                        String sourceText = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+                        jervisSpeak(enFrTranslator.translate(sourceText));
                         speechRecogniser.startRecognition();
                     }
-                    else{
-                        voice.speak("You are a" + owner.getSex() + "sir");
-                    }
-                }
-                else if (utterance.contains("what is my profession")) {
-                    
-                    if(!owner.hasProfession() || owner.getProfession().equals(" ")){
-                        voice.speak("I do not know your profession sir, please say it now");
-                        
+                    else if(utterance.contains("open a website")){
+                        jervisSpeak("What is the address sir?");
                         speechRecogniser.stopRecognition();
-                        String profession = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
-                        
-                        Owner editedObject = Owner.newBuilder()
-                                .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                                .setProfession(profession)
-                                .build();
-                        
-                        serialOutput = new FileOutputStream("JervisStorage.ser");
-                        editedObject.writeTo(serialOutput);
-                        serialOutput.close();
-                        
-                        speechRecogniser.startRecognition(); 
+
+                        String url = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+
+                        url = url.replace("dot", ".");
+                        url = url.replace(" ", "");
+
+                        try {
+                            Desktop.getDesktop().browse(new URL("http://" + url).toURI());
+                        } catch (URISyntaxException | IOException e) {
+                        }
+                        jervisSpeak("The website should pop up, sir");
+                        speechRecogniser.startRecognition();
                     }
-                    else{
-                        voice.speak("You are " + owner.getProfession() + "sir");
-                    }
-                }
-                else if (utterance.contains("what is my email")) {
-                    
-                    if(!owner.hasEmail() || owner.getEmail().equals(" ")){
-                        voice.speak("I do not know your email sir, please say it now");
-                        
+                    else if(utterance.contains("the weather")){
+                        actionWeather(utterance);
+                    }     
+                    else if(utterance.contains("make a note")){
+                        //Future<String> future = (Future<String>) execServise.submit(new GoogleSpeech());
+
+                        /*while(GoogleSpeech.bStartRecognition){
+                            GoogleSpeech.displayResponse();
+                            if(GoogleSpeech.displayResponse().contains("note finished"))
+                                future.cancel(true);
+                        }*/
+
+                        String noteTitle, content;
+
+                        jervisSpeak("short, medium or long, sir");
+                        Thread.sleep(1000);
+                        utterance = speechRecogniser.getResult();
+
+                        if(utterance.contains("short")){
+                            noteLength = NoteLength.eSHORT_NOTE;
+                        }
+                        else if(utterance.contains("medium")){
+                            noteLength = NoteLength.eMEDIUM_NOTE;
+                        }
+                        else if(utterance.contains("long")){
+                            noteLength = NoteLength.eLONG_NOTE;
+                        }
+
                         speechRecogniser.stopRecognition();
-                        String email = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
-                        
-                        Owner editedObject = Owner.newBuilder()
-                                .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                                .setEmail(email)
-                                .build();
-                        
-                        serialOutput = new FileOutputStream("JervisStorage.ser");
-                        editedObject.writeTo(serialOutput);
-                        serialOutput.close();
-                        
-                        speechRecogniser.startRecognition(); 
+                        jervisSpeak("What should be the title, sir?");
+
+                        noteTitle = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+
+                        jervisSpeak("Ok, sir, I am listening for the content");
+                        content = WatsonSpeechRecogniser.recognise(noteLength);
+
+                        NotepadWrapper.writeData(noteTitle, content);
+                        jervisSpeak("Task completed, sir");
+
+                        speechRecogniser.startRecognition();
                     }
-                    else{
-                        voice.speak("Your email is " + owner.getEmail() + "sir");
-                    }
+                    else if(utterance.contains("open location")){
+                        jervisSpeak("What is the location?"); 
+                    }   
                 }
-                else if (utterance.contains("what is my location")) {
-                    
-                    if(!owner.hasLocation() || owner.getLocation().equals(" ")){
-                        voice.speak("I do not know your location sir, please say it now");
-                        
-                        speechRecogniser.stopRecognition();
-                        String location = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
-                        
-                        Owner editedObject = Owner.newBuilder()
-                                .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                                .setLocation(location)
-                                .build();
-                        
-                        serialOutput = new FileOutputStream("JervisStorage.ser");
-                        editedObject.writeTo(serialOutput);
-                        serialOutput.close();
-                        
-                        speechRecogniser.startRecognition(); 
-                    }
-                    else{
-                        voice.speak("Your location is " + owner.getLocation() + "sir");
-                    }
+
+                else if (utterance.contains("that was funny") ||
+                         utterance.contains("that's funny")   ||
+                         utterance.contains("that's funny")){
+                    jervisSpeak("Thank you, sir");
                 }
-                else if (utterance.contains("remember my name")) {
-                    voice.speak("Please say your name sir");
-                    
-                    speechRecogniser.stopRecognition();
-                    
-                    String name = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
-
-                    Owner editedOwner = Owner.newBuilder()
-                            .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                            .setName(name) 
-                            .build();
-
-                    serialOutput = new FileOutputStream("JervisStorage.ser");
-                    editedOwner.writeTo(serialOutput);
-                    serialOutput.close();
-
-                    speechRecogniser.startRecognition(); 
+                else if(utterance.contains("thank you") ||
+                        utterance.contains("thanks")){
+                    jervisSpeak("Anytime, sir");
                 }
-                else if (utterance.contains("remember my sex")) {
-                    voice.speak("Please state your sex sir");
-                    
-                    speechRecogniser.stopRecognition();
-                    
-                    String sex = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
-
-                    Owner editedOwner = Owner.newBuilder()
-                            .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                            .setSex(sex) 
-                            .build();
-
-                    serialOutput = new FileOutputStream("JervisStorage.ser");
-                    editedOwner.writeTo(serialOutput);
-                    serialOutput.close();
-
-                    speechRecogniser.startRecognition(); 
-                }
-                else if (utterance.contains("remember my profession")) {
-                    voice.speak("Please state your profession sir");
-                    
-                    speechRecogniser.stopRecognition();
-                    
-                    String profession = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
-
-                    Owner editedOwner = Owner.newBuilder()
-                            .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                            .setProfession(profession) 
-                            .build();
-
-                    serialOutput = new FileOutputStream("JervisStorage.ser");
-                    editedOwner.writeTo(serialOutput);
-                    serialOutput.close();
-
-                    speechRecogniser.startRecognition(); 
-                }
-                else if (utterance.contains("remember my email")) {
-                    voice.speak("Please state your email sir");
-                    
-                    speechRecogniser.stopRecognition();
-                    
-                    String email = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
-
-                    Owner editedOwner = Owner.newBuilder()
-                            .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                            .setEmail(email) 
-                            .build();
-
-                    serialOutput = new FileOutputStream("JervisStorage.ser");
-                    editedOwner.writeTo(serialOutput);
-                    serialOutput.close();
-
-                    speechRecogniser.startRecognition(); 
-                }
-                else if (utterance.contains("remember my location")) {
-                    voice.speak("Please state your location sir");
-                    
-                    speechRecogniser.stopRecognition();
-                    
-                    String location = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
-
-                    Owner editedOwner = Owner.newBuilder()
-                            .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                            .setLocation(location) 
-                            .build();
-
-                    serialOutput = new FileOutputStream("JervisStorage.ser");
-                    editedOwner.writeTo(serialOutput);
-                    serialOutput.close();
-
-                    speechRecogniser.startRecognition(); 
-                }
-                else if (utterance.contains("what is your name")) {
-                    voice.speak("My name is Jervis, a digital being");
-                    Thread.sleep(1000);
-                }
-                else if (utterance.contains("the date")) {
-                    voice.speak("Today's date is " + DateGenerator.readTodayDate());
-                    Thread.sleep(1000);
-                }
-                else if(utterance.contains("remember event")){
-                    voice.speak("What date sir?");
-                }
-                else if(utterance.contains("translate")){
-                    voice.speak("I am listening for the source text sir");
-                    speechRecogniser.stopRecognition();
-                    
-                    String sourceText = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
-                    voice.speak(enFrTranslator.translate(sourceText));
-                    speechRecogniser.startRecognition();
-                }
-                else if(utterance.contains("open a website")){
-                    voice.speak("What is the address sir?");
-                    speechRecogniser.stopRecognition();
-                    
-                    String url = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
-                    
-                    url = url.replace("dot", ".");
-                    url = url.replace(" ", "");
-                            
-                    try {
-                        Desktop.getDesktop().browse(new URL("http://" + url).toURI());
-                    } catch (URISyntaxException | IOException e) {
-                    }
-                    
-                    speechRecogniser.startRecognition();
-                }
-                else if(utterance.contains("the weather")){
-                    actionWeather(utterance);
-                }     
-                else if(utterance.contains("make a note")){
-                    //Future<String> future = (Future<String>) execServise.submit(new GoogleSpeech());
-
-                    /*while(GoogleSpeech.bStartRecognition){
-                        GoogleSpeech.displayResponse();
-                        if(GoogleSpeech.displayResponse().contains("note finished"))
-                            future.cancel(true);
-                    }*/
-                    
-                    String noteTitle, content;
-                    
-                    voice.speak("short, medium or long, sir");
-                    Thread.sleep(1000);
-                    utterance = speechRecogniser.getResult();
-                    
-                    if(utterance.contains("short")){
-                        noteLength = NoteLength.eSHORT_NOTE;
-                    }
-                    else if(utterance.contains("medium")){
-                        noteLength = NoteLength.eMEDIUM_NOTE;
-                    }
-                    else if(utterance.contains("long")){
-                        noteLength = NoteLength.eLONG_NOTE;
-                    }
-                    
-                    speechRecogniser.stopRecognition();
-                    voice.speak("What should be the title, sir?");
-                    
-                    noteTitle = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
-                    
-                    voice.speak("Ok, sir, I am listening for the content");
-                    content = WatsonSpeechRecogniser.recognise(noteLength);
-                    
-                    NotepadWrapper.writeData(noteTitle, content);
-                    voice.speak("Task completed, sir");
-                    
-                    speechRecogniser.startRecognition();
-                }
-                else if(utterance.contains("open location")){
-                    voice.speak("What is the location?"); 
-                }   
+                System.out.println(utterance);//debug
             }
-
-            else if (utterance.contains("that was funny") ||
-                     utterance.contains("that's funny")   ||
-                     utterance.contains("that's funny")){
-                voice.speak("Thank you, sir");
-            }
-            else if(utterance.contains("thank you") ||
-                    utterance.contains("thanks")){
-                voice.speak("Anytime, sir");
-            }
-            System.out.println(utterance);//debug
         }
     }
     
@@ -481,7 +484,7 @@ public class Jervis {
         }
         else{
             //if location unknown
-            voice.speak("Where about, sir?");
+            jervisSpeak("Where about, sir?");
         }
 
         speechRecogniser.stopRecognition();
@@ -489,7 +492,7 @@ public class Jervis {
         speechRecogniser.startRecognition();
 
         //utterance = speechRecogniser.getResult();
-        voice.speak(InformationFinder.weatherForecast(InformationFinder.Place.ePORTSMOUTH, 
+        jervisSpeak(InformationFinder.weatherForecast(InformationFinder.Place.ePORTSMOUTH, 
                 InformationFinder.Period.eOUTLOOK).replace("c", "degree in celsius"));
         Thread.sleep(1000);
 
@@ -506,11 +509,29 @@ public class Jervis {
         utterance = speechRecogniser.getResult();
 
         System.out.println(utterance);
-        voice.speak(InformationFinder.quotesFinder(utterance.replace(' ', '+')));
+        jervisSpeak(InformationFinder.quotesFinder(utterance.replace(' ', '+')));
 
         speechRecogniser.stopRecognition();
         speechRecogniser.setRecogniser(eINIT_GRMR_RCGNSR);
         speechRecogniser.startRecognition();
+    }
+    
+    private static void jervisSpeak(String text){
+        startAnimation = true;
+        voice.speak(text);
+        startAnimation = false;
+    }
+    
+    public static boolean getStartAnim(){
+        return startAnimation;
+    }
+    
+    public static boolean getListening(){
+        return Jervis.bListening;
+    }
+        
+    public static void setListening(boolean bListening){
+        Jervis.bListening = bListening;
     }
    
     

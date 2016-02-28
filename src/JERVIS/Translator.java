@@ -21,7 +21,14 @@ public class Translator {
     private final String sSrcLanguage;
     private final String sDestinLanguage;
     private final LanguageTranslation service;
-    
+   
+    /*  Constructor ************************************************************
+    **  16/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Constructor for Translator class
+     * @param sSrcLanguage
+     * @param sDestinLanguage
+    ****************************************************************************/  
     public Translator(String sSrcLanguage, String sDestinLanguage){
         
         this.sSrcLanguage = sSrcLanguage;
@@ -33,6 +40,13 @@ public class Translator {
         );
     }
     
+    /*  translate ************************************************************
+    **  16/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: translates from the parameters passed in the constructor
+     * @param text
+     * @return 
+    ****************************************************************************/ 
     public String translate(String text){
                 
         TranslationResult translationResult = 

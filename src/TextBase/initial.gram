@@ -31,7 +31,8 @@ grammar dialog;
                    | thanks [jervis]
                    | open a* location
                    | translate please*
-                   | please* remember my ( name | sex | profession | email | location | event )
+                   | please* remember my* ( name | sex | profession | email | location | event )
+                   | set new commands
 
                 );
 

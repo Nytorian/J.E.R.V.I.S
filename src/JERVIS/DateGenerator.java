@@ -156,4 +156,27 @@ public final class DateGenerator {
                 
         return readTodayDate;
     }
+    
+    /*  textToDate *************************************************************
+    **  27/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: takes text as input and outputs numerical date
+     * @param textDate
+     * @return 
+    ***************************************************************************/
+    public static String textToDate(String textDate){
+
+        String temp[] = textDate.split(" ");
+        String numericDate;
+        
+        for(int i = 0; i < ordinalNumNames.length; i++){
+            if(ordinalNumNames[i].contains(temp[0])){
+                
+            }
+        }
+        
+        //twenty first of October | two thousand and ten
+        
+        return todayDate;
+    }
 }
