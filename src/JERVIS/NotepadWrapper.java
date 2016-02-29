@@ -17,14 +17,14 @@ import java.io.FileWriter;
 
 public class NotepadWrapper {
     
-    /*  writeData **************************************************************
+    /*  writeNoteData **************************************************************
     **  16/02/2016  M.Michalski Initial Version
     ***************************************************************************/
     /**Description: Writes specified data to to the notepad file
      * @param title
      * @param content
     ****************************************************************************/ 
-    public static void writeData(String title, String content){
+    public static void writeNoteData(String title, String content){
         BufferedWriter writer = null;
         try{
             File file = new File(title + ".txt");

@@ -49,7 +49,7 @@ public class mainGUI extends javax.swing.JFrame {
 
         lblAnim.setIcon(new javax.swing.ImageIcon("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\img\\Voice Animation\\s0.jpg")); // NOI18N
         jLayeredPane1.add(lblAnim);
-        lblAnim.setBounds(390, 680, 200, 100);
+        lblAnim.setBounds(400, 410, 200, 100);
         jLayeredPane1.setLayer(lblAnim, javax.swing.JLayeredPane.PALETTE_LAYER);
 
         chkListen.setBackground(new java.awt.Color(153, 204, 255));

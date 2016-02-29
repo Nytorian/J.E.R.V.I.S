@@ -23,43 +23,6 @@ public final class DateGenerator {
     /* class variable declarations */
     private static String todayDate = "", readTodayDate = "";
     
-    private static final String[] tensNames = {
-        "",
-        " ten",
-        " twenty",
-        " thirty"
-    };
-    
-    private static final String[] ordninalTensNames = {
-        "",
-        " tenth",
-        " twentieth",
-        " thirtieth"
-    };
-
-    private static final String[] numNames = {
-        "",
-        " one",
-        " two",
-        " three",
-        " four",
-        " five",
-        " six",
-        " seven",
-        " eight",
-        " nine",
-        " ten",
-        " eleven",
-        " twelve",
-        " thirteen",
-        " fourteen",
-        " fifteen",
-        " sixteen",
-        " seventeen",
-        " eighteen",
-        " nineteen"
-    };
-    
         private static final String[] ordinalNumNames = {
         "",
         " first",
@@ -80,9 +43,36 @@ public final class DateGenerator {
         " sixteenth",
         " seventeenth",
         " eighteenth",
-        " nineteenth"
+        " nineteenth",
+        " twentieth",
+        " twenty first",
+        " twenty second",
+        " twenty third",
+        " twenty fourth",
+        " twenty fifth",
+        " twenty sixth",
+        " twenty seventh",
+        " twenty eightth",
+        " twenty nineth",
+        " thirtieth",
+        " thirty first",
     };
-
+        
+    private static final String[] months = {
+        "january",
+        "february",
+        "march",
+        "april",
+        "may",
+        "june",
+        "july",
+        "august",
+        "september",
+        "october",
+        "november",
+        "december"
+    };
+ 
     /*  initDateGenerator ************************************************************
     **  02/02/2016  M.Michalski Initial Version
     ***************************************************************************/
@@ -124,26 +114,10 @@ public final class DateGenerator {
             
             DateFormatSymbols dfs = new DateFormatSymbols();
             String[] months = dfs.getMonths();
-
-            char[] charTmpArray = finalDate[0].toCharArray();
-            
-            if(charTmpArray[1] == '0'){
-                finalDate[0] = 
-                    ordninalTensNames[Character.getNumericValue(charTmpArray[0])];
-            } 
-            else {
-                
-                if (Integer.parseInt(finalDate[0]) <= 19){
-                    finalDate[0] =
-                        ordinalNumNames[Character.getNumericValue(charTmpArray[1])];
-                } 
-                else {
-                    finalDate[0] = 
-                        tensNames[Character.getNumericValue(charTmpArray[0])] +
-                        " " +
-                        ordinalNumNames[Character.getNumericValue(charTmpArray[1])];  
-                }
-            }
+                     
+            System.out.println(Integer.parseInt(finalDate[0]));
+            finalDate[0] = 
+                    ordinalNumNames[Integer.parseInt(finalDate[0])];
             
             int i = Integer.parseInt(finalDate[1]);
 
@@ -167,13 +141,20 @@ public final class DateGenerator {
     public static String textToDate(String textDate){
 
         String temp[] = textDate.split(" ");
-        String numericDate;
+        String numericDate = "";
         
         for(int i = 0; i < ordinalNumNames.length; i++){
             if(ordinalNumNames[i].contains(temp[0])){
-                
+                numericDate = Integer.toString(i);
             }
         }
+        for(int i = 1; i < months.length; i++){
+            if(months[i].contains(temp[2]) || 
+               months[i].contains(temp[3])){
+                numericDate += "/" + Integer.toString(i);
+            }
+        }
+ 
         
         //twenty first of October | two thousand and ten
         
