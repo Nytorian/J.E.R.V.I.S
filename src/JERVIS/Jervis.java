@@ -31,7 +31,7 @@ import java.net.URL;
 
 public class Jervis {
     
-    private static mainGUI mainFrame;
+    private static mainGUI mainFrame = new mainGUI();;
             
     private static final String Voice = "kevin16";
     private static VoiceManager vm;
@@ -79,8 +79,6 @@ public class Jervis {
         voice = vm.getVoice(Voice);
         voice.allocate();
         
-        mainFrame = new mainGUI();
-        
         ExecutorService execServise = Executors.newCachedThreadPool();
         execServise.execute(new WaveFormAnim());
 
@@ -99,12 +97,8 @@ public class Jervis {
                 System.out.println(utterance);//debug
 
                 Jervis.bAnimationStart = true;
-                if (utterance.contains("go away") ||
-                    utterance.contains("you can go")){
-                    jervisSpeak("Ok, I am gone, sir, Goodbye");
-                    exit(0);
-                }
-                else if (utterance.equals("jervis")){
+              
+                if (utterance.equals("jervis")){
 
                     jervisSpeak("Yes, sir?");
 
@@ -113,14 +107,19 @@ public class Jervis {
                     Thread.sleep(200);
 
                     utterance = speechRecogniser.getResult();
+                    
+                    if (utterance.contains("go away") ||
+                        utterance.contains("you can go")){
+                        jervisSpeak("Ok, I am gone, sir, Goodbye");
+                        exit(0);
+                    }
 
-                    if (
-                         utterance.equals("hello jervis")    ||
-                         utterance.contains("good morning")  ||
-                         utterance.contains("good afternoon")||
-                         utterance.contains("good evening")  ||
-                         utterance.startsWith("how are")){
-
+                    else if (
+                        utterance.contains("hello")    ||
+                        utterance.contains("good afternoon")||
+                        utterance.contains("good evening")  ||
+                        utterance.startsWith("how are")){
+  
                         if (utterance.contains("Hello")){
                             jervisSpeak("Hello! Sir, how is life?");
                             actionConvers();
@@ -188,6 +187,7 @@ public class Jervis {
                         }
                         else{
                             jervisSpeak("Your name is" + owner.getName() + "sir");
+                            Thread.sleep(300);
                         }
                         //*/
 
@@ -237,6 +237,7 @@ public class Jervis {
                         }
                         else{
                             jervisSpeak("You are a" + owner.getSex() + "sir");
+                            Thread.sleep(300);
                         }
                     }
                     else if (utterance.contains("what is my profession")) {
@@ -260,6 +261,7 @@ public class Jervis {
                         }
                         else{
                             jervisSpeak("You are " + owner.getProfession() + "sir");
+                            Thread.sleep(300);
                         }
                     }
                     else if (utterance.contains("what is my email")) {
@@ -283,6 +285,7 @@ public class Jervis {
                         }
                         else{
                             jervisSpeak("Your email is " + owner.getEmail() + "sir");
+                            Thread.sleep(300);
                         }
                     }
                     else if (utterance.contains("what is my location")) {
@@ -306,6 +309,7 @@ public class Jervis {
                         }
                         else{
                             jervisSpeak("Your location is " + owner.getLocation() + "sir");
+                            Thread.sleep(300);
                         }
                     }
                     else if (utterance.contains("remember my name")) {
@@ -481,6 +485,7 @@ public class Jervis {
                     }
                     else if(utterance.contains("open location")){
                         jervisSpeak("What is the location?"); 
+                        Thread.sleep(600);
                     }   
                 }
 
@@ -488,10 +493,12 @@ public class Jervis {
                          utterance.contains("that's funny")   ||
                          utterance.contains("that's funny")){
                     jervisSpeak("Thank you, sir");
+                    Thread.sleep(600);
                 }
                 else if(utterance.contains("thank you") ||
                         utterance.contains("thanks")){
                     jervisSpeak("Anytime, sir");
+                    Thread.sleep(600);
                 }
                 System.out.println(utterance);//debug
             }
@@ -501,13 +508,13 @@ public class Jervis {
     public static void actionWeather(String utterance) 
             throws IOException, InterruptedException, LineUnavailableException{
         
-        if(utterance.contains("in my location")){
+        /*if(utterance.contains("in my location")){
 
         }
         else{
             //if location unknown
             jervisSpeak("Where about, sir?");
-        }
+        }*/
 
         speechRecogniser.stopRecognition();
         speechRecogniser.setRecogniser(ePLACE_GRMR_RCGNSR);

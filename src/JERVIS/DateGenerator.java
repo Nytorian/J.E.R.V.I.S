@@ -12,6 +12,7 @@
 *******************************************************************************/
 package JERVIS;
 
+import TextBase.DataTables;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -23,55 +24,7 @@ public final class DateGenerator {
     /* class variable declarations */
     private static String todayDate = "", readTodayDate = "";
     
-        private static final String[] ordinalNumNames = {
-        "",
-        " first",
-        " second",
-        " third",
-        " fourth",
-        " fifth",
-        " sixth",
-        " seventh",
-        " eightth",
-        " nineth",
-        " tenth",
-        " eleventh",
-        " twelveth",
-        " thirteenth",
-        " fourteenth",
-        " fifteenth",
-        " sixteenth",
-        " seventeenth",
-        " eighteenth",
-        " nineteenth",
-        " twentieth",
-        " twenty first",
-        " twenty second",
-        " twenty third",
-        " twenty fourth",
-        " twenty fifth",
-        " twenty sixth",
-        " twenty seventh",
-        " twenty eightth",
-        " twenty nineth",
-        " thirtieth",
-        " thirty first",
-    };
-        
-    private static final String[] months = {
-        "january",
-        "february",
-        "march",
-        "april",
-        "may",
-        "june",
-        "july",
-        "august",
-        "september",
-        "october",
-        "november",
-        "december"
-    };
+    private static String[] tmpDate;
  
     /*  initDateGenerator ************************************************************
     **  02/02/2016  M.Michalski Initial Version
@@ -87,6 +40,7 @@ public final class DateGenerator {
         // Using DateFormat format method we can create a string 
         // representation of a date with the defined format.
         todayDate = df.format(today);
+        System.out.println(todayDate);
     }
     
     /*  getTodayDate ***********************************************************
@@ -117,7 +71,7 @@ public final class DateGenerator {
                      
             System.out.println(Integer.parseInt(finalDate[0]));
             finalDate[0] = 
-                    ordinalNumNames[Integer.parseInt(finalDate[0])];
+                    DataTables.dateDays[0][Integer.parseInt(finalDate[0])];
             
             int i = Integer.parseInt(finalDate[1]);
 
@@ -131,33 +85,107 @@ public final class DateGenerator {
         return readTodayDate;
     }
     
-    /*  textToDate *************************************************************
-    **  27/02/2016  M.Michalski Initial Version
+    /*  setEvent ***************************************************************
+    **  27/03/2016  M.Michalski Initial Version
     ***************************************************************************/
-    /**Description: takes text as input and outputs numerical date
-     * @param textDate
+    /**Description: Produces numeric date from text
+     * @param sDaysMonthsText
+     * @param sYearText
+     * @param sHourText
+    ***************************************************************************/
+    public static void setEvent(String sDaysMonthsText,
+            String sYearText, String sHourText){
+        
+        String sDateNumeric;
+        String sTimeNumeric;
+        
+        sDateNumeric  = daysMonthsToNumeric(sDaysMonthsText);
+        sDateNumeric += yearToNumeric(sYearText);
+        sTimeNumeric = timeToNumeric(sHourText);
+    }
+    
+    /*  daysMonthsToNumeric ****************************************************
+    **  27/03/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Produces numeric date of days and months from text
+     * @param sDaysMonthsText
      * @return 
     ***************************************************************************/
-    public static String textToDate(String textDate){
+    public static String daysMonthsToNumeric(String sDaysMonthsText){
+       
+        String[] sTmpDate = sDaysMonthsText.split("of");
+        String sDateNumeric = "";
 
-        String temp[] = textDate.split(" ");
-        String numericDate = "";
-        
-        for(int i = 0; i < ordinalNumNames.length; i++){
-            if(ordinalNumNames[i].contains(temp[0])){
-                numericDate = Integer.toString(i);
+        for(int i = 0; i < DataTables.dateDays[0].length; i++){
+            if(DataTables.dateDays[0][i].equals(sTmpDate[0])){
+                sDateNumeric = DataTables.dateDays[i][i] + "/";
             }
         }
-        for(int i = 1; i < months.length; i++){
-            if(months[i].contains(temp[2]) || 
-               months[i].contains(temp[3])){
-                numericDate += "/" + Integer.toString(i);
+        
+        for(int i = 0; i < DataTables.dateMonths[0].length; i++){
+            if(DataTables.dateDays[0][i].equals(sTmpDate[1])){
+                sDateNumeric += DataTables.dateMonths[i][i] + "/";
             }
         }
- 
+    
+        return sDateNumeric;
+    }
+    
+    /*  yearToNumeric **********************************************************
+    **  27/03/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Produces numeric year
+     * @param sYearText from text
+     * @return 
+    ***************************************************************************/
+    public static String yearToNumeric(String sYearText){
         
-        //twenty first of October | two thousand and ten
+        String sYearNumeric = "";
         
-        return todayDate;
+        for(int i = 0; i < DataTables.dateYear[0].length; i++){
+            if(DataTables.dateYear[0][i].equals(sYearText)){
+                sYearNumeric = DataTables.dateYear[i][i];
+            }
+        }
+    
+        return sYearNumeric;
+    }
+    
+    /*  timeToNumeric **********************************************************
+    **  27/03/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Produces numeric time from text
+     * @param sTimeText
+     * @return 
+    ***************************************************************************/
+    public static String timeToNumeric(String sTimeText){
+       
+        String[] sTmpTime = sTimeText.split(" ");
+        String sTmpHours;
+        String sTmpMinutes;
+        String sTimeNumeric = "";
+        
+        if(sTmpTime.length > 3){
+            sTmpHours = sTmpTime[0] + " " + sTmpTime[1];
+        }
+        else{
+            sTmpHours = sTmpTime[0] + " ";
+        }
+        
+        sTmpMinutes = sTmpTime[2] + " " + sTmpTime[3];
+
+        for(int i = 0; i < DataTables.dateTime[0].length; i++){
+            if(DataTables.dateTime[0][i].equals(sTmpHours)){
+                sTimeNumeric = DataTables.dateTime[i][i] + ":";
+            }
+        }
+        
+        for(int i = 0; i < DataTables.dateTime[0].length; i++){
+            if(DataTables.dateTime[0][i].equals(sTmpMinutes)){
+                sTimeNumeric += DataTables.dateTime[i][i];
+            }
+        }
+    
+        return sTimeNumeric;
     }
 }

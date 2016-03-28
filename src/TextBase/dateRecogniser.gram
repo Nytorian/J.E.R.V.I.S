@@ -22,8 +22,16 @@ grammar dateRecogniser;
             | seventeenth
             | eighteenth
             | nineteenth
-| twentieth
-| thirtieth
+            | twentieth
+            | twenty first
+            | twenty second
+            | twenty third
+            | twenty fourth
+            | twenty fifth
+            | twenty sixth
+            | twenty seventh
+            | twenty eighth
+            | twenty ninth
                 );
 
 <month> = ( 
