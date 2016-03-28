@@ -7,7 +7,7 @@
 *
 @language      Java JDK 1.8
 *
-@Description:  Speech recognsiser for Jervis.
+@Description:  Speech recognsiser warpper for Jervis.
 *******************************************************************************/
 package JERVIS;
 
@@ -33,7 +33,7 @@ public class SpeechRecogniser {
             
     LiveSpeechRecognizer currentRecogniser, initialGramRecognizer, 
             placeGramRecognizer, conversationGramRecognizer,
-            commandGramRecognizer;
+            commandGramRecognizer, dateGramRecognizer;
     
     LiveSpeechRecognizer lmRecognizer;
     
@@ -75,6 +75,11 @@ public class SpeechRecogniser {
         commandGramRecognizer = new LiveSpeechRecognizer(configuration);
         commandGramRecognizer.closeRecognitionLine();
         
+        configuration.setUseGrammar(true);
+        configuration.setGrammarName("dateRecogniser");
+        dateGramRecognizer = new LiveSpeechRecognizer(configuration);
+        dateGramRecognizer.closeRecognitionLine();
+        
         /* Initialise the language model recogniser */
         configuration.setUseGrammar(false);
         configuration.setLanguageModelPath(LANGUAGE_MODEL);
@@ -107,6 +112,9 @@ public class SpeechRecogniser {
                 break;
             case eCMD_GRMR_RCGNSR:
                 currentRecogniser = commandGramRecognizer;
+                break;
+            case eDTE_GRMR_RCGNSR:
+                currentRecogniser = dateGramRecognizer;
                 break;
             case eLM_RECOGNISER:
                 currentRecogniser = lmRecognizer;

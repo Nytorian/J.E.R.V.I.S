@@ -93,7 +93,7 @@ public final class DateGenerator {
      * @param sYearText
      * @param sHourText
     ***************************************************************************/
-    public static void setEvent(String sDaysMonthsText,
+    public static String setEvent(String sDaysMonthsText,
             String sYearText, String sHourText){
         
         String sDateNumeric;
@@ -102,6 +102,8 @@ public final class DateGenerator {
         sDateNumeric  = daysMonthsToNumeric(sDaysMonthsText);
         sDateNumeric += yearToNumeric(sYearText);
         sTimeNumeric = timeToNumeric(sHourText);
+        
+        return sDateNumeric + " " + sTimeNumeric;
     }
     
     /*  daysMonthsToNumeric ****************************************************
@@ -113,18 +115,18 @@ public final class DateGenerator {
     ***************************************************************************/
     public static String daysMonthsToNumeric(String sDaysMonthsText){
        
-        String[] sTmpDate = sDaysMonthsText.split("of");
+        String[] sTmpDate = sDaysMonthsText.replace(" ", "").split("of");
         String sDateNumeric = "";
 
-        for(int i = 0; i < DataTables.dateDays[0].length; i++){
+        for(int i = 0; i <= DataTables.dateDays[0].length - 1; i++){
             if(DataTables.dateDays[0][i].equals(sTmpDate[0])){
-                sDateNumeric = DataTables.dateDays[i][i] + "/";
+                sDateNumeric = DataTables.dateDays[1][i] + "/";
             }
         }
         
-        for(int i = 0; i < DataTables.dateMonths[0].length; i++){
-            if(DataTables.dateDays[0][i].equals(sTmpDate[1])){
-                sDateNumeric += DataTables.dateMonths[i][i] + "/";
+        for(int i = 0; i <= DataTables.dateMonths[0].length - 1; i++){
+            if(DataTables.dateMonths[0][i].equals(sTmpDate[1])){
+                sDateNumeric += DataTables.dateMonths[1][i] + "/";
             }
         }
     
@@ -142,9 +144,9 @@ public final class DateGenerator {
         
         String sYearNumeric = "";
         
-        for(int i = 0; i < DataTables.dateYear[0].length; i++){
+        for(int i = 0; i <= DataTables.dateYear[0].length - 1; i++){
             if(DataTables.dateYear[0][i].equals(sYearText)){
-                sYearNumeric = DataTables.dateYear[i][i];
+                sYearNumeric = DataTables.dateYear[1][i];
             }
         }
     
@@ -167,22 +169,26 @@ public final class DateGenerator {
         
         if(sTmpTime.length > 3){
             sTmpHours = sTmpTime[0] + " " + sTmpTime[1];
+            sTmpMinutes = sTmpTime[2] + " " + sTmpTime[3];
+        }
+        else if(sTmpTime.length > 2){
+            sTmpHours = sTmpTime[0] + " ";
+            sTmpMinutes = sTmpTime[1] + " " + sTmpTime[2];
         }
         else{
             sTmpHours = sTmpTime[0] + " ";
+            sTmpMinutes = sTmpTime[1];
         }
-        
-        sTmpMinutes = sTmpTime[2] + " " + sTmpTime[3];
-
-        for(int i = 0; i < DataTables.dateTime[0].length; i++){
+       
+        for(int i = 0; i <= DataTables.dateTime[0].length - 1; i++){
             if(DataTables.dateTime[0][i].equals(sTmpHours)){
-                sTimeNumeric = DataTables.dateTime[i][i] + ":";
+                sTimeNumeric = DataTables.dateTime[1][i] + ":";
             }
         }
         
-        for(int i = 0; i < DataTables.dateTime[0].length; i++){
+        for(int i = 0; i <= DataTables.dateTime[0].length - 1; i++){
             if(DataTables.dateTime[0][i].equals(sTmpMinutes)){
-                sTimeNumeric += DataTables.dateTime[i][i];
+                sTimeNumeric += DataTables.dateTime[1][i];
             }
         }
     

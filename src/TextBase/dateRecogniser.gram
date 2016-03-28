@@ -36,17 +36,17 @@ grammar dateRecogniser;
             | thirty first
         );
 <month> = ( 
-            january,
-            | february,
-            | march,
-            | april,
-            | may,
-            | june,
-            | july,
-            | august,
-            | september,
-            | october,
-            | november,
+            january
+            | february
+            | march
+            | april
+            | may
+            | june
+            | july
+            | august
+            | september
+            | october
+            | november
             | december
         );
 
@@ -66,8 +66,7 @@ grammar dateRecogniser;
           );
 
 <time> = (
-            oh
-            | one
+            one
             | two
             | three
             | four
@@ -124,5 +123,6 @@ grammar dateRecogniser;
             | fifty seven
             | fifty eight
             | fifty nine
+        );
 
 public <date> = (<day> of <month>) | <year> | (<time> <time>);

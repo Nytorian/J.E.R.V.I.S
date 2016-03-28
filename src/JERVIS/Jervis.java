@@ -256,13 +256,13 @@ public class Jervis {
                                 speechRecogniser.stopRecognition();
                                 String name = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
 
-                                Owner editedObject = Owner.newBuilder()
+                                Owner sEditedObject = Owner.newBuilder()
                                         .mergeFrom(new FileInputStream("JervisStorage.ser"))
                                         .setName(name) 
                                         .build();
 
                                 serialOutput = new FileOutputStream("JervisStorage.ser");
-                                editedObject.writeTo(serialOutput);
+                                sEditedObject.writeTo(serialOutput);
                                 serialOutput.close();
 
                                 speechRecogniser.startRecognition(); 
@@ -296,15 +296,15 @@ public class Jervis {
                                 jervisSpeak("I do not know your sex sir, please say it now");
 
                                 speechRecogniser.stopRecognition();
-                                String sex = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+                                String sSex = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
 
-                                if(sex.equals("male")  ||
-                                   sex.equals("female")||
-                                   sex.equals("Male")  ||
-                                   sex.equals("Female")){
+                                if(sSex.equals("male")  ||
+                                   sSex.equals("female")||
+                                   sSex.equals("Male")  ||
+                                   sSex.equals("Female")){
                                     Owner editedObject = Owner.newBuilder()
                                             .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                                            .setSex(sex) 
+                                            .setSex(sSex) 
                                             .build();
 
                                     serialOutput = new FileOutputStream("JervisStorage.ser");
@@ -328,11 +328,11 @@ public class Jervis {
                                 jervisSpeak("I do not know your profession sir, please say it now");
 
                                 speechRecogniser.stopRecognition();
-                                String profession = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+                                String sProfession = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
 
                                 Owner editedObject = Owner.newBuilder()
                                         .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                                        .setProfession(profession)
+                                        .setProfession(sProfession)
                                         .build();
 
                                 serialOutput = new FileOutputStream("JervisStorage.ser");
@@ -352,11 +352,11 @@ public class Jervis {
                                 jervisSpeak("I do not know your email sir, please say it now");
 
                                 speechRecogniser.stopRecognition();
-                                String email = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+                                String sEmail = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
 
                                 Owner editedObject = Owner.newBuilder()
                                         .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                                        .setEmail(email)
+                                        .setEmail(sEmail)
                                         .build();
 
                                 serialOutput = new FileOutputStream("JervisStorage.ser");
@@ -376,11 +376,11 @@ public class Jervis {
                                 jervisSpeak("I do not know your location sir, please say it now");
 
                                 speechRecogniser.stopRecognition();
-                                String location = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+                                String sLocation = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
 
                                 Owner editedObject = Owner.newBuilder()
                                         .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                                        .setLocation(location)
+                                        .setLocation(sLocation)
                                         .build();
 
                                 serialOutput = new FileOutputStream("JervisStorage.ser");
@@ -404,7 +404,41 @@ public class Jervis {
                                 utterance.contains("event")){
                             
                             speechRecogniser.stopRecognition();
-                            speechRecogniser.setRecogniser(eCMD_GRMR_RCGNSR);
+                            speechRecogniser.setRecogniser(eDTE_GRMR_RCGNSR);
+                            
+                            jervisSpeak("What is the title of the event, sir?");
+                            String sTitle = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+                            
+                            //TODO protocol buff
+                            System.out.println(sTitle);
+                            
+                            jervisSpeak("What is the day and month, sir?");
+                            speechRecogniser.startRecognition();
+                            String sDaysMonthsText = speechRecogniser.getResult();
+                            
+                            //TODO protocol buff
+                            System.out.println(sDaysMonthsText);
+                            
+                            speechRecogniser.stopRecognition();
+                            jervisSpeak("What is the year of the event, sir?");
+                            speechRecogniser.startRecognition();
+                            String sYearText = speechRecogniser.getResult();
+                            
+                            //TODO protocol buff
+                            System.out.println(sYearText);
+                            
+                            speechRecogniser.stopRecognition();
+                            jervisSpeak("What is the time of the event, sir?");
+                            speechRecogniser.startRecognition();
+                            String sHourText = speechRecogniser.getResult();
+                            
+                            //TODO protocol buff
+                            System.out.println(sHourText);
+                            
+                            System.out.println(DateGenerator.setEvent(sDaysMonthsText, sYearText, sHourText));  
+                            
+                            speechRecogniser.stopRecognition();
+                            speechRecogniser.setRecogniser(eINIT_GRMR_RCGNSR);
                             speechRecogniser.startRecognition();
                             
                             //reminder feature here
