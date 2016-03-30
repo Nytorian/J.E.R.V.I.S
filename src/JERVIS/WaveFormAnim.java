@@ -33,7 +33,7 @@ public class WaveFormAnim implements Runnable{
     /* run *********************************************************************
     ** 09/11/2015  M.Michalski Initial Version
     ***************************************************************************/
-    /** Description: Task for the threads in the Masked Brute Force functionality 
+    /** Description: Task for the wave form animation
     ***************************************************************************/
     @Override
     public void run(){

@@ -1,0 +1,22 @@
+
+#JSGF V1.0;
+
+grammar yearRecogniser;
+
+<year> = ( 
+            two thousand and sixteen
+            | two thousand and seventeen
+            | two thousand and eighteen
+            | two thousand and nineteen
+            | two thousand and twenty
+            | two thousand and twenty one
+            | two thousand and twenty two
+            | two thousand and twenty three
+            | two thousand and twenty four
+            | two thousand and twenty five
+            | two thousand and twenty six
+            | two thousand and twenty seven
+          );
+
+
+public <yearOut> = <year>;

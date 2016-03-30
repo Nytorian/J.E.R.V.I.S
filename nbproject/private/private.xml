@@ -1,10 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="2">
+        <file>
+            <url>src/JERVIS/Jervis.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>247</line>
+                <key/>
+            </bookmark>
+            <bookmark id="2">
+                <name/>
+                <line>470</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/JERVIS/DueEvents.java</file>
             <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/JERVIS/Jervis.java</file>
             <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/JERVIS/DateGenerator.java</file>
+            <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/TextBase/dateRecogniser.gram</file>
+            <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/TextBase/timeRecogniser.gram</file>
+            <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/JERVIS/Organiser.java</file>
+            <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/JERVIS/WaveFormAnim.java</file>
+            <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/TextBase/DataTables.java</file>
+            <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/TextBase/SpeechRecognisers.java</file>
+            <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/JERVIS/MicrophoneRecorder.java</file>
         </group>
     </open-files>
 </project-private>

@@ -33,7 +33,8 @@ public class SpeechRecogniser {
             
     LiveSpeechRecognizer currentRecogniser, initialGramRecognizer, 
             placeGramRecognizer, conversationGramRecognizer,
-            commandGramRecognizer, dateGramRecognizer;
+            commandGramRecognizer, dateGramRecognizer, timeGramRecognizer, 
+            yearGramRecognizer, minutesGramRecognizer;
     
     LiveSpeechRecognizer lmRecognizer;
     
@@ -80,6 +81,22 @@ public class SpeechRecogniser {
         dateGramRecognizer = new LiveSpeechRecognizer(configuration);
         dateGramRecognizer.closeRecognitionLine();
         
+        configuration.setUseGrammar(true);
+        configuration.setGrammarName("timeRecogniser");
+        timeGramRecognizer = new LiveSpeechRecognizer(configuration);
+        timeGramRecognizer.closeRecognitionLine();
+        
+        configuration.setUseGrammar(true);
+        configuration.setGrammarName("yearRecogniser");
+        yearGramRecognizer = new LiveSpeechRecognizer(configuration);
+        yearGramRecognizer.closeRecognitionLine();
+        
+        configuration.setUseGrammar(true);
+        configuration.setGrammarName("minutesRecogniser");
+        minutesGramRecognizer = new LiveSpeechRecognizer(configuration);
+        minutesGramRecognizer.closeRecognitionLine();
+        
+        
         /* Initialise the language model recogniser */
         configuration.setUseGrammar(false);
         configuration.setLanguageModelPath(LANGUAGE_MODEL);
@@ -116,6 +133,16 @@ public class SpeechRecogniser {
             case eDTE_GRMR_RCGNSR:
                 currentRecogniser = dateGramRecognizer;
                 break;
+            case eTME_GRMR_RCGNSR:
+                currentRecogniser = timeGramRecognizer;
+                break;
+            case eYR_GRMR_RCGNSR:
+                currentRecogniser = yearGramRecognizer;
+                break;
+            case eMNT_GRMR_RCGNSR:
+                currentRecogniser = minutesGramRecognizer;
+                break;    
+                
             case eLM_RECOGNISER:
                 currentRecogniser = lmRecognizer;
                 break;

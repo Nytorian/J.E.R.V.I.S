@@ -23,6 +23,7 @@ import static java.lang.System.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import TextBase.NoteLength;
+import TextBase.Organiser.Event;
 import java.awt.Desktop;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -40,6 +41,7 @@ public class Jervis {
     
     private static Owner owner;
     private static Command command;
+    private static Event events;
     private static boolean startAnimation = false;
     
     private static SpeechRecogniser speechRecogniser;  
@@ -81,14 +83,13 @@ public class Jervis {
         
         ExecutorService execServise = Executors.newCachedThreadPool();
         execServise.execute(new WaveFormAnim());
+        execServise.execute(new Organiser());
 
                         
         System.setProperty("mbrola.base", "D://J.E.R.V.I.S//Downloaded//mbrola//");     
         
         DateGenerator.initDateGenerator();
         Translator enFrTranslator = new Translator("en", "fr");
-        
-        //ownerBuilder = Owner.newBuilder();
         
         while (true) {
             if(getListening()){
@@ -104,6 +105,7 @@ public class Jervis {
 
                     owner = Owner.parseFrom(new FileInputStream("JervisStorage.ser"));
                     command = Command.parseFrom(new FileInputStream("CustomCmd.ser"));
+                    events = Event.parseFrom(new FileInputStream("Organiser.ser"));
                     Thread.sleep(200);
 
                     utterance = speechRecogniser.getResult();
@@ -421,6 +423,7 @@ public class Jervis {
                             
                             speechRecogniser.stopRecognition();
                             jervisSpeak("What is the year of the event, sir?");
+                            speechRecogniser.setRecogniser(eYR_GRMR_RCGNSR);
                             speechRecogniser.startRecognition();
                             String sYearText = speechRecogniser.getResult();
                             
@@ -429,13 +432,54 @@ public class Jervis {
                             
                             speechRecogniser.stopRecognition();
                             jervisSpeak("What is the time of the event, sir?");
+                            speechRecogniser.setRecogniser(eTME_GRMR_RCGNSR);
                             speechRecogniser.startRecognition();
                             String sHourText = speechRecogniser.getResult();
                             
                             //TODO protocol buff
                             System.out.println(sHourText);
                             
-                            System.out.println(DateGenerator.setEvent(sDaysMonthsText, sYearText, sHourText));  
+                            speechRecogniser.stopRecognition();
+                            jervisSpeak("How many minutes before the event shall I remind you, sir?");
+                            speechRecogniser.setRecogniser(eMNT_GRMR_RCGNSR);
+                            speechRecogniser.startRecognition();
+                            String sTimeToRemind = speechRecogniser.getResult();
+                            
+                            System.out.println("Text Time to remind: " + sTimeToRemind);//debug                           
+                            
+                            String sDaysMonthsNum = DateGenerator.daysMonthsToNumeric(sDaysMonthsText);
+                            String sYearNum = DateGenerator.yearToNumeric(sYearText);
+                            String sTimeNum = DateGenerator.timeToNumeric(sHourText);
+                            String sMinutesToRemindNum = DateGenerator.minuteToNumeric(sTimeToRemind);       
+                            
+                            System.out.println("Numeric sDaysMonthsNum: " + sDaysMonthsNum);//debug
+                            System.out.println("Numeric sYearNum: " + sYearNum);//debug
+                            System.out.println("Numeric sTimeNum: " + sTimeNum);//debug
+                            System.out.println("Numeric Time to remind: " + sMinutesToRemindNum);//debug
+                            
+                            Event editedObject = Event.newBuilder()
+                                        .mergeFrom(new FileInputStream("Organiser.ser"))
+                                        .addTitle(sTitle)
+                                        .addDayMonth(sDaysMonthsNum)
+                                        .addYear(sYearNum)
+                                        .addTime(sTimeNum)
+                                        .addTimeToRemind(sMinutesToRemindNum)
+                                        .build();
+
+                            serialOutput = new FileOutputStream("Organiser.ser");
+                            editedObject.writeTo(serialOutput);
+                            serialOutput.close();
+                            
+                            if(sYearNum.equals(Organiser.sCurrentYear)){
+                                if(sDaysMonthsNum.equals(Organiser.sCurrentDayMonth)){
+                                    DueEvents.setEvent(sTitle, sDaysMonthsNum, 
+                                        sYearNum, sTimeNum, sMinutesToRemindNum);
+                                }
+                            }
+                            
+                            jervisSpeak("The event " + sTitle + "has been set");
+                            jervisSpeak("I will remind you about it on " + sDaysMonthsText);
+                            jervisSpeak(sTimeToRemind + " minutes before the event is due");
                             
                             speechRecogniser.stopRecognition();
                             speechRecogniser.setRecogniser(eINIT_GRMR_RCGNSR);
@@ -595,7 +639,8 @@ public class Jervis {
         speechRecogniser.startRecognition();
     }
     
-    private static void jervisSpeak(String text){
+    //Run from multiple threads
+    public static synchronized void jervisSpeak(String text){
         startAnimation = true;
         voice.speak(text);
         startAnimation = false;

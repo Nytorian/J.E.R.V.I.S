@@ -23,8 +23,6 @@ public final class DateGenerator {
     
     /* class variable declarations */
     private static String todayDate = "", readTodayDate = "";
-    
-    private static String[] tmpDate;
  
     /*  initDateGenerator ************************************************************
     **  02/02/2016  M.Michalski Initial Version
@@ -85,27 +83,6 @@ public final class DateGenerator {
         return readTodayDate;
     }
     
-    /*  setEvent ***************************************************************
-    **  27/03/2016  M.Michalski Initial Version
-    ***************************************************************************/
-    /**Description: Produces numeric date from text
-     * @param sDaysMonthsText
-     * @param sYearText
-     * @param sHourText
-    ***************************************************************************/
-    public static String setEvent(String sDaysMonthsText,
-            String sYearText, String sHourText){
-        
-        String sDateNumeric;
-        String sTimeNumeric;
-        
-        sDateNumeric  = daysMonthsToNumeric(sDaysMonthsText);
-        sDateNumeric += yearToNumeric(sYearText);
-        sTimeNumeric = timeToNumeric(sHourText);
-        
-        return sDateNumeric + " " + sTimeNumeric;
-    }
-    
     /*  daysMonthsToNumeric ****************************************************
     **  27/03/2016  M.Michalski Initial Version
     ***************************************************************************/
@@ -117,16 +94,16 @@ public final class DateGenerator {
        
         String[] sTmpDate = sDaysMonthsText.replace(" ", "").split("of");
         String sDateNumeric = "";
-
+        
         for(int i = 0; i <= DataTables.dateDays[0].length - 1; i++){
-            if(DataTables.dateDays[0][i].equals(sTmpDate[0])){
+            if(DataTables.dateDays[0][i].startsWith(sTmpDate[0])){
                 sDateNumeric = DataTables.dateDays[1][i] + "/";
             }
         }
         
         for(int i = 0; i <= DataTables.dateMonths[0].length - 1; i++){
-            if(DataTables.dateMonths[0][i].equals(sTmpDate[1])){
-                sDateNumeric += DataTables.dateMonths[1][i] + "/";
+            if(DataTables.dateMonths[0][i].startsWith(sTmpDate[1])){
+                sDateNumeric += DataTables.dateMonths[1][i];
             }
         }
     
@@ -162,23 +139,13 @@ public final class DateGenerator {
     ***************************************************************************/
     public static String timeToNumeric(String sTimeText){
        
-        String[] sTmpTime = sTimeText.split(" ");
+        String[] sTmpTime = sTimeText.split(" next ");
         String sTmpHours;
         String sTmpMinutes;
         String sTimeNumeric = "";
         
-        if(sTmpTime.length > 3){
-            sTmpHours = sTmpTime[0] + " " + sTmpTime[1];
-            sTmpMinutes = sTmpTime[2] + " " + sTmpTime[3];
-        }
-        else if(sTmpTime.length > 2){
-            sTmpHours = sTmpTime[0] + " ";
-            sTmpMinutes = sTmpTime[1] + " " + sTmpTime[2];
-        }
-        else{
-            sTmpHours = sTmpTime[0] + " ";
-            sTmpMinutes = sTmpTime[1];
-        }
+        sTmpHours = sTmpTime[0];
+        sTmpMinutes = sTmpTime[1];
        
         for(int i = 0; i <= DataTables.dateTime[0].length - 1; i++){
             if(DataTables.dateTime[0][i].equals(sTmpHours)){
@@ -193,5 +160,70 @@ public final class DateGenerator {
         }
     
         return sTimeNumeric;
+    }
+    
+    /*  minuteToNumeric **********************************************************
+    **  27/03/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Produces numeric minutes from text
+     * @param sMinutesText
+     * @return 
+    ***************************************************************************/
+    public static String minuteToNumeric(String sMinutesText){
+       
+        String sMinutesNumeric = "";
+        
+        for(int i = 0; i <= DataTables.dateTime[0].length - 1; i++){
+            if(DataTables.dateTime[0][i].equals(sMinutesText)){
+                sMinutesNumeric = DataTables.dateTime[1][i];
+            }
+        }
+    
+        return sMinutesNumeric;
+    }
+    
+    /*  subTime **********************************************************
+    **  30/03/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Subtracts minutes from time passed as parameter.
+     * @param sTime
+     * @param sMinutes
+     * @return 
+    ***************************************************************************/
+    public static String subTime(String sTime, String sMinutes){
+       
+        String sTimeProcessed = "", sXhour = "", sXminute = "";
+        int iMinutes, iTimeMinutes, iTimeHours, iTimeProcessed;
+        
+        String[] tmpTime = sTime.split(":");
+        
+        iMinutes = Integer.parseInt(sMinutes);
+        iTimeMinutes = Integer.parseInt(tmpTime[1]);
+        
+        if(iTimeMinutes >= iMinutes){
+            iTimeProcessed = iTimeMinutes - iMinutes;
+            
+            if(Integer.parseInt(tmpTime[0]) < 10)
+                sXhour = "0";
+            if(iTimeProcessed < 10)
+                sXminute = "0";
+            
+            sTimeProcessed = sXhour + tmpTime[0] + ":" + sXminute + iTimeProcessed;
+        }
+        else{
+            iTimeHours = Integer.parseInt(tmpTime[0]);
+            iTimeHours -= 1;
+            iTimeMinutes += 60;
+            iTimeProcessed = iTimeMinutes - iMinutes;
+            
+            if(iTimeHours < 10)
+                sXhour = "0";
+            if(iTimeProcessed < 10)
+                sXminute = "0";
+            
+            sTimeProcessed = sXhour + iTimeHours + ":" + sXminute + iTimeProcessed;
+        }
+     
+        return sTimeProcessed;
     }
 }
