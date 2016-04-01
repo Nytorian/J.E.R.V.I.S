@@ -14,6 +14,8 @@ package JERVIS;
 import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public final class InformationFinder {
     
@@ -41,6 +43,47 @@ public final class InformationFinder {
                           .timeout(3000)
                           .get();
                 resultText = doc.select("span[class=bqQuoteLink]").first().text();
+            } catch (IOException e) {
+            }
+            return(resultText);
+        }
+        return "";
+    }
+    
+        /*  definitionFinder ***************************************************
+    **  03/02/2016  M.Michalski Initial Version
+    *   09/02/2016  M.Michalski allocated hard coded source (brainyquote)
+    ***************************************************************************/
+    /**Description: changes the currentRecogniser - multi recogniser extention
+     * @param sQuery
+     * @return 
+    ***************************************************************************/
+    public static String definitionFinder(String sQuery){
+        
+        if(sQuery != null){
+            Document document;
+            String resultText = "";
+
+            try {
+                document = Jsoup.connect("https://en.wikipedia.org/wiki/"+ sQuery)
+                          .userAgent("Mozilla")
+                          .cookie("auth", "token")
+                          .timeout(3000)
+                          .get();
+                resultText = document.select("p").first().text();
+                System.out.println(resultText);
+                
+                if(resultText.contains("may refer to")){
+                    Elements liElements = document.select("li:not([class])");
+                    
+                    int i = 0; 
+                    for(Element element : liElements){
+                        if(i > 4)
+                            break;
+                        resultText += element.text() + "as well as ";
+                        i++;
+                    }
+                }
             } catch (IOException e) {
             }
             return(resultText);

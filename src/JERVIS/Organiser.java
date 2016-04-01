@@ -35,8 +35,6 @@ public class Organiser implements Runnable{
     ***************************************************************************/
     @Override
     public void run(){
-        
-        DueEvents.initDueEvents();
                 
         Calendar now = Calendar.getInstance();
         sCurrentYear = Integer.toString(now.get(Calendar.YEAR));
@@ -75,7 +73,7 @@ public class Organiser implements Runnable{
             String sMinute = Integer.toString(now.get(Calendar.MINUTE));
             String sCurrentTime = sHour + ":" + sMinute;
             
-            for(int index = 0; index < DueEvents.getDueEventsLength() - 1; index++){
+            for(int index = 0; index < DueEvents.getDueEventsLength(); index++){
                 
                 if(!DueEvents.getTime(index).equals(" ") ||
                         !DueEvents.getTimeToRemind(index).equals(" ")){
@@ -85,8 +83,9 @@ public class Organiser implements Runnable{
                             DueEvents.getTimeToRemind(index)
                     );
 
-                    //System.out.println("sTimeToRemind: " + sTimeToRemind);//debug                   
-
+                    //System.out.println("sTimeToRemind: " + sTimeToRemind);//debug   
+                    //System.out.println("sTimeToRemind: " + sCurrentTime);//debug
+                    
                     if(sTimeToRemind.equals(sCurrentTime)){
                         Jervis.jervisSpeak("The event " + DueEvents.getTitle(index) + " is due in " + DueEvents.getTimeToRemind(index) );
                     }

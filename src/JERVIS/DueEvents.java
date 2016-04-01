@@ -23,11 +23,6 @@ public class DueEvents {
     private static List<String> timeToRemind = new ArrayList<>();;
     private static int iSize = 0;
     
-    public static void initDueEvents(){
-        //init empty list - avoid null pointer
-        setEvent(" ", " ", " ", " ", " ");
-    }
-    
     public static synchronized void setEvent(String sTitle, String sDayMonth, 
             String sYear, String sTime, String sTimeToRemind){
         
@@ -83,5 +78,23 @@ public class DueEvents {
         
         //Fix to null pointer - increased int with new addition
         return iSize;
+    }
+    
+    public static synchronized void todaySchedule(){
+        boolean bEventsDue = false;
+        
+        Jervis.jervisSpeak("Today's schedule is the following, sir: ");
+        
+        for(int i = 0; i < getDueEventsLength(); i++){
+            Jervis.jervisSpeak(getTitle(i));
+            Jervis.jervisSpeak("at, " + getTime(i));
+            if(!getTitle(i).isEmpty()){
+                bEventsDue = true;
+            }
+        }
+        
+        if(!bEventsDue){
+            Jervis.jervisSpeak("Actually no events have been scheduled for today, sir");
+        }
     }
 }

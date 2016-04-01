@@ -70,7 +70,9 @@ public class WatsonSpeechRecogniser {
         MicrophoneRecorder.startRecording();
 
         SpeechResults transcript = service.recognize(MicrophoneRecorder.wavFile, options);
-
+        
+        System.out.println(transcript);//debug 
+        
         result = transcript.toString();
         tmp = result.split(",");
         tmp = tmp[2].split(":");

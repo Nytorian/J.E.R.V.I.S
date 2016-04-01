@@ -2,7 +2,7 @@
 
 grammar timeRecogniser;
 
-    <time> = (
+    <minutes> = (
                 one
                 | two
                 | three
@@ -62,4 +62,31 @@ grammar timeRecogniser;
                 | fifty nine
             );
 
-public <timeOut> = <time> next <time>;
+    <hours> = (
+                one
+                | two
+                | three
+                | four
+                | five
+                | six
+                | seven
+                | eight
+                | nine
+                | ten
+                | eleven
+                | twelve
+                | thirteen
+                | fourteen
+                | fifteen
+                | sixteen
+                | seventeen
+                | eighteen
+                | nineteen
+                | twenty
+                | twenty one
+                | twenty two
+                | twenty three
+                | twenty four
+            );
+
+public <timeOut> = <minutes> next <hours>;

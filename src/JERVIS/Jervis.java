@@ -242,6 +242,10 @@ public class Jervis {
                             jervisSpeak("My name is Jervis, a digital being");
                             Thread.sleep(1000);
                         }
+                        else if (utterance.contains("my schedule")) {
+                            DueEvents.todaySchedule();
+                            Thread.sleep(1000);
+                        }
                         else if (utterance.contains("the date")) {
                             jervisSpeak("Today's date is " + DateGenerator.readTodayDate());
                             Thread.sleep(1000);
@@ -273,24 +277,6 @@ public class Jervis {
                                 jervisSpeak("Your name is" + owner.getName() + "sir");
                                 Thread.sleep(300);
                             }
-                            //*/
-
-                            /* debug - loading an initial object
-                            Owner pusheen= Owner.newBuilder()
-                            .setName(" ") 
-                            .setSex(" ") 
-                            .setProfession(" ")
-                            .setEmail(" ")
-                            .setLocation(" ")
-                            .build();
-
-                            serialOutput = new FileOutputStream("JervisStorage.ser");
-                            pusheen.writeTo(serialOutput);
-                            serialOutput.close();
-
-                            owner = Owner.parseFrom(new FileInputStream("JervisStorage.ser"));
-                            System.out.println(owner.getName());
-                           */
                         }
                         else if (utterance.contains("my sex")) {
 
@@ -402,8 +388,12 @@ public class Jervis {
                             jervisSpeak("On it sir");
                             commandGUI cmdGUI = new commandGUI();
                         }
-                        else if(utterance.contains("an event") ||
-                                utterance.contains("event")){
+                        else if(utterance.contains("an event")       ||
+                                utterance.contains("a meeting")      ||
+                                utterance.contains("an appointment") ||
+                                utterance.contains("event")          ||
+                                utterance.contains("meeting")        ||
+                                utterance.contains("appointment")){
                             
                             speechRecogniser.stopRecognition();
                             speechRecogniser.setRecogniser(eDTE_GRMR_RCGNSR);
@@ -547,7 +537,18 @@ public class Jervis {
                             if(GoogleSpeech.displayResponse().contains("note finished"))
                                 future.cancel(true);
                         }*/
-                        
+                        if(utterance.contains("research") ||
+                           utterance.contains("a research")){
+                            speechRecogniser.stopRecognition();
+                            jervisSpeak("Sure sir, what shall I look up?");
+                            Thread.sleep(200);
+                            String sResearch = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+                            sResearch = InformationFinder.definitionFinder(sResearch);
+                            sResearch = sResearch.toLowerCase().replaceAll("\\[()", "").replaceAll("\\]/", "");
+                            jervisSpeak(sResearch);
+                            speechRecogniser.startRecognition();
+                        }
+                            
                         
                         if(utterance.contains("a note")){
 
@@ -581,11 +582,12 @@ public class Jervis {
                             speechRecogniser.startRecognition();
                         }
                     } 
-                
                 }
                     else if (utterance.contains("that was funny") ||
                              utterance.contains("that's funny")   ||
-                             utterance.contains("that's funny")){
+                             utterance.contains("that's funny")   ||
+                             utterance.contains("you're stupid")
+                            ){
                         jervisSpeak("Thank you, sir");
                         Thread.sleep(600);
                     }

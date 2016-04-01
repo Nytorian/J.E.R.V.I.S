@@ -69,7 +69,7 @@ public class MicrophoneRecorder {
         
         float sampleRate  = 16000;
         int sampleSize    = 8;
-        int nofChannels   = 2;
+        int nofChannels   = 1;
         boolean signed    = true;
         boolean bigEndian = true;
         
