@@ -11,9 +11,11 @@
 *******************************************************************************/
 package JERVIS;
 
+import static JERVIS.Jervis.serialOutput;
 import java.io.FileInputStream;
 import TextBase.Organiser.Event;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Calendar;
@@ -89,11 +91,41 @@ public class Organiser implements Runnable{
                     if(sTimeToRemind.equals(sCurrentTime)){
                         Jervis.jervisSpeak("The event " + DueEvents.getTitle(index) + " is due in " + DueEvents.getTimeToRemind(index) );
                     }
+                    
+                    else if(DateGenerator.checkPastTime(sTimeToRemind, sCurrentTime)){
+                        Jervis.jervisSpeak("The event " + DueEvents.getTitle(index) + " was due at " + DueEvents.getTime(index) );
+                        
+                        DueEvents.removeEvent(index);
+                        
+                        Event editedEvent;
+                        try {
+                            editedEvent = Event.newBuilder()
+                                    .mergeFrom(new FileInputStream("Organiser.ser"))
+                                    .setTitle(index, " ")
+                                    .setDayMonth(index, " ")
+                                    .setYear(index, " ")
+                                    .setTime(index, " ")
+                                    .setTimeToRemind(index, " ")
+                                    .build();
+                            
+                            Jervis.serialOutputLock.lock();
+                                try {
+                                    serialOutput = new FileOutputStream("Organiser.ser");
+                                    editedEvent.writeTo(serialOutput);
+                                    serialOutput.close();
+                                } finally {
+                                    Jervis.serialOutputLock.unlock();
+                                }
+                            
+                        } catch (IOException ex) {
+                            Logger.getLogger(Organiser.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                 }
             }
             
             try {
-                Thread.sleep(333);
+                Thread.sleep(500);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Organiser.class.getName()).log(Level.SEVERE, null, ex);
             }

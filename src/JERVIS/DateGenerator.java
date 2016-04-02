@@ -226,4 +226,38 @@ public final class DateGenerator {
      
         return sTimeProcessed;
     }
+    /*  checkPastTime **********************************************************
+    **  02/04/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Checks if the time passed is in the past
+     * @param sScheduleTime
+     * @param sCurrentTime
+     * @return 
+    ***************************************************************************/
+    public static boolean checkPastTime(String sScheduleTime, String sCurrentTime){
+       
+        boolean sPastTime = false;
+        int iScheduleHours, iScheduleMinutes, iCurrentHours, iCurrentMinutes;
+        
+        String[] tmpScheduleTime = sScheduleTime.split(":");
+        
+        iScheduleHours = Integer.parseInt(tmpScheduleTime[0]);
+        iScheduleMinutes = Integer.parseInt(tmpScheduleTime[1]);
+        
+        String[] tmpCurrentTime = sCurrentTime.split(":");
+        
+        iCurrentHours = Integer.parseInt(tmpCurrentTime[0]);
+        iCurrentMinutes = Integer.parseInt(tmpCurrentTime[1]);
+        
+        if(iScheduleHours < iCurrentHours){
+            sPastTime = true;
+        }
+        else if(iScheduleHours == iCurrentHours){
+            if(iScheduleMinutes < iCurrentMinutes){
+                sPastTime = true;
+            }
+        }
+     
+        return sPastTime;
+    }
 }

@@ -29,10 +29,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Jervis {
     
-    private static mainGUI mainFrame = new mainGUI();;
+    private static mainGUI mainFrame;
             
     private static final String Voice = "kevin16";
     private static VoiceManager vm;
@@ -51,7 +54,17 @@ public class Jervis {
     public static FileOutputStream serialOutput;
     public static boolean bAnimationStart = false;
     public static boolean bListening = true;
-   
+    
+    public static final Lock serialOutputLock = new ReentrantLock();
+    
+    private static final String[] sJervInit = {
+        "Yes, sir?",
+        "How can I help, sir?",
+        "How can I assist you, sir?",
+        "can I help you, sir?",
+        "I am listening, sir"
+    };
+    
     /*  main *******************************************************************
     **  15/01/2016  M.Michalski Initial Version
     **  15/01/2016  M.Michalski Added GUI support
@@ -64,6 +77,8 @@ public class Jervis {
     **  16/02/2016  M.Michalski Note taking functionality added
     **  18/02/2016  M.Michalski Web browsing functionality
     **  21/02/2016  M.Michalski Learnng about the user
+    **  28/03/2016  M.Michalski Organiser feature
+    **  02/04/2016  M.Michalski Made Jervis's responses random
     ***************************************************************************/
     /**Description: Main function for Jervis
      * @throws java.io.IOException
@@ -73,7 +88,9 @@ public class Jervis {
     ****************************************************************************/
     public static void main(String[] args) throws IOException,
             LineUnavailableException, InterruptedException {
-
+        
+        mainFrame = new mainGUI();
+        
         speechRecogniser = new SpeechRecogniser();
         speechRecogniser.startRecognition();
         
@@ -101,7 +118,7 @@ public class Jervis {
               
                 if (utterance.equals("jervis")){
 
-                    jervisSpeak("Yes, sir?");
+                    jervisSpeak(sJervInit[new Random().nextInt(sJervInit.length)]);
 
                     owner = Owner.parseFrom(new FileInputStream("JervisStorage.ser"));
                     command = Command.parseFrom(new FileInputStream("CustomCmd.ser"));
@@ -155,10 +172,15 @@ public class Jervis {
                                     .mergeFrom(new FileInputStream("JervisStorage.ser"))
                                     .setLocation(location) 
                                     .build();
-
-                            serialOutput = new FileOutputStream("JervisStorage.ser");
-                            editedOwner.writeTo(serialOutput);
-                            serialOutput.close();
+                            
+                            serialOutputLock.lock();
+                                try {
+                                    serialOutput = new FileOutputStream("JervisStorage.ser");
+                                    editedOwner.writeTo(serialOutput);
+                                    serialOutput.close();
+                                } finally {
+                                    serialOutputLock.unlock();
+                                }
 
                             speechRecogniser.startRecognition(); 
                         }
@@ -173,10 +195,15 @@ public class Jervis {
                                     .mergeFrom(new FileInputStream("JervisStorage.ser"))
                                     .setEmail(email) 
                                     .build();
-
-                            serialOutput = new FileOutputStream("JervisStorage.ser");
-                            editedOwner.writeTo(serialOutput);
-                            serialOutput.close();
+                            
+                            serialOutputLock.lock();
+                                try {
+                                    serialOutput = new FileOutputStream("JervisStorage.ser");
+                                    editedOwner.writeTo(serialOutput);
+                                    serialOutput.close();
+                                } finally {
+                                    serialOutputLock.unlock();
+                                }
 
                             speechRecogniser.startRecognition(); 
                         }
@@ -192,9 +219,14 @@ public class Jervis {
                                     .setProfession(profession) 
                                     .build();
 
-                            serialOutput = new FileOutputStream("JervisStorage.ser");
-                            editedOwner.writeTo(serialOutput);
-                            serialOutput.close();
+                            serialOutputLock.lock();
+                                try {
+                                    serialOutput = new FileOutputStream("JervisStorage.ser");
+                                    editedOwner.writeTo(serialOutput);
+                                    serialOutput.close();
+                                } finally {
+                                    serialOutputLock.unlock();
+                                }
 
                             speechRecogniser.startRecognition();
                         }
@@ -210,9 +242,14 @@ public class Jervis {
                                     .setSex(sex) 
                                     .build();
 
-                            serialOutput = new FileOutputStream("JervisStorage.ser");
-                            editedOwner.writeTo(serialOutput);
-                            serialOutput.close();
+                            serialOutputLock.lock();
+                                try {
+                                    serialOutput = new FileOutputStream("JervisStorage.ser");
+                                    editedOwner.writeTo(serialOutput);
+                                    serialOutput.close();
+                                } finally {
+                                    serialOutputLock.unlock();
+                                }
 
                             speechRecogniser.startRecognition();
                         }
@@ -228,9 +265,14 @@ public class Jervis {
                                     .setName(name) 
                                     .build();
 
-                            serialOutput = new FileOutputStream("JervisStorage.ser");
-                            editedOwner.writeTo(serialOutput);
-                            serialOutput.close();
+                            serialOutputLock.lock();
+                                try {
+                                    serialOutput = new FileOutputStream("JervisStorage.ser");
+                                    editedOwner.writeTo(serialOutput);
+                                    serialOutput.close();
+                                } finally {
+                                    serialOutputLock.unlock();
+                                }
 
                             speechRecogniser.startRecognition();
                         }
@@ -262,14 +304,19 @@ public class Jervis {
                                 speechRecogniser.stopRecognition();
                                 String name = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
 
-                                Owner sEditedObject = Owner.newBuilder()
+                                Owner editedOwner = Owner.newBuilder()
                                         .mergeFrom(new FileInputStream("JervisStorage.ser"))
                                         .setName(name) 
                                         .build();
 
-                                serialOutput = new FileOutputStream("JervisStorage.ser");
-                                sEditedObject.writeTo(serialOutput);
-                                serialOutput.close();
+                                serialOutputLock.lock();
+                                    try {
+                                        serialOutput = new FileOutputStream("JervisStorage.ser");
+                                        editedOwner.writeTo(serialOutput);
+                                        serialOutput.close();
+                                    } finally {
+                                        serialOutputLock.unlock();
+                                    }
 
                                 speechRecogniser.startRecognition(); 
                             }
@@ -290,14 +337,19 @@ public class Jervis {
                                    sSex.equals("female")||
                                    sSex.equals("Male")  ||
                                    sSex.equals("Female")){
-                                    Owner editedObject = Owner.newBuilder()
+                                    Owner editedOwner = Owner.newBuilder()
                                             .mergeFrom(new FileInputStream("JervisStorage.ser"))
                                             .setSex(sSex) 
                                             .build();
 
-                                    serialOutput = new FileOutputStream("JervisStorage.ser");
-                                    editedObject.writeTo(serialOutput);
-                                    serialOutput.close();
+                                    serialOutputLock.lock();
+                                        try {
+                                            serialOutput = new FileOutputStream("JervisStorage.ser");
+                                            editedOwner.writeTo(serialOutput);
+                                            serialOutput.close();
+                                        } finally {
+                                            serialOutputLock.unlock();
+                                        }
                                 }
                                 else{
                                     jervisSpeak("The sex is invalid, you can be either male or female");
@@ -318,15 +370,19 @@ public class Jervis {
                                 speechRecogniser.stopRecognition();
                                 String sProfession = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
 
-                                Owner editedObject = Owner.newBuilder()
+                                Owner editedOwner = Owner.newBuilder()
                                         .mergeFrom(new FileInputStream("JervisStorage.ser"))
                                         .setProfession(sProfession)
                                         .build();
 
-                                serialOutput = new FileOutputStream("JervisStorage.ser");
-                                editedObject.writeTo(serialOutput);
-                                serialOutput.close();
-
+                                serialOutputLock.lock();
+                                        try {
+                                            serialOutput = new FileOutputStream("JervisStorage.ser");
+                                            editedOwner.writeTo(serialOutput);
+                                            serialOutput.close();
+                                        } finally {
+                                            serialOutputLock.unlock();
+                                        }
                                 speechRecogniser.startRecognition(); 
                             }
                             else{
@@ -342,14 +398,21 @@ public class Jervis {
                                 speechRecogniser.stopRecognition();
                                 String sEmail = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
 
-                                Owner editedObject = Owner.newBuilder()
+                                Owner editedOwner = Owner.newBuilder()
                                         .mergeFrom(new FileInputStream("JervisStorage.ser"))
                                         .setEmail(sEmail)
                                         .build();
 
-                                serialOutput = new FileOutputStream("JervisStorage.ser");
-                                editedObject.writeTo(serialOutput);
-                                serialOutput.close();
+                                serialOutputLock.lock();
+                                    try {
+                                        serialOutput = new FileOutputStream("JervisStorage.ser");
+                                        editedOwner.writeTo(serialOutput);
+                                        serialOutput.close();
+                                    } finally {
+                                        serialOutputLock.unlock();
+                                    }
+                                    
+                                speechRecogniser.startRecognition();
 
                                 speechRecogniser.startRecognition(); 
                             }
@@ -366,14 +429,19 @@ public class Jervis {
                                 speechRecogniser.stopRecognition();
                                 String sLocation = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
 
-                                Owner editedObject = Owner.newBuilder()
+                                Owner editedOwner = Owner.newBuilder()
                                         .mergeFrom(new FileInputStream("JervisStorage.ser"))
                                         .setLocation(sLocation)
                                         .build();
 
-                                serialOutput = new FileOutputStream("JervisStorage.ser");
-                                editedObject.writeTo(serialOutput);
-                                serialOutput.close();
+                                serialOutputLock.lock();
+                                    try {
+                                        serialOutput = new FileOutputStream("JervisStorage.ser");
+                                        editedOwner.writeTo(serialOutput);
+                                        serialOutput.close();
+                                    } finally {
+                                        serialOutputLock.unlock();
+                                    }
 
                                 speechRecogniser.startRecognition(); 
                             }
@@ -447,7 +515,7 @@ public class Jervis {
                             System.out.println("Numeric sTimeNum: " + sTimeNum);//debug
                             System.out.println("Numeric Time to remind: " + sMinutesToRemindNum);//debug
                             
-                            Event editedObject = Event.newBuilder()
+                            Event editedEveny = Event.newBuilder()
                                         .mergeFrom(new FileInputStream("Organiser.ser"))
                                         .addTitle(sTitle)
                                         .addDayMonth(sDaysMonthsNum)
@@ -455,10 +523,15 @@ public class Jervis {
                                         .addTime(sTimeNum)
                                         .addTimeToRemind(sMinutesToRemindNum)
                                         .build();
-
-                            serialOutput = new FileOutputStream("Organiser.ser");
-                            editedObject.writeTo(serialOutput);
-                            serialOutput.close();
+                            
+                            serialOutputLock.lock();
+                                try {
+                                    serialOutput = new FileOutputStream("Organiser.ser");
+                                    editedEveny.writeTo(serialOutput);
+                                    serialOutput.close();
+                                } finally {
+                                    serialOutputLock.unlock();
+                                }
                             
                             if(sYearNum.equals(Organiser.sCurrentYear)){
                                 if(sDaysMonthsNum.equals(Organiser.sCurrentDayMonth)){
@@ -543,9 +616,7 @@ public class Jervis {
                             jervisSpeak("Sure sir, what shall I look up?");
                             Thread.sleep(200);
                             String sResearch = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
-                            sResearch = InformationFinder.definitionFinder(sResearch);
-                            sResearch = sResearch.toLowerCase().replaceAll("\\[()", "").replaceAll("\\]/", "");
-                            jervisSpeak(sResearch);
+                            InformationFinder.definitionFinder(sResearch);
                             speechRecogniser.startRecognition();
                         }
                             

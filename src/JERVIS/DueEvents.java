@@ -17,10 +17,10 @@ import java.util.List;
 
 public class DueEvents {
     private static List<String> title = new ArrayList<>();
-    private static List<String> dayMonth = new ArrayList<>();;
-    private static List<String> year = new ArrayList<>();;
-    private static List<String> time = new ArrayList<>();;
-    private static List<String> timeToRemind = new ArrayList<>();;
+    private static List<String> dayMonth = new ArrayList<>();
+    private static List<String> year = new ArrayList<>();
+    private static List<String> time = new ArrayList<>();
+    private static List<String> timeToRemind = new ArrayList<>();
     private static int iSize = 0;
     
     public static synchronized void setEvent(String sTitle, String sDayMonth, 
@@ -78,6 +78,15 @@ public class DueEvents {
         
         //Fix to null pointer - increased int with new addition
         return iSize;
+    }
+    
+    public static synchronized void removeEvent(int index){
+        title.remove(index);
+        dayMonth.remove(index);
+        year.remove(index);
+        time.remove(index);
+        timeToRemind.remove(index);
+        iSize--;
     }
     
     public static synchronized void todaySchedule(){

@@ -11,6 +11,7 @@
 *******************************************************************************/
 package JERVIS;
 
+import static JERVIS.Jervis.jervisSpeak;
 import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -50,15 +51,16 @@ public final class InformationFinder {
         return "";
     }
     
-        /*  definitionFinder ***************************************************
+    /*  definitionFinder *******************************************************
     **  03/02/2016  M.Michalski Initial Version
     *   09/02/2016  M.Michalski allocated hard coded source (brainyquote)
     ***************************************************************************/
     /**Description: changes the currentRecogniser - multi recogniser extention
      * @param sQuery
      * @return 
+     * @throws java.lang.InterruptedException 
     ***************************************************************************/
-    public static String definitionFinder(String sQuery){
+    public static String definitionFinder(String sQuery) throws InterruptedException{
         
         if(sQuery != null){
             Document document;
@@ -73,6 +75,8 @@ public final class InformationFinder {
                 resultText = document.select("p").first().text();
                 System.out.println(resultText);
                 
+                jervisSpeak(resultText);
+                
                 if(resultText.contains("may refer to")){
                     Elements liElements = document.select("li:not([class])");
                     
@@ -80,7 +84,9 @@ public final class InformationFinder {
                     for(Element element : liElements){
                         if(i > 4)
                             break;
-                        resultText += element.text() + "as well as ";
+                        resultText = element.text().toLowerCase().replaceAll("\\[()", "").replaceAll("\\]/", "");
+                        jervisSpeak(resultText);
+                        Thread.sleep(400);//Pause between the list
                         i++;
                     }
                 }

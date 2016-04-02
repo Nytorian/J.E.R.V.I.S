@@ -5,6 +5,10 @@
  */
 package JERVIS;
 
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 /**
  *
  * @author Mateusz
@@ -14,8 +18,9 @@ public class mainGUI extends javax.swing.JFrame {
     /**
      * Creates new form mainGUI
      */
-    public mainGUI() {
+    public mainGUI() throws IOException {
         initComponents();
+        setIconImage(ImageIO.read(new File("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\img\\JervisMiniBG.png")));
         setVisible(true);
     }
 
