@@ -64,7 +64,7 @@ public class Jervis {
         "can I help you, sir?",
         "I am listening, sir"
     };
-    
+        
     /*  main *******************************************************************
     **  15/01/2016  M.Michalski Initial Version
     **  15/01/2016  M.Michalski Added GUI support
@@ -106,6 +106,8 @@ public class Jervis {
         System.setProperty("mbrola.base", "D://J.E.R.V.I.S//Downloaded//mbrola//");     
         
         DateGenerator.initDateGenerator();
+        InformationFinder.initInformationFinder();
+        
         Translator enFrTranslator = new Translator("en", "fr");
         
         while (true) {
@@ -292,9 +294,44 @@ public class Jervis {
                             jervisSpeak("Today's date is " + DateGenerator.readTodayDate());
                             Thread.sleep(1000);
                         }
+                        else if(utterance.contains("the weather in my location") ||
+                                utterance.contains("weather in my location")){
+                                speechRecogniser.stopRecognition();
+
+                                String sPlace = owner.getLocation();
+                                
+                                System.out.println(sPlace);//debug 
+                                
+                                jervisSpeak(InformationFinder
+                                        .weatherForecast(sPlace)
+                                        .replace("c", "degree in celsius"));
+                                
+                                Thread.sleep(600);
+
+                                speechRecogniser.setRecogniser(eINIT_GRMR_RCGNSR);
+                                speechRecogniser.startRecognition();
+                        }
                         else if(utterance.contains("the weather") ||
                                 utterance.contains("weather")){
-                            actionWeather(utterance);
+                                speechRecogniser.stopRecognition();
+
+                                jervisSpeak("Please state the city sir");
+                                
+                                String sPlace = WatsonSpeechRecogniser
+                                        .recognise(NoteLength.eWord);
+                                
+                                if(sPlace.contains("my location")){
+                                    sPlace = owner.getLocation();
+                                }
+                                
+                                jervisSpeak(InformationFinder
+                                        .weatherForecast(sPlace)
+                                        .replace("c", "degree in celsius"));
+                                
+                                Thread.sleep(600);
+
+                                speechRecogniser.setRecogniser(eINIT_GRMR_RCGNSR);
+                                speechRecogniser.startRecognition();
                         }
                         else if (utterance.contains("my name")) {
 
@@ -670,31 +707,6 @@ public class Jervis {
                     System.out.println(utterance);//debug
             }
         }
-    }
-    
-    public static void actionWeather(String utterance) 
-            throws IOException, InterruptedException, LineUnavailableException{
-        
-        /*if(utterance.contains("in my location")){
-
-        }
-        else{
-            //if location unknown
-            jervisSpeak("Where about, sir?");
-        }*/
-
-        speechRecogniser.stopRecognition();
-        speechRecogniser.setRecogniser(ePLACE_GRMR_RCGNSR);
-        speechRecogniser.startRecognition();
-
-        //utterance = speechRecogniser.getResult();
-        jervisSpeak(InformationFinder.weatherForecast(InformationFinder.Place.ePORTSMOUTH, 
-                InformationFinder.Period.eOUTLOOK).replace("c", "degree in celsius"));
-        Thread.sleep(1000);
-
-        speechRecogniser.stopRecognition();
-        speechRecogniser.setRecogniser(eINIT_GRMR_RCGNSR);
-        speechRecogniser.startRecognition();
     }
     
     public static void actionConvers() throws LineUnavailableException{

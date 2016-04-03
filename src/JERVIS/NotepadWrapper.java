@@ -11,9 +11,14 @@
 *******************************************************************************/
 package JERVIS;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 
 public class NotepadWrapper {
     
@@ -42,5 +47,28 @@ public class NotepadWrapper {
                 writer.close();
             } catch (Exception e) {}
         }
-    }  
+    }
+    
+    /*  writeNoteData **************************************************************
+    **  16/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Writes specified data to to the notepad file
+     * @param title
+     * @return 
+     * @throws java.io.FileNotFoundException
+    ****************************************************************************/ 
+    public static String readNoteData(String title) throws FileNotFoundException, IOException{
+        try(BufferedReader br = new BufferedReader(new FileReader(title))) {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = br.readLine();
+            }
+            
+            return sb.toString();
+        }
+    }
 }

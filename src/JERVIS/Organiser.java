@@ -17,7 +17,6 @@ import TextBase.Organiser.Event;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -97,9 +96,8 @@ public class Organiser implements Runnable{
                         
                         DueEvents.removeEvent(index);
                         
-                        Event editedEvent;
                         try {
-                            editedEvent = Event.newBuilder()
+                        Event editedEvent = Event.newBuilder()
                                     .mergeFrom(new FileInputStream("Organiser.ser"))
                                     .setTitle(index, " ")
                                     .setDayMonth(index, " ")

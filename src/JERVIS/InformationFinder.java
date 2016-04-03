@@ -20,8 +20,20 @@ import org.jsoup.select.Elements;
 
 public final class InformationFinder {
     
-    public enum Period { eOUTLOOK, eTODAY, eTOMORROW, eTwoDays };
-    public enum Place { ePORTSMOUTH, eLONDON, eSOUTHAMPTON };
+    private static String[] sPlacesPostcodes;
+    
+    /*  initInformationFinder **************************************************
+    **  02/02/2016  M.Michalski Initial Version
+    *   09/02/2016  M.Michalski allocated hard coded source (brainyquote)
+    ***************************************************************************/
+    /**Description: Initialises initInformationFinder, required for full
+     * functionality.
+     * @throws java.io.IOException
+    ***************************************************************************/
+    public static void initInformationFinder() throws IOException{
+        
+        sPlacesPostcodes = NotepadWrapper.readNoteData("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\postcodes.txt").split(",");
+    }
     
     /*  quotesFinder **********************************************************
     **  02/02/2016  M.Michalski Initial Version
@@ -101,35 +113,30 @@ public final class InformationFinder {
     **  09/02/2016  M.Michalski Initial Version
     ***************************************************************************/
     /**Description: changes the currentRecogniser - multi recogniser extention
-     * @param ePlace
-     * @param ePeriod
+     * @param sPlace
      * @return 
      * @throws java.io.IOException 
     ***************************************************************************/
-    public static String weatherForecast(Place ePlace, Period ePeriod) throws IOException{
+    public static String weatherForecast(String sPlace) throws IOException{
         
-        Document doc;
+        Document doc = null;
         String resultText = "";
         
-        //http://www.worldweatheronline.com/portsmouth-weather/hampshire/gb.aspx
-        
-        if(ePeriod == Period.eOUTLOOK){
-            doc = Jsoup.connect("http://www.worldweatheronline.com/portsmouth-weather/hampshire/gb.aspx")
-                    .userAgent("Mozilla")
-                    .cookie("auth", "token")
-                    .timeout(3000)
-                    .get();
-        }
-        else{
-            doc = Jsoup.connect("http://www.worldweatheronline.com/portsmouth-weather/hampshire/gb.aspx?day="+ ePeriod)
-                    .userAgent("Mozilla")
-                    .cookie("auth", "token")
-                    .timeout(3000)
-                    .get();
+        for(int i = 0; i < sPlacesPostcodes.length; i++){
+            if(sPlacesPostcodes[i].contains(sPlace)){
+                doc = Jsoup.connect("http://www.worldweatheronline.com/v2/weather.aspx?q="+ sPlacesPostcodes[i + 0x1])
+                .userAgent("Mozilla")
+                .cookie("auth", "token")
+                .timeout(3000)
+                .get();
+                
+            }
         }
         
-        resultText  = doc.select("p.media-heading").text();
-        resultText += doc.select("p.temperature").text();
+        if(doc != null){
+            resultText  = doc.select("p.media-heading").text();
+            resultText += doc.select("p.temperature").text();
+        }
         
         return(resultText);
     }
