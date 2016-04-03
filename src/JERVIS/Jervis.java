@@ -26,12 +26,15 @@ import TextBase.NoteLength;
 import TextBase.Organiser.Event;
 import java.awt.Desktop;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Jervis {
     
@@ -47,10 +50,9 @@ public class Jervis {
     private static Event events;
     private static boolean startAnimation = false;
     
-    private static SpeechRecogniser speechRecogniser;  
-    
     static NoteLength noteLength;
     
+    public static SpeechRecogniser speechRecogniser;  
     public static FileOutputStream serialOutput;
     public static boolean bAnimationStart = false;
     public static boolean bListening = true;
@@ -166,15 +168,17 @@ public class Jervis {
                     }
                     else if (utterance.contains("remember")) {
                         if(utterance.contains("my location")){
-                            jervisSpeak("Please state your location sir");
+                            jervisSpeak("Please state your location followed by word city, sir");
 
                             speechRecogniser.stopRecognition();
 
                             String location = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+                            
+                            String[] processedLoc = location.toLowerCase().split(" city");
 
                             Owner editedOwner = Owner.newBuilder()
                                     .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                                    .setLocation(location) 
+                                    .setLocation(processedLoc[0]) 
                                     .build();
                             
                             serialOutputLock.lock();
@@ -316,12 +320,15 @@ public class Jervis {
                         else if(utterance.contains("the weather") ||
                                 utterance.contains("weather")){
                                 speechRecogniser.stopRecognition();
-
+                                speechRecogniser.setRecogniser(ePLACE_GRMR_RCGNSR);
                                 jervisSpeak("Please state the city sir");
+                                speechRecogniser.startRecognition();
                                 
-                                String sPlace = WatsonSpeechRecogniser
-                                        .recognise(NoteLength.eWord);
+                                String sPlace = speechRecogniser.getResult();
                                 
+                                System.out.println(sPlace);
+                                
+                                speechRecogniser.stopRecognition();
                                 if(sPlace.contains("my location")){
                                     sPlace = owner.getLocation();
                                 }
@@ -743,6 +750,50 @@ public class Jervis {
         
     public static void setListening(boolean bListening){
         Jervis.bListening = bListening;
+    }
+    
+    public static void customCmd(String sCmd, String sDir) throws InterruptedException{
+        
+        Command editedObject;
+        
+        try {
+            editedObject = Command.newBuilder()
+                    .mergeFrom(new FileInputStream("CustomCmd.ser"))
+                    .addCmd(sCmd)
+                    .addDir(sDir)
+                    .build();
+            
+            serialOutput = new FileOutputStream("CustomCmd.ser");
+            editedObject.writeTo(serialOutput);
+            serialOutput.close();
+            
+            NotepadWrapper.addToGram("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\commands.gram", sCmd);
+            
+            Jervis.jervisSpeak("Please restart me in order for the changes to take place");
+            Thread.sleep(1000);
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(commandGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(commandGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void customWeather(String sPlace, String sPostcode) throws InterruptedException, IOException{
+        
+        String fileContent = NotepadWrapper.readNoteData("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\postcodes.txt");
+        
+        fileContent += sPlace + ", " + sPostcode + "," +
+                System.getProperty("line.separator");
+        
+        NotepadWrapper.writeNoteData(
+                "D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\postcodes.txt",
+                fileContent);
+        
+        NotepadWrapper.addToGram("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\places.gram", sPlace);
+            
+        Jervis.jervisSpeak("Please restart me in order for the changes to take place");
+        Thread.sleep(1000);
     }
    
     

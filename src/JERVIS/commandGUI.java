@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sound.sampled.LineUnavailableException;
 
 /**
  *
@@ -127,24 +128,9 @@ public class commandGUI extends javax.swing.JFrame {
         String txt = txtCommand.getText();
         String dir = txtDir.getText();
         
-        Command editedObject;
-        
         try {
-            editedObject = Command.newBuilder()
-                    .mergeFrom(new FileInputStream("CustomCmd.ser"))
-                    .addCmd(txt)
-                    .addDir(dir)
-                    .build();
-            
-            serialOutput = new FileOutputStream("CustomCmd.ser");
-            editedObject.writeTo(serialOutput);
-            serialOutput.close();
-            
-            NotepadWrapper.addToGram("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\commands.gram",txt);
-            
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(commandGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+            Jervis.customCmd(txt, dir);
+        } catch (InterruptedException ex) {
             Logger.getLogger(commandGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         

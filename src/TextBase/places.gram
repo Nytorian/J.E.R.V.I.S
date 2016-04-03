@@ -3,8 +3,17 @@
 grammar places;
 
 
-public <place> = ( 
-                    portsmouth
+public <places> = ( 
+                   my location
+                  | portsmouth
                   | london
-                  | southampton
-                  );
+                  | blackburn
+                  | burnley
+                  | birmingham
+                  | manchester
+                  | coventry
+                  | peterborough
+);
+
+
+public <command> = <places>;

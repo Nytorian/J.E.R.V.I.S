@@ -27,6 +27,7 @@ public class weatherGUI extends javax.swing.JFrame {
     public weatherGUI() {
         initComponents();
         setVisible(true);
+        Jervis.jervisSpeak("please provide places in small characters whereas postcodes in capital");
     }
 
     /**
@@ -130,14 +131,11 @@ public class weatherGUI extends javax.swing.JFrame {
         String sPlace = txtPlace.getText();
         String sPostcode = txtPostcode.getText();
         
-        String fileContent = NotepadWrapper.readNoteData("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\postcodes.txt");
-        
-        fileContent += sPlace + ", " + sPostcode + "," +
-                System.getProperty("line.separator");
-        
-        NotepadWrapper.writeNoteData(
-                "D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\postcodes.txt",
-                fileContent);
+        try {
+            Jervis.customWeather(sPlace, sPostcode);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(commandGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }                                      

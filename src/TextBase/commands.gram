@@ -3,20 +3,18 @@
 grammar commands;
 
 <commands> = ( 
-                photos
-                | music 
-                | movies
-                | programs
-                | root
-                | development
-                | games
-                | notes
-                | documents
-                | temporary
-                | trance
-                | test
-                | test2
+                root
 );
+
+
+
+
+
+
+
+
+
+
 
 
 public <command> = <commands>;
