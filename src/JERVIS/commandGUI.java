@@ -139,6 +139,8 @@ public class commandGUI extends javax.swing.JFrame {
             serialOutput = new FileOutputStream("CustomCmd.ser");
             editedObject.writeTo(serialOutput);
             serialOutput.close();
+            
+            
         } catch (FileNotFoundException ex) {
             Logger.getLogger(commandGUI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

@@ -121,6 +121,7 @@ public final class InformationFinder {
         
         Document doc = null;
         String resultText = "";
+        boolean bForecastFound = false;
         
         for(int i = 0; i < sPlacesPostcodes.length; i++){
             if(sPlacesPostcodes[i].contains(sPlace.replace(" ", ""))){
@@ -130,12 +131,17 @@ public final class InformationFinder {
                 .timeout(3000)
                 .get();
                 
+                bForecastFound = true;
             }
         }
         
         if(doc != null){
             resultText  = doc.select("p.media-heading").text();
             resultText += doc.select("p.temperature").text();
+        }
+        
+        if(!bForecastFound){
+            jervisSpeak("Unfortunately I cannot find anything, please make sure the post code was given to me");
         }
         
         return(resultText);

@@ -53,9 +53,9 @@ public class mainGUI extends javax.swing.JFrame {
         jLabel1.setBounds(0, 0, 1000, 780);
 
         lblAnim.setIcon(new javax.swing.ImageIcon("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\img\\Voice Animation\\s0.jpg")); // NOI18N
+        jLayeredPane1.setLayer(lblAnim, javax.swing.JLayeredPane.PALETTE_LAYER);
         jLayeredPane1.add(lblAnim);
         lblAnim.setBounds(400, 410, 200, 100);
-        jLayeredPane1.setLayer(lblAnim, javax.swing.JLayeredPane.PALETTE_LAYER);
 
         chkListen.setBackground(new java.awt.Color(153, 204, 255));
         chkListen.setFont(new java.awt.Font("Prestige Elite Std", 1, 14)); // NOI18N
@@ -66,9 +66,9 @@ public class mainGUI extends javax.swing.JFrame {
                 chkListenActionPerformed(evt);
             }
         });
+        jLayeredPane1.setLayer(chkListen, javax.swing.JLayeredPane.PALETTE_LAYER);
         jLayeredPane1.add(chkListen);
         chkListen.setBounds(140, 550, 120, 25);
-        jLayeredPane1.setLayer(chkListen, javax.swing.JLayeredPane.PALETTE_LAYER);
 
         btnCustomCmd.setBackground(new java.awt.Color(0, 0, 0));
         btnCustomCmd.setFont(new java.awt.Font("Prestige Elite Std", 1, 14)); // NOI18N
@@ -80,12 +80,12 @@ public class mainGUI extends javax.swing.JFrame {
                 btnCustomCmdActionPerformed(evt);
             }
         });
+        jLayeredPane1.setLayer(btnCustomCmd, javax.swing.JLayeredPane.PALETTE_LAYER);
         jLayeredPane1.add(btnCustomCmd);
         btnCustomCmd.setBounds(100, 230, 170, 23);
-        jLayeredPane1.setLayer(btnCustomCmd, javax.swing.JLayeredPane.PALETTE_LAYER);
 
         btnFavWeb.setFont(new java.awt.Font("Prestige Elite Std", 1, 14)); // NOI18N
-        btnFavWeb.setText("Favourite Websites");
+        btnFavWeb.setText("Weather Places");
         btnFavWeb.setBorderPainted(false);
         btnFavWeb.setContentAreaFilled(false);
         btnFavWeb.addActionListener(new java.awt.event.ActionListener() {
@@ -93,9 +93,9 @@ public class mainGUI extends javax.swing.JFrame {
                 btnFavWebActionPerformed(evt);
             }
         });
+        jLayeredPane1.setLayer(btnFavWeb, javax.swing.JLayeredPane.PALETTE_LAYER);
         jLayeredPane1.add(btnFavWeb);
         btnFavWeb.setBounds(170, 130, 190, 23);
-        jLayeredPane1.setLayer(btnFavWeb, javax.swing.JLayeredPane.PALETTE_LAYER);
 
         getContentPane().add(jLayeredPane1);
         jLayeredPane1.setBounds(-1, 0, 1000, 780);
@@ -112,7 +112,7 @@ public class mainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCustomCmdActionPerformed
 
     private void btnFavWebActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFavWebActionPerformed
-        // TODO add your handling code here:
+        weatherGUI wthrGUI = new weatherGUI();
     }//GEN-LAST:event_btnFavWebActionPerformed
 
 

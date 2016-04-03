@@ -14,7 +14,6 @@ package JERVIS;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -29,7 +28,7 @@ public class NotepadWrapper {
      * @param title
      * @param content
     ****************************************************************************/ 
-    public static void writeNoteData(String title, String content){
+    public synchronized static void writeNoteData(String title, String content){
         BufferedWriter writer = null;
         try{
             File file = new File(title + ".txt");
@@ -57,7 +56,7 @@ public class NotepadWrapper {
      * @return 
      * @throws java.io.FileNotFoundException
     ****************************************************************************/ 
-    public static String readNoteData(String title) throws FileNotFoundException, IOException{
+    public synchronized static String readNoteData(String title) throws FileNotFoundException, IOException{
         try(BufferedReader br = new BufferedReader(new FileReader(title))) {
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
