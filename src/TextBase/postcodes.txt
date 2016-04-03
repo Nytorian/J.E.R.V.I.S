@@ -1,2 +1,9 @@
- Portsmouth, PO
- London, NW1
+Portsmouth, PO,
+London, NW1,
+Peterborough, PE1
+Blackburn, BB2,
+Burnley, BB10,
+Birmingham, B1
+Manchester, M1
+Coventry, CV1
+

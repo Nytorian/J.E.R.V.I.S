@@ -123,7 +123,7 @@ public final class InformationFinder {
         String resultText = "";
         
         for(int i = 0; i < sPlacesPostcodes.length; i++){
-            if(sPlacesPostcodes[i].contains(sPlace)){
+            if(sPlacesPostcodes[i].contains(sPlace.replace(" ", ""))){
                 doc = Jsoup.connect("http://www.worldweatheronline.com/v2/weather.aspx?q="+ sPlacesPostcodes[i + 0x1])
                 .userAgent("Mozilla")
                 .cookie("auth", "token")

@@ -110,14 +110,16 @@ public class Jervis {
         
         Translator enFrTranslator = new Translator("en", "fr");
         
+        jervisSpeak("I am ready to serve you sir!");
+        Thread.sleep(1000);
+                
         while (true) {
+            
+            utterance = speechRecogniser.getResult();
+            System.out.println(utterance);//debug
+            Jervis.bAnimationStart = true;
+            
             if(getListening()){
-                utterance = speechRecogniser.getResult();
-
-                System.out.println(utterance);//debug
-
-                Jervis.bAnimationStart = true;
-              
                 if (utterance.equals("jervis")){
 
                     jervisSpeak(sJervInit[new Random().nextInt(sJervInit.length)]);
