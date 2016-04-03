@@ -31,7 +31,7 @@ public class NotepadWrapper {
     public synchronized static void writeNoteData(String title, String content){
         BufferedWriter writer = null;
         try{
-            File file = new File(title + ".txt");
+            File file = new File(title);
 
             // This will output the full path where the file will be written to...
             System.out.println(file.getCanonicalPath());
@@ -69,5 +69,23 @@ public class NotepadWrapper {
             
             return sb.toString();
         }
+    }
+    
+    /*  addToGram **************************************************************
+    **  03/04/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Writes specified data to a gram file
+     * @param sTitle
+     * @param sContent
+     * @throws java.io.FileNotFoundException
+    ****************************************************************************/ 
+    public synchronized static void addToGram(String sTitle, String sContent) throws FileNotFoundException, IOException{
+        String sGramContent = readNoteData(sTitle);
+        
+        String [] arrGramContent = sGramContent.split("\\);");
+        arrGramContent[0] += "| " + sContent + System.getProperty("line.separator");
+        arrGramContent[0] += ");" + System.getProperty("line.separator");
+        
+        writeNoteData(sTitle, arrGramContent[0] + arrGramContent[1]);
     }
 }

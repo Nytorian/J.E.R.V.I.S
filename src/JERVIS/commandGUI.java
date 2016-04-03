@@ -140,6 +140,7 @@ public class commandGUI extends javax.swing.JFrame {
             editedObject.writeTo(serialOutput);
             serialOutput.close();
             
+            NotepadWrapper.addToGram("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\commands.gram",txt);
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(commandGUI.class.getName()).log(Level.SEVERE, null, ex);

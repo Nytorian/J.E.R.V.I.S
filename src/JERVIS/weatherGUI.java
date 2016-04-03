@@ -136,7 +136,7 @@ public class weatherGUI extends javax.swing.JFrame {
                 System.getProperty("line.separator");
         
         NotepadWrapper.writeNoteData(
-                "D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\postcodes",
+                "D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\postcodes.txt",
                 fileContent);
         
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));

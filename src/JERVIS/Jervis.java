@@ -686,7 +686,7 @@ public class Jervis {
                             jervisSpeak("Ok, sir, I am listening for the content");
                             content = WatsonSpeechRecogniser.recognise(noteLength);
 
-                            NotepadWrapper.writeNoteData(noteTitle, content);
+                            NotepadWrapper.writeNoteData(noteTitle + ".txt", content);
                             jervisSpeak("Task completed, sir");
 
                             speechRecogniser.startRecognition();
