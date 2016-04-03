@@ -32,7 +32,7 @@ public class Organiser implements Runnable{
     /* run *********************************************************************
     ** 29/03/2015  M.Michalski Initial Version
     ***************************************************************************/
-    /** Description: Task for the threads in for the organiser
+    /** Description: Task for the Organiser thread
     ***************************************************************************/
     @Override
     public void run(){
