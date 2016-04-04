@@ -260,4 +260,17 @@ public final class DateGenerator {
      
         return sPastTime;
     }
+    /*  getCurrentTime *********************************************************
+    **  04/04/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: return current time in numeric form
+     * @return 
+    ***************************************************************************/
+    public synchronized static String getCurrentTime(){
+        Calendar now = Calendar.getInstance();
+        String sHour = Integer.toString(now.get(Calendar.HOUR_OF_DAY));
+        String sMinute = Integer.toString(now.get(Calendar.MINUTE));
+        
+        return sHour + ":" + sMinute;
+    }
 }

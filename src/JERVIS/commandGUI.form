@@ -36,6 +36,9 @@
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JPanel" name="mainPanel">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="custom commands dialog"/>
+      </Properties>
 
       <Layout>
         <DimensionLayout dim="0">

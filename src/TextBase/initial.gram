@@ -8,7 +8,8 @@ grammar dialog;
                    | how are you                
                    | [what is | what's] my* ([(your | my) name] | schedule 
                         | name | sex | profession | email | location | event 
-                        | [the date today] | (the weather [in my location] ))       
+                        | [the time] | [the date today] 
+                        | (the weather [in my location] ))
                    | [ok] go away [jervis | now] 
                    | [ok] you can go [jervis | now]   
                    | recognise language model       
@@ -32,6 +33,7 @@ grammar dialog;
                         | ([a] meeting))
                    | make [a] (research | note)
                    | you're | you (stupid [being])
+                   | add weather places
                 );
 
 public <command> = <menu_command>;

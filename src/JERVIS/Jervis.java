@@ -138,11 +138,13 @@ public class Jervis {
                         jervisSpeak("Ok, I am gone, sir, Goodbye");
                         exit(0);
                     }
-
+                    else if (utterance.contains("add weather places")){
+                        jervisSpeak("On it sir");
+                        weatherGUI wthrGUI = new weatherGUI();
+                    }
                     else if (
-                        utterance.contains("hello")    ||
-                        utterance.contains("good afternoon")||
-                        utterance.contains("good evening")  ||
+                        utterance.contains("hello")||
+                        utterance.contains("good") ||
                         utterance.startsWith("how are")){
   
                         if (utterance.contains("Hello")){
@@ -288,7 +290,12 @@ public class Jervis {
 
                     else if (utterance.contains("what is") ||
                              utterance.contains("what's")) {
-                        if(utterance.contains("your name")){
+                        
+                        if(utterance.contains("the time")){
+                            jervisSpeak("Current time is: " + DateGenerator.getCurrentTime());
+                            Thread.sleep(1000);
+                        }
+                        else if(utterance.contains("your name")){
                             jervisSpeak("My name is Jervis, a digital being");
                             Thread.sleep(1000);
                         }

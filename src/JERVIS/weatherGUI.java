@@ -10,10 +10,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import TextBase.CustomCmd.Command;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -24,8 +26,9 @@ public class weatherGUI extends javax.swing.JFrame {
     /**
      * Creates new form commandGUI
      */
-    public weatherGUI() {
+    public weatherGUI() throws IOException {
         initComponents();
+        setIconImage(ImageIO.read(new File("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\img\\JervisMiniBG.png")));
         setVisible(true);
         Jervis.jervisSpeak("please provide places in small characters whereas postcodes in capital");
     }

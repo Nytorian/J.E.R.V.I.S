@@ -7,6 +7,8 @@ package JERVIS;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
@@ -39,16 +41,17 @@ public class mainGUI extends javax.swing.JFrame {
         chkListen = new javax.swing.JCheckBox();
         btnCustomCmd = new javax.swing.JButton();
         btnFavWeb = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("J.E.R.V.I.S");
         setLocationByPlatform(true);
-        setMaximumSize(new java.awt.Dimension(1000, 800));
         setMinimumSize(new java.awt.Dimension(1000, 800));
         setResizable(false);
         getContentPane().setLayout(null);
 
         jLabel1.setIcon(new javax.swing.ImageIcon("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\img\\JervisBG.jpg")); // NOI18N
+        jLabel1.setToolTipText("main dialog");
         jLayeredPane1.add(jLabel1);
         jLabel1.setBounds(0, 0, 1000, 780);
 
@@ -97,6 +100,24 @@ public class mainGUI extends javax.swing.JFrame {
         jLayeredPane1.add(btnFavWeb);
         btnFavWeb.setBounds(170, 130, 190, 23);
 
+        jButton1.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(51, 153, 255));
+        jButton1.setText("[ ? ]");
+        jButton1.setToolTipText("Opens help dialog");
+        jButton1.setBorderPainted(false);
+        jButton1.setContentAreaFilled(false);
+        jButton1.setFocusPainted(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jLayeredPane1.setLayer(jButton1, javax.swing.JLayeredPane.POPUP_LAYER);
+        jLayeredPane1.add(jButton1);
+        jButton1.setBounds(630, 120, 79, 25);
+        jButton1.getAccessibleContext().setAccessibleName("help");
+        jButton1.getAccessibleContext().setAccessibleDescription("help");
+
         getContentPane().add(jLayeredPane1);
         jLayeredPane1.setBounds(-1, 0, 1000, 780);
 
@@ -108,18 +129,35 @@ public class mainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_chkListenActionPerformed
 
     private void btnCustomCmdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomCmdActionPerformed
-        commandGUI cmdGUI = new commandGUI();
+        try {
+            commandGUI cmdGUI = new commandGUI();
+        } catch (IOException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnCustomCmdActionPerformed
 
     private void btnFavWebActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFavWebActionPerformed
-        weatherGUI wthrGUI = new weatherGUI();
+        try {
+            weatherGUI weatherGUI = new weatherGUI();
+        } catch (IOException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnFavWebActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            helpGUI helpGUI = new helpGUI();
+        } catch (IOException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCustomCmd;
     private javax.swing.JButton btnFavWeb;
     public static javax.swing.JCheckBox chkListen;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLayeredPane jLayeredPane1;
     public static javax.swing.JLabel lblAnim;

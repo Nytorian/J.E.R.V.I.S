@@ -4,7 +4,13 @@ grammar commands;
 
 <commands> = ( 
                 root
+| development
+| university
+| downloads
 );
+
+
+
 
 
 

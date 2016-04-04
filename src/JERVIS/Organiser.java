@@ -70,9 +70,7 @@ public class Organiser implements Runnable{
         }
         
         while(true){
-            String sHour = Integer.toString(now.get(Calendar.HOUR_OF_DAY));
-            String sMinute = Integer.toString(now.get(Calendar.MINUTE));
-            String sCurrentTime = sHour + ":" + sMinute;
+            String sCurrentTime = DateGenerator.getCurrentTime();
             
             for(int index = 0; index < DueEvents.getDueEventsLength(); index++){
                 

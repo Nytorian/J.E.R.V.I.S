@@ -10,10 +10,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import TextBase.CustomCmd.Command;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 
 /**
@@ -25,8 +27,9 @@ public class commandGUI extends javax.swing.JFrame {
     /**
      * Creates new form commandGUI
      */
-    public commandGUI() {
+    public commandGUI() throws IOException {
         initComponents();
+        setIconImage(ImageIO.read(new File("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\img\\JervisMiniBG.png")));
         setVisible(true);
     }
 
@@ -49,6 +52,8 @@ public class commandGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setLocationByPlatform(true);
         setResizable(false);
+
+        mainPanel.setToolTipText("custom commands dialog");
 
         txtCommand.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
