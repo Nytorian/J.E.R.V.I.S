@@ -101,7 +101,6 @@ public class mainGUI extends javax.swing.JFrame {
         btnFavWeb.setBounds(170, 130, 190, 23);
 
         jButton1.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(51, 153, 255));
         jButton1.setText("[ ? ]");
         jButton1.setToolTipText("Opens help dialog");
         jButton1.setBorderPainted(false);

@@ -29,8 +29,13 @@ public class weatherGUI extends javax.swing.JFrame {
     public weatherGUI() throws IOException {
         initComponents();
         setIconImage(ImageIO.read(new File("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\img\\JervisMiniBG.png")));
+        
         setVisible(true);
-        Jervis.jervisSpeak("please provide places in small characters whereas postcodes in capital");
+                
+        if(Jervis.bInit)     
+            Jervis.jervisSpeak("please provide places in small characters whereas postcodes in capitals");
+        
+        Jervis.bInit = false;
     }
 
     /**

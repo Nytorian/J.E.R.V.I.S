@@ -73,6 +73,7 @@ public class WatsonSpeechRecogniser {
         
         System.out.println(transcript);//debug 
         
+        //Custom alternative to JSON
         result = transcript.toString();
         tmp = result.split(",");
         tmp = tmp[2].split(":");

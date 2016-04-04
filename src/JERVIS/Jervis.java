@@ -38,6 +38,7 @@ import java.util.logging.Logger;
 
 public class Jervis {
     
+    public static boolean bInit = true;
     private static mainGUI mainFrame;
             
     private static final String Voice = "kevin16";
@@ -133,7 +134,17 @@ public class Jervis {
 
                     utterance = speechRecogniser.getResult();
                     
-                    if (utterance.contains("go away") ||
+                    if(utterance.contains("stop listening")){
+                        setListening(false);
+                        mainFrame.chkListen.setSelected(false);
+                    }
+                    else if(utterance.contains("out of the way")){
+                        mainFrame.setState(mainFrame.ICONIFIED);
+                    }
+                    else if(utterance.contains("come back")){
+                        mainFrame.setState(mainFrame.NORMAL);
+                    }
+                    else if (utterance.contains("go away") ||
                         utterance.contains("you can go")){
                         jervisSpeak("Ok, I am gone, sir, Goodbye");
                         exit(0);
@@ -613,7 +624,10 @@ public class Jervis {
                         speechRecogniser.startRecognition();
                     }
                     else if(utterance.contains("open")){
-                        if(utterance.contains("a website")){
+                        if(utterance.contains("help")){
+                            helpGUI helpGUI = new helpGUI();
+                        }
+                        else if(utterance.contains("a website")){
                             jervisSpeak("What is the address sir?");
                             speechRecogniser.stopRecognition();
 
@@ -647,8 +661,15 @@ public class Jervis {
                                     dir = command.getDir(i);
                                 } i++;
                             }
-
-                            Runtime.getRuntime().exec("explorer.exe /select," + dir);
+                            
+                            if(!utterance.contains("<unk>"))
+                                Runtime.getRuntime().exec("explorer.exe /open," + dir);
+                            
+                            else{
+                                jervisSpeak("Unfortunately, I was unable to find "+ 
+                                            "a location related to this command");
+                                jervisSpeak("please add the command using the custom command option");
+                            }
 
                             speechRecogniser.stopRecognition();
                             speechRecogniser.setRecogniser(eINIT_GRMR_RCGNSR);

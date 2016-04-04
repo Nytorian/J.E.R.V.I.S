@@ -2,35 +2,6 @@
 
 grammar conversation;
 
-<person> = (  i am*                   
-            | you are*            
-            | he is* 
-            | she is* 
-            | it is* 
-            | we are* 
-            | you are* 
-            | they are*
-            | my
-            | your
-            | yours
-            | his
-            | her
-            | hers
-            | their
-            | theirs
-            | our
-            | ours
-         );
-
-<tense> = (
-              is
-            | are
-         );
-
-<verb> = ( [feel | feeling]
-         | [experience | experiencing]
-         | [like | liking]
-          );
 <feeling> =
                 ( great
                 | excellent
@@ -55,7 +26,6 @@ grammar conversation;
                 | paranoid
                 | mental
                 | joy
-                | [difficulty | difficulties]
                 );
 
 <noun> =
@@ -74,4 +44,4 @@ grammar conversation;
                 );
 
 
-public <command> = <person> <verb>* <feeling>;
+public <command> = I* [am | feel] (<feeling> | <noun>;
