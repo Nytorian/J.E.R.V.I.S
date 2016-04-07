@@ -14,9 +14,11 @@
         <group>
             <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/JERVIS/WatsonSpeechRecogniser.java</file>
             <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/JERVIS/Jervis.java</file>
+            <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/TextBase/initial.gram</file>
             <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/JERVIS/mainGUI.java</file>
             <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/TextBase/conversation.gram</file>
             <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/JERVIS/SpeechRecogniser.java</file>
+            <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/JERVIS/InformationFinder.java</file>
             <file>file:/D:/J.E.R.V.I.S/J.E.R.V.I.S/GitHub/src/JERVIS/MicrophoneRecorder.java</file>
         </group>
     </open-files>

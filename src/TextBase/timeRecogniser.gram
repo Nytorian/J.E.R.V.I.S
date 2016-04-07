@@ -23,43 +23,13 @@ grammar timeRecogniser;
                 | eighteen
                 | nineteen
                 | twenty
-                | twenty one
-                | twenty two
-                | twenty three
-                | twenty four
-                | twenty five
-                | twenty six
-                | twenty seven
-                | twenty eight
-                | twenty nine
+                | twenty (one | two | three | four | five | six | seven | eight | nine)
                 | thirty
-                | thirty one
-                | thirty two
-                | thirty three
-                | thirty five
-                | thirty six
-                | thirty seven
-                | thirty eight
-                | thirty nine
+                | thirty (one | two | three | four | five | six | seven | eight | nine)
                 | fourty
-                | fourty one
-                | fourty two
-                | fourty three
-                | fourty four
-                | fourty six
-                | fourty seven
-                | fourty eight
-                | fourty nine
+                | fourty (one | two | three | four | five | six | seven | eight | nine)
                 | fifty
-                | fifty one
-                | fifty two
-                | fifty three
-                | fifty four
-                | fifty five
-                | fifty six
-                | fifty seven
-                | fifty eight
-                | fifty nine
+                | fifty (one | two | three | four | five | six | seven | eight | nine)
             );
 
     <hours> = (
@@ -83,10 +53,7 @@ grammar timeRecogniser;
                 | eighteen
                 | nineteen
                 | twenty
-                | twenty one
-                | twenty two
-                | twenty three
-                | twenty four
+                | twenty [ one | two | three | four]
             );
 
-public <timeOut> = <minutes> next <hours>;
+public <timeOut> = <hours> next <minutes>;

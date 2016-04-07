@@ -2,7 +2,7 @@
 
 grammar dialog;
 
-<menu_command> = ( jervis                     
+<menu_command> = ( [hey] jervis                     
                    | hello jervis    
                    | good (morning | afternoon | evening) [jervis]  
                    | how are you                

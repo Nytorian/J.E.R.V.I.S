@@ -7,7 +7,7 @@
 *
 @language      Java JDK 1.8
 *
-@Description:  Speech recognsiser warpper for Jervis.
+@Description:  Speech recognsiser extention for Jervis.
 *******************************************************************************/
 package JERVIS;
 
@@ -26,8 +26,6 @@ public class SpeechRecogniser {
             "resource:/TextBase/cmudict-en-us.dict";
     private static final String GRAMMAR_PATH =
             "resource:/TextBase/";
-    private static final String LANGUAGE_MODEL = 
-            "resource:/edu/cmu/sphinx/demo/dialog/weather.lm";//multiple lm support fix
     
     Configuration configuration;
             
@@ -35,8 +33,6 @@ public class SpeechRecogniser {
             placeGramRecognizer, conversationGramRecognizer,
             commandGramRecognizer, dateGramRecognizer, timeGramRecognizer, 
             yearGramRecognizer, minutesGramRecognizer;
-    
-    LiveSpeechRecognizer lmRecognizer;
     
     /*  Constructor ************************************************************
     **  02/02/2016  M.Michalski Initial Version
@@ -94,15 +90,7 @@ public class SpeechRecogniser {
         minutesGramRecognizer = new LiveSpeechRecognizer(configuration);
         minutesGramRecognizer.closeRecognitionLine();
         
-        
-        /* Initialise the language model recogniser */
-        configuration.setUseGrammar(false);
-        configuration.setLanguageModelPath(LANGUAGE_MODEL);
-        lmRecognizer = new LiveSpeechRecognizer(configuration);
-        lmRecognizer.closeRecognitionLine();
-        
         currentRecogniser = initialGramRecognizer;
-        lmRecognizer.closeRecognitionLine();
     }
     
     /*  setRecogniser **********************************************************
@@ -138,12 +126,11 @@ public class SpeechRecogniser {
                 currentRecogniser = yearGramRecognizer;
                 break;
             case eMNT_GRMR_RCGNSR:
-                currentRecogniser = minutesGramRecognizer;
-                break;    
-                
-            case eLM_RECOGNISER:
-                currentRecogniser = lmRecognizer;
+                currentRecogniser = minutesGramRecognizer;    
                 break;
+                
+            default:
+                System.out.println("Error in setRecogniser - no such recogniser");
         }
     }
 

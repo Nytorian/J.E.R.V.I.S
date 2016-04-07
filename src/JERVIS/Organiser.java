@@ -97,11 +97,11 @@ public class Organiser implements Runnable{
                         try {
                         Event editedEvent = Event.newBuilder()
                                     .mergeFrom(new FileInputStream("Organiser.ser"))
-                                    .setTitle(index, " ")
-                                    .setDayMonth(index, " ")
-                                    .setYear(index, " ")
-                                    .setTime(index, " ")
-                                    .setTimeToRemind(index, " ")
+                                    .setTitle(index, "x")
+                                    .setDayMonth(index, "x")
+                                    .setYear(index, "x")
+                                    .setTime(index, "x")
+                                    .setTimeToRemind(index, "x")
                                     .build();
                             
                             Jervis.serialOutputLock.lock();

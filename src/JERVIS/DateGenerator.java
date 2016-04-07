@@ -271,6 +271,9 @@ public final class DateGenerator {
         String sHour = Integer.toString(now.get(Calendar.HOUR_OF_DAY));
         String sMinute = Integer.toString(now.get(Calendar.MINUTE));
         
+        if(sHour.equals("0"))
+            sHour = "24";
+        
         return sHour + ":" + sMinute;
     }
 }

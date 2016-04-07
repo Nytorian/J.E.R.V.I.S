@@ -102,10 +102,7 @@ public class Jervis {
         voice.allocate();
         
         ExecutorService execServise = Executors.newCachedThreadPool();
-        execServise.execute(new WaveFormAnim());
-        execServise.execute(new Organiser());
-
-                        
+                   
         System.setProperty("mbrola.base", "D://J.E.R.V.I.S//Downloaded//mbrola//");     
         
         DateGenerator.initDateGenerator();
@@ -114,6 +111,8 @@ public class Jervis {
         Translator enFrTranslator = new Translator("en", "fr");
         
         jervisSpeak("I am ready to serve you sir!");
+        execServise.execute(new WaveFormAnim());
+        execServise.execute(new Organiser());
         Thread.sleep(1000);
                 
         while (true) {
@@ -123,7 +122,7 @@ public class Jervis {
             Jervis.bAnimationStart = true;
             
             if(getListening()){
-                if (utterance.equals("jervis")){
+                if (utterance.contains("jervis")){
 
                     jervisSpeak(sJervInit[new Random().nextInt(sJervInit.length)]);
 
@@ -572,7 +571,7 @@ public class Jervis {
                             String sDaysMonthsNum = DateGenerator.daysMonthsToNumeric(sDaysMonthsText);
                             String sYearNum = DateGenerator.yearToNumeric(sYearText);
                             String sTimeNum = DateGenerator.timeToNumeric(sHourText);
-                            String sMinutesToRemindNum = DateGenerator.minuteToNumeric(sTimeToRemind);       
+                             String sMinutesToRemindNum = DateGenerator.minuteToNumeric(sTimeToRemind);       
                             
                             System.out.println("Numeric sDaysMonthsNum: " + sDaysMonthsNum);//debug
                             System.out.println("Numeric sYearNum: " + sYearNum);//debug
