@@ -158,7 +158,7 @@ public class Jervis {
                         utterance.contains("good") ||
                         utterance.startsWith("how are")){
   
-                        if (utterance.contains("Hello")){
+                        if (utterance.contains("hello")){
                             jervisSpeak("Hello! Sir, how is life?");
                             actionConvers();
                         }

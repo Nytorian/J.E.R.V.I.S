@@ -14,7 +14,9 @@ package JERVIS;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.RecognizeOptions;
+import javax.json.*;
 import TextBase.NoteLength;
+import java.io.StringReader;
 
 public class WatsonSpeechRecogniser {
 
@@ -72,12 +74,17 @@ public class WatsonSpeechRecogniser {
         SpeechResults transcript = service.recognize(MicrophoneRecorder.wavFile, options);
         
         System.out.println(transcript);//debug 
+        String finalResult = "";
         
-        //Custom alternative to JSON
-        result = transcript.toString();
-        tmp = result.split(",");
-        tmp = tmp[2].split(":");
-        String finalResult = tmp[2].replace("\"", "");
+        try (JsonReader reader = Json.createReader(new StringReader(transcript.toString()))){
+            JsonObject IBMresponse = reader.readObject();
+            JsonArray resultsArray = IBMresponse.getJsonArray("results");
+            JsonObject transcriptObject = resultsArray.getJsonObject(0);
+            JsonArray alternativesArray = transcriptObject.getJsonArray("alternatives");
+            JsonObject alternativesObject = alternativesArray.getJsonObject(0);
+            finalResult = alternativesObject.getString("transcript");
+        }
+        
         
         return finalResult;
     }

@@ -44,4 +44,4 @@ grammar conversation;
                 );
 
 
-public <command> = I* [am | feel] (<feeling> | <noun>;
+public <command> = <feeling> | <noun>;
