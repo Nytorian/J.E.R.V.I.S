@@ -10,7 +10,9 @@ grammar commands;
 | movies
 | Dragon Ball Z Goku vs Vegeta
 | dragon ball z episode one
+| windows
 );
+
 
 
 

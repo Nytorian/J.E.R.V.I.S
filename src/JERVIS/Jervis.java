@@ -180,17 +180,15 @@ public class Jervis {
                     }
                     else if (utterance.contains("remember")) {
                         if(utterance.contains("my location")){
-                            jervisSpeak("Please state your location followed by word city, sir");
+                            jervisSpeak("Please state your location, sir");
 
                             speechRecogniser.stopRecognition();
 
                             String location = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
-                            
-                            String[] processedLoc = location.toLowerCase().split(" city");
 
                             Owner editedOwner = Owner.newBuilder()
                                     .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                                    .setLocation(processedLoc[0]) 
+                                    .setLocation(location) 
                                     .build();
                             
                             serialOutputLock.lock();
@@ -201,7 +199,9 @@ public class Jervis {
                                 } finally {
                                     serialOutputLock.unlock();
                                 }
-
+                                
+                            jervisSpeak("Your new location is " + location + " ,sir");
+                                
                             speechRecogniser.startRecognition(); 
                         }
                         else if(utterance.contains("my email")){

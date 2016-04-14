@@ -26,22 +26,89 @@ grammar conversation;
                 | paranoid
                 | mental
                 | joy
+                | blissful
+                | brave
+                | careful
+                | cautious
+                | clever
+                | concentrated
+                | confident
+                | curious
+                | ecstatic
+                | excited
+                | fair
+                | fantastic
+                | friendly
+                | glad
+                | good
+                | great
+                | happy
+                | honest
+                | innocent
+                | interested
+                | joyful
+                | mediative
+                | nice
+                | optimistic
+                | pleasant
+                | quiet
+                | satisfied
+                | sensible
+                | serious
+                | surprised
+                | in love
+                | pleased
+                | proud
+                | wonderful
+
+
+                | aggressive
+                | agonized
+                | angry
+                | annoyed
+                | arrogant
+                | awful
+                | bad
+                | bored
+                | confused
+                | crazy
+                | disappointed
+                | disbelieving
+                | disgusted
+                | enraged
+                | exhausted
+                | frightened
+                | frustrating
+                | grieving
+                | guilty
+                | hangover
+                | helpless
+                | horrifying
+                | hurting
+                | hysterical
+                | idiotic
+                | indifferent
+                | lonely
+                | lovesick
+                | mad
+                | mischievous
+                | miserable
+                | nasty
+                | nervous
+                | puzzled
+                | sad
+                | sheepish
+                | shocking
+                | silly
+                | smug
+                | sorry
+                | strange
+                | stupid
+                | suspicious
+                | terrible
+                | jealous
+                | upsetting
+                | busy
                 );
 
-<noun> =
-                ( comedy
-                | awesome
-                | film
-                | life
-                | people
-                | nature
-                | surroundings
-                | me
-                | my mum
-                | my neighbours
-                | studying
-                | a joke
-                );
-
-
-public <command> = <feeling> | <noun>;
+public <command> = <feeling>;
