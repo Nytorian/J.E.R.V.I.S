@@ -62,6 +62,7 @@ grammar conversation;
                 | wonderful
 
 
+                | awkward
                 | aggressive
                 | agonized
                 | angry

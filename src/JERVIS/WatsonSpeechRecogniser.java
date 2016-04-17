@@ -22,8 +22,8 @@ public class WatsonSpeechRecogniser {
 
     private static String result;
     private static long RECORD_TIME;
-    private static final String userName = TextBase.SensitiveData.WATSON_STT_LGN;
-    private static final String password = TextBase.SensitiveData.WATSON_STT_PSWD;
+    private static final String sUserName = TextBase.SensitiveData.WATSON_STT_LGN;
+    private static final String sPassword = TextBase.SensitiveData.WATSON_STT_PSWD;
 
     private static String[] tmp;
     
@@ -37,7 +37,7 @@ public class WatsonSpeechRecogniser {
     public static String recognise(NoteLength eLength){
         SpeechToText service = new SpeechToText();
         RecognizeOptions options = new RecognizeOptions().continuous(true);
-        service.setUsernameAndPassword(userName, password); 
+        service.setUsernameAndPassword(sUserName, sPassword); 
 
         switch(eLength){
             case eWord:
@@ -79,13 +79,17 @@ public class WatsonSpeechRecogniser {
         try (JsonReader reader = Json.createReader(new StringReader(transcript.toString()))){
             JsonObject IBMresponse = reader.readObject();
             JsonArray resultsArray = IBMresponse.getJsonArray("results");
-            JsonObject transcriptObject = resultsArray.getJsonObject(0);
-            JsonArray alternativesArray = transcriptObject.getJsonArray("alternatives");
-            JsonObject alternativesObject = alternativesArray.getJsonObject(0);
-            finalResult = alternativesObject.getString("transcript");
+            try{
+                JsonObject transcriptObject = resultsArray.getJsonObject(0);
+                JsonArray alternativesArray = transcriptObject.getJsonArray("alternatives");
+                JsonObject alternativesObject = alternativesArray.getJsonObject(0);
+                finalResult = alternativesObject.getString("transcript");
+            } catch(IndexOutOfBoundsException ex) {
+                Jervis.jervisSpeak("Unfortunately I didn't get that, plese try again");
+            }
         }
-        
         
         return finalResult;
     }
 }
+

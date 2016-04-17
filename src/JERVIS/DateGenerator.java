@@ -24,11 +24,11 @@ public final class DateGenerator {
     /* class variable declarations */
     private static String todayDate = "", readTodayDate = "";
  
-    /*  initDateGenerator ************************************************************
+    /*  initDateGenerator ******************************************************
     **  02/02/2016  M.Michalski Initial Version
     ***************************************************************************/
-    /**Description: Initialises the class 
-    ****************************************************************************/ 
+    /**Description: Initialises the DateGenerator class 
+    ***************************************************************************/ 
     public static void initDateGenerator(){
         // Create an instance of SimpleDateFormat used for formatting 
         // the string representation of date (month/day/year)
@@ -51,10 +51,10 @@ public final class DateGenerator {
         return todayDate;
     }
 
-    /*  readTodayDate ***********************************************************
+    /*  readTodayDate **********************************************************
     **  02/02/2016  M.Michalski Initial Version
     ***************************************************************************/
-    /**Description: Returns today's date in the readable form
+    /**Description: Returns today's date as standard date format
      * @return 
     ***************************************************************************/
     public static String readTodayDate(){
@@ -162,7 +162,7 @@ public final class DateGenerator {
         return sTimeNumeric;
     }
     
-    /*  minuteToNumeric **********************************************************
+    /*  minuteToNumeric ********************************************************
     **  27/03/2016  M.Michalski Initial Version
     ***************************************************************************/
     /**Description: Produces numeric minutes from text
@@ -182,7 +182,7 @@ public final class DateGenerator {
         return sMinutesNumeric;
     }
     
-    /*  subTime **********************************************************
+    /*  subTime ****************************************************************
     **  30/03/2016  M.Michalski Initial Version
     ***************************************************************************/
     /**Description: Subtracts minutes from time passed as parameter.

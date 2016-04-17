@@ -13,6 +13,7 @@ package JERVIS;
 
 import static JERVIS.Jervis.jervisSpeak;
 import java.io.IOException;
+import java.util.Random;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -55,7 +56,7 @@ public final class InformationFinder {
                           .cookie("auth", "token")
                           .timeout(3000)
                           .get();
-                resultText = doc.select("span[class=bqQuoteLink]").first().text();
+                resultText = doc.select("span[class=bqQuoteLink]").get(new Random().nextInt(3)).text();
             } catch (IOException e) {
             }
             return(resultText);
