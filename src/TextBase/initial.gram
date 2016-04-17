@@ -2,8 +2,8 @@
 
 grammar dialog;
 
-<menu_command> = ( [hey] jervis                     
-                   | hello jervis    
+<menu_command> = ( [hey | hello] jervis
+                   | hello                        
                    | good (morning | afternoon | evening) [jervis]  
                    | how are you                
                    | [what is | what's] my* (((your | my) name) | schedule 
@@ -23,9 +23,8 @@ grammar dialog;
                    | translate [please]
                    | [please] remember [my] ( name | sex | profession | email | location | event )
                    | set ((new commands) | ([an] event) | ([an] appointment) | ([a] meeting))
-                   | make [a] (research | note)
-                   | you're | you (stupid [being])
-                   | add weather places
+                   | make [a | an] (research | note | event)
+                   | add (weather places) | (new commands)
                    | out of the way
                    | come back
                    | stop listening

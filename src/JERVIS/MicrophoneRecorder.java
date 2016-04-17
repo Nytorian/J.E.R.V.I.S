@@ -34,7 +34,7 @@ public class MicrophoneRecorder {
     **  16/02/2016  M.Michalski Initial Version
     ***************************************************************************/
     /**Description: Records the microphone input using WAV encoding
-    ****************************************************************************/  
+    ***************************************************************************/  
     public static void startRecording() {
         try {
             audioFormat = getAudioFormat();
@@ -64,7 +64,7 @@ public class MicrophoneRecorder {
     ***************************************************************************/
     /**Description: Defines and returns audio format
      * @return 
-    ****************************************************************************/  
+    ***************************************************************************/  
     public static AudioFormat getAudioFormat(){
         
         float sampleRate  = 16000;
@@ -83,7 +83,7 @@ public class MicrophoneRecorder {
     **  16/02/2016  M.Michalski Initial Version
     ***************************************************************************/
     /**Description: Closes the data line hence stops microphone recording
-    ****************************************************************************/
+    ***************************************************************************/
     public static void stop(){
         dataLine.stop();
         dataLine.close();

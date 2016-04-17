@@ -7,7 +7,7 @@
 *
 @language      Java JDK 1.8
 *
-@Description:  Main file for Jervis.
+@Description:  Main/root file for Jervis.
 *******************************************************************************/
 
 package JERVIS;
@@ -18,8 +18,6 @@ import java.io.IOException;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
 import javax.sound.sampled.LineUnavailableException;
-import static TextBase.SpeechRecognisers.*;
-import static java.lang.System.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import TextBase.NoteLength;
@@ -35,6 +33,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static TextBase.SpeechRecognisers.*;
+import static java.lang.System.*;
 
 public class Jervis {
     
@@ -83,8 +84,10 @@ public class Jervis {
     **  21/02/2016  M.Michalski Learnng about the user
     **  28/03/2016  M.Michalski Organiser feature
     **  02/04/2016  M.Michalski Made Jervis's responses random
+    **  17/04/2016  M.Michalski Code optimisation
     ***************************************************************************/
-    /**Description: Main function for Jervis
+    /**Description: Main function for Jervis. Implements the Tree Search algorithm
+     * and links all the subcomponents.
      * @throws java.io.IOException
      * @param args *  
      * @throws javax.sound.sampled.LineUnavailableException  
@@ -111,7 +114,7 @@ public class Jervis {
         
         enFrTranslator = new Translator("en", "fr");
         
-        execServise.execute(new WaveFormAnim());
+        execServise.execute(new WaveformAnim());
         execServise.execute(new Organiser());
         jervisSpeak("I am ready to serve you sir!");
         Thread.sleep(1000);
@@ -149,9 +152,16 @@ public class Jervis {
                         jervisSpeak("Ok, I am gone, sir, Goodbye");
                         exit(0);
                     }
-                    else if (utterance.contains("add weather places")){
-                        jervisSpeak("On it sir");
-                        weatherGUI weatherGUI = new weatherGUI();
+                    else if (utterance.contains("add")){
+                        
+                        if(utterance.contains("weather places")){
+                            jervisSpeak("On it sir");
+                            weatherGUI weatherGUI = new weatherGUI();
+                        }
+                        else if(utterance.contains("new commands")){
+                            jervisSpeak("On it sir");
+                            commandGUI cmdGUI = new commandGUI();
+                        }
                     }
                     else if (
                         utterance.contains("hello")||
@@ -305,7 +315,12 @@ public class Jervis {
             }
         }
     }
-    
+    /*  jervisConvers **********************************************************
+    **  11/01/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Used for conducting conversations with the user.
+     * @throws javax.sound.sampled.LineUnavailableException
+    ***************************************************************************/
     public static void jervisConvers() throws LineUnavailableException{
         speechRecogniser.stopRecognition();
         speechRecogniser.setRecogniser(eCNVRS_GRMR_RCGNSR);
@@ -321,25 +336,59 @@ public class Jervis {
         speechRecogniser.startRecognition();
     }
     
-    //Run from multiple threads
+    /*  jervisSpeak ************************************************************
+    **  15/01/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Utilises the speech synthesiser as well as runs the GUI
+     * animation by setting the startAnimation flag. The method is used by
+     * multiple threads, hence it's synchronised.
+     * @param text
+    ***************************************************************************/
     public static synchronized void jervisSpeak(String text){
         startAnimation = true;
         voice.speak(text);
         startAnimation = false;
     }
     
+    /*  getStartAnim ***********************************************************
+    **  16/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: returns the startAnimation flag. Used by the WaveformAnim
+     * Runnable.
+     * @return 
+    ***************************************************************************/
     public static boolean getStartAnim(){
         return startAnimation;
     }
     
+    /*  getListening ***********************************************************
+    **  09/03/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: returns bListening flag.
+     * @return 
+    ***************************************************************************/
     public static boolean getListening(){
         return Jervis.bListening;
     }
         
+    /*  setListening ***********************************************************
+    **  09/03/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: sets the bListening flag.
+     * @param bListening
+    ***************************************************************************/
     public static void setListening(boolean bListening){
         Jervis.bListening = bListening;
     }
     
+    /*  customCmd **************************************************************
+    **  21/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: used by commandGUI. Allows to add new commands to Jervis
+     * @param sCmd
+     * @param sDir
+     * @throws java.lang.InterruptedException
+    ***************************************************************************/
     public static void customCmd(String sCmd, String sDir) throws InterruptedException{
         
         Command editedObject;
@@ -367,6 +416,15 @@ public class Jervis {
         }
     }
     
+    /*  customWeather **********************************************************
+    **  09/03/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Allows to add new weather places (UK support only).
+     * @param sPlace
+     * @param sPostcode
+     * @throws java.lang.InterruptedException
+     * @throws java.io.IOException
+    ***************************************************************************/
     public static void customWeather(String sPlace, String sPostcode) throws InterruptedException, IOException{
         
         String fileContent = NotepadWrapper.readNoteData("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\postcodes.txt");
@@ -384,6 +442,13 @@ public class Jervis {
         Thread.sleep(1000);
     }
     
+    /*  jervisResearch *********************************************************
+    **  09/03/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Allows to add new weather places (UK support only).
+     * @throws java.lang.InterruptedException
+     * @throws javax.sound.sampled.LineUnavailableException
+    ***************************************************************************/
     public static void jervisResearch() throws InterruptedException, LineUnavailableException{
         speechRecogniser.stopRecognition();
         jervisSpeak("Sure sir, what shall I look up?");
@@ -393,6 +458,14 @@ public class Jervis {
         speechRecogniser.startRecognition();
     }
     
+    /*  jervisResearch *********************************************************
+    **  27/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Implementation of the Note Taking feature.
+     * @param utterance
+     * @throws java.lang.InterruptedException
+     * @throws javax.sound.sampled.LineUnavailableException
+    ***************************************************************************/
     public static void jervisNote(String utterance) throws InterruptedException, LineUnavailableException{
         String noteTitle, content;
 
@@ -424,6 +497,13 @@ public class Jervis {
         speechRecogniser.startRecognition();
     }
     
+    /*  jervisResearch *********************************************************
+    **  24/03/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Allows utilisation of the commands stored in protobufs.
+     * @throws javax.sound.sampled.LineUnavailableException
+     * @throws java.io.IOException
+    ***************************************************************************/
     public static void jervisOpenLocation() throws LineUnavailableException, IOException{
         jervisSpeak("Sure, sir, what is the location name?");
         speechRecogniser.stopRecognition();
@@ -455,6 +535,12 @@ public class Jervis {
         speechRecogniser.startRecognition();
     }
     
+    /*  jervisResearch *********************************************************
+    **  24/03/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Opens a website with the specified address.
+     * @throws javax.sound.sampled.LineUnavailableException
+    ***************************************************************************/
     public static void jervisOpenWebsite() throws LineUnavailableException{
         jervisSpeak("What is the address sir?");
         speechRecogniser.stopRecognition();
@@ -472,6 +558,13 @@ public class Jervis {
         speechRecogniser.startRecognition();
     }
     
+    /*  jervisTranslate ********************************************************
+    **  02/03/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Translates input text in French. This is beta 
+     * feature (not required).
+     * @throws javax.sound.sampled.LineUnavailableException
+    ***************************************************************************/
     public static void jervisTranslate() throws LineUnavailableException{
         jervisSpeak("I am listening for the source text sir");
         speechRecogniser.stopRecognition();
@@ -481,6 +574,15 @@ public class Jervis {
         speechRecogniser.startRecognition();
     }
     
+    /*  jervisRememberLocation *************************************************
+    **  21/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Takes user location and serialises it into 
+     * JervisStorage.ser file.
+     * feature (not required).
+     * @throws java.io.IOException
+     * @throws javax.sound.sampled.LineUnavailableException
+    ***************************************************************************/
     public static void jervisRememberLocation() throws IOException, LineUnavailableException{
         jervisSpeak("Please state your location, sir");
 
@@ -507,8 +609,19 @@ public class Jervis {
         speechRecogniser.startRecognition(); 
     }
     
+    /*  jervisRememberEmail ****************************************************
+    **  21/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Takes user location and serialises it into 
+     * JervisStorage.ser file.
+     * feature (not required).
+     * @throws java.io.IOException
+     * @throws javax.sound.sampled.LineUnavailableException
+     * @throws java.io.FileNotFoundException
+    ***************************************************************************/
     public static void jervisRememberEmail() throws IOException, LineUnavailableException,
             IOException, FileNotFoundException, FileNotFoundException{
+        
         jervisSpeak("Please state your email sir");
 
         speechRecogniser.stopRecognition();
@@ -532,7 +645,17 @@ public class Jervis {
         speechRecogniser.startRecognition(); 
     }
     
+    /*  jervisRememberProfession ***********************************************
+    **  21/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Takes user profession and serialises it into 
+     * JervisStorage.ser file.
+     * feature (not required).
+     * @throws java.io.IOException
+     * @throws javax.sound.sampled.LineUnavailableException
+    ***************************************************************************/
     public static void jervisRememberProfession() throws IOException, LineUnavailableException {
+        
         jervisSpeak("Please state your profession sir");
 
         speechRecogniser.stopRecognition();
@@ -555,7 +678,18 @@ public class Jervis {
 
         speechRecogniser.startRecognition();
     }
+    
+    /*  jervisRememberSex ******************************************************
+    **  21/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Takes user profession and serialises it into 
+     * JervisStorage.ser file.
+     * feature (not required).
+     * @throws java.io.IOException
+     * @throws javax.sound.sampled.LineUnavailableException
+    ***************************************************************************/
     public static void jervisRememberSex() throws IOException, LineUnavailableException{
+        
         speechRecogniser.stopRecognition();
 
         String sex = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
@@ -577,7 +711,17 @@ public class Jervis {
         speechRecogniser.startRecognition();
     }
     
+    /*  jervisRememberName *****************************************************
+    **  21/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Takes user name and serialises it into 
+     * JervisStorage.ser file.
+     * feature (not required).
+     * @throws java.io.IOException
+     * @throws javax.sound.sampled.LineUnavailableException
+    ***************************************************************************/
     public static void jervisRememberName() throws LineUnavailableException, IOException{
+        
             jervisSpeak("Please say your name sir");
 
             speechRecogniser.stopRecognition();
@@ -601,6 +745,15 @@ public class Jervis {
             speechRecogniser.startRecognition();
     }
     
+    /*  jervisWeather **********************************************************
+    **  09/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Top level implementation for the Weather Forecasting feature.
+     * @param myLocation
+     * @throws javax.sound.sampled.LineUnavailableException
+     * @throws java.io.IOException
+     * @throws java.lang.InterruptedException
+    ***************************************************************************/
     public static void jervisWeather(boolean myLocation) throws LineUnavailableException, IOException, InterruptedException{
         
         String sPlace = "";
@@ -633,8 +786,17 @@ public class Jervis {
         speechRecogniser.startRecognition();
     }
     
+    /*  jervisStateName ********************************************************
+    **  22/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Retrieves user's name.
+     * @throws java.io.IOException
+     * @throws java.lang.InterruptedException
+     * @throws javax.sound.sampled.LineUnavailableException
+    ***************************************************************************/
     public static void jervisStateName() throws IOException, InterruptedException, LineUnavailableException{
         if(!owner.hasName() || owner.getName().equals(" ")){
+            
             jervisSpeak("I do not know your name sir, please say your name");
 
             speechRecogniser.stopRecognition();
@@ -662,8 +824,17 @@ public class Jervis {
         }
     }
     
+    /*  jervisStateSex *********************************************************
+    **  22/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Retrieves user's sex.
+     * @throws java.io.IOException
+     * @throws javax.sound.sampled.LineUnavailableException
+     * @throws java.lang.InterruptedException
+    ***************************************************************************/
     public static void jervisStateSex() throws IOException, LineUnavailableException, InterruptedException{
         if(!owner.hasSex() || owner.getSex().equals(" ")){
+            
             jervisSpeak("I do not know your sex sir, please say it now");
 
             speechRecogniser.stopRecognition();
@@ -699,8 +870,19 @@ public class Jervis {
         }
     }
     
-    public static void jervisStateProfession() throws IOException, LineUnavailableException, InterruptedException{
+    /*  jervisStateProfession **************************************************
+    **  22/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Retrieves user's profession.
+     * @throws java.io.IOException
+     * @throws javax.sound.sampled.LineUnavailableException
+     * @throws java.lang.InterruptedException
+    ***************************************************************************/
+    public static void jervisStateProfession() throws IOException,
+            LineUnavailableException, InterruptedException{
+        
         if(!owner.hasProfession() || owner.getProfession().equals(" ")){
+            
             jervisSpeak("I do not know your profession sir, please say it now");
 
             speechRecogniser.stopRecognition();
@@ -727,8 +909,17 @@ public class Jervis {
         }
     }
     
+    /*  jervisStateEmail *******************************************************
+    **  22/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Retrieves user's e-mail.
+     * @throws java.io.IOException
+     * @throws javax.sound.sampled.LineUnavailableException
+     * @throws java.lang.InterruptedException
+    ***************************************************************************/
     public static void jervisStateEmail() throws IOException, LineUnavailableException, InterruptedException{
         if(!owner.hasEmail() || owner.getEmail().equals(" ")){
+            
             jervisSpeak("I do not know your email sir, please say it now");
 
             speechRecogniser.stopRecognition();
@@ -758,8 +949,18 @@ public class Jervis {
         }
     }
     
-    public static void jervisStateLocation() throws FileNotFoundException, IOException, InterruptedException, LineUnavailableException{
+    /*  jervisStateLocation ****************************************************
+    **  22/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Retrieves user's location.
+     * @throws java.io.FileNotFoundException
+     * @throws javax.sound.sampled.LineUnavailableException
+     * @throws java.lang.InterruptedException
+    ***************************************************************************/
+    public static void jervisStateLocation() throws FileNotFoundException,
+            IOException, InterruptedException, LineUnavailableException{
         if(!owner.hasLocation() || owner.getLocation().equals(" ")){
+            
             jervisSpeak("I do not know your location sir, please say it now");
 
             speechRecogniser.stopRecognition();
@@ -787,21 +988,27 @@ public class Jervis {
         }
     }
     
+    /*  jervisEvent ************************************************************
+    **  22/02/2016  M.Michalski Initial Version
+    ***************************************************************************/
+    /**Description: Retrieves user's location.
+     * @throws javax.sound.sampled.LineUnavailableException
+     * @throws java.io.IOException
+    ***************************************************************************/
     public static void jervisEvent() throws LineUnavailableException, IOException{
+        
         speechRecogniser.stopRecognition();
         speechRecogniser.setRecogniser(eDTE_GRMR_RCGNSR);
 
         jervisSpeak("What is the title of the event, sir?");
         String sTitle = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
 
-        //TODO protocol buff
         System.out.println(sTitle);
 
         jervisSpeak("What is the day and month, sir?");
         speechRecogniser.startRecognition();
         String sDaysMonthsText = speechRecogniser.getResult();
 
-        //TODO protocol buff
         System.out.println(sDaysMonthsText);
 
         speechRecogniser.stopRecognition();
@@ -810,7 +1017,6 @@ public class Jervis {
         speechRecogniser.startRecognition();
         String sYearText = speechRecogniser.getResult();
 
-        //TODO protocol buff
         System.out.println(sYearText);
 
         speechRecogniser.stopRecognition();
@@ -819,7 +1025,6 @@ public class Jervis {
         speechRecogniser.startRecognition();
         String sHourText = speechRecogniser.getResult();
 
-        //TODO protocol buff
         System.out.println(sHourText);
 
         speechRecogniser.stopRecognition();
