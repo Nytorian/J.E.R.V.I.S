@@ -43,6 +43,7 @@ public class Jervis {
     private static mainGUI mainFrame;
             
     private static final String Voice = "kevin16";
+    private static String sSalutation = "sir";
     private static VoiceManager vm;
     private static Voice voice;
     private static String utterance;
@@ -63,11 +64,11 @@ public class Jervis {
     public static final Lock serialOutputLock = new ReentrantLock();
     
     private static final String[] sJervInit = {
-        "Yes, sir?",
-        "How can I help, sir?",
-        "How can I assist you, sir?",
-        "can I help you, sir?",
-        "I am listening, sir"
+        "Yes,",
+        "How can I help,",
+        "How can I assist you,",
+        "can I help you,",
+        "I am listening,"
     };
         
     /*  main *******************************************************************
@@ -85,6 +86,7 @@ public class Jervis {
     **  28/03/2016  M.Michalski Organiser feature
     **  02/04/2016  M.Michalski Made Jervis's responses random
     **  17/04/2016  M.Michalski Code optimisation
+    **  17/04/2016  M.Michalski Added salutation depending on sex remembered
     ***************************************************************************/
     /**Description: Main function for Jervis. Implements the Tree Search algorithm
      * and links all the subcomponents.
@@ -116,7 +118,15 @@ public class Jervis {
         
         execServise.execute(new WaveformAnim());
         execServise.execute(new Organiser());
-        jervisSpeak("I am ready to serve you sir!");
+        
+        //initial for salutation - will need to repeat in the ST loop
+        owner = Owner.parseFrom(new FileInputStream("JervisStorage.ser"));
+        if(owner.getSex().equals("female"))
+            sSalutation = "madam";
+        else
+            sSalutation = "sir"; 
+        
+        jervisSpeak("I am ready to serve you " + sSalutation);
         Thread.sleep(1000);
                 
         while (true) {
@@ -128,7 +138,7 @@ public class Jervis {
             if(getListening()){
                 if (utterance.contains("jervis")){
 
-                    jervisSpeak(sJervInit[new Random().nextInt(sJervInit.length)]);
+                    jervisSpeak(sJervInit[new Random().nextInt(sJervInit.length)] + sSalutation);
 
                     owner = Owner.parseFrom(new FileInputStream("JervisStorage.ser"));
                     command = Command.parseFrom(new FileInputStream("CustomCmd.ser"));
@@ -149,17 +159,17 @@ public class Jervis {
                     }
                     else if (utterance.contains("go away") ||
                         utterance.contains("you can go")){
-                        jervisSpeak("Ok, I am gone, sir, Goodbye");
+                        jervisSpeak("Ok, I am gone, " + sSalutation + ", Goodbye");
                         exit(0);
                     }
                     else if (utterance.contains("add")){
                         
                         if(utterance.contains("weather places")){
-                            jervisSpeak("On it sir");
+                            jervisSpeak("On it " + sSalutation);
                             weatherGUI weatherGUI = new weatherGUI();
                         }
                         else if(utterance.contains("new commands")){
-                            jervisSpeak("On it sir");
+                            jervisSpeak("On it " + sSalutation);
                             commandGUI cmdGUI = new commandGUI();
                         }
                     }
@@ -169,19 +179,19 @@ public class Jervis {
                         utterance.startsWith("how are")){
   
                         if (utterance.contains("hello")){
-                            jervisSpeak("Hello! Sir, how is life?");
+                            jervisSpeak("Hello! " + sSalutation + ", how is life?");
                             jervisConvers();
                         }
                         else if (utterance.contains("morning")){
-                            jervisSpeak("Good morning! Sir, how is life?");
+                            jervisSpeak("Good morning! " + sSalutation + ", how is life?");
                             jervisConvers();
                         }
                         else if (utterance.contains("afternoon")){
-                            jervisSpeak("Good afternoon! Sir, how is life?");
+                            jervisSpeak("Good afternoon! " + sSalutation + ", how is life?");
                             jervisConvers();
                         }
                         else if (utterance.contains("evening")){
-                            jervisSpeak("Good evening! Sir, how is life?");
+                            jervisSpeak("Good evening! " + sSalutation + ", how is life?");
                             jervisConvers();
                         }
                         else if (utterance.contains("how are")){
@@ -200,7 +210,7 @@ public class Jervis {
                             jervisRememberProfession();
                         }
                         else if(utterance.contains("my sex")){
-                            jervisSpeak("Please state your sex sir");
+                            jervisSpeak("Please state your sex " + sSalutation);
                             jervisRememberSex();
                         }
                         else if(utterance.contains("my name")){
@@ -253,7 +263,7 @@ public class Jervis {
                     }
                     else if(utterance.contains("set")){
                         if(utterance.contains("new commands")){
-                            jervisSpeak("On it sir");
+                            jervisSpeak("On it " + sSalutation);
                             commandGUI cmdGUI = new commandGUI();
                         }
                         else if(utterance.contains("an event")       ||
@@ -302,12 +312,12 @@ public class Jervis {
                              utterance.contains("that's funny")   ||
                              utterance.contains("that's funny")   ||
                              utterance.contains("you're stupid")){
-                        jervisSpeak("Thank you, sir");
+                        jervisSpeak("Thank you, " + sSalutation);
                         Thread.sleep(600);
                     }
                     else if(utterance.contains("thank you") ||
                             utterance.contains("thanks")){
-                        jervisSpeak("Anytime, sir");
+                        jervisSpeak("Anytime, " + sSalutation);
                         Thread.sleep(600);
                     }
                 
@@ -451,7 +461,7 @@ public class Jervis {
     ***************************************************************************/
     public static void jervisResearch() throws InterruptedException, LineUnavailableException{
         speechRecogniser.stopRecognition();
-        jervisSpeak("Sure sir, what shall I look up?");
+        jervisSpeak("Sure " + sSalutation + ", what shall I look up?");
         Thread.sleep(200);
         String sResearch = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
         InformationFinder.definitionFinder(sResearch);
@@ -469,7 +479,7 @@ public class Jervis {
     public static void jervisNote(String utterance) throws InterruptedException, LineUnavailableException{
         String noteTitle, content;
 
-        jervisSpeak("short, medium or long, sir");
+        jervisSpeak("short, medium or long, " + sSalutation);
         Thread.sleep(1000);
         utterance = speechRecogniser.getResult();
 
@@ -484,15 +494,15 @@ public class Jervis {
         }
 
         speechRecogniser.stopRecognition();
-        jervisSpeak("What should be the title, sir?");
+        jervisSpeak("What should be the title, "  + sSalutation + " ?");
 
         noteTitle = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
 
-        jervisSpeak("Ok, sir, I am listening for the content");
+        jervisSpeak("Ok, "  + sSalutation + " I am listening for the content");
         content = WatsonSpeechRecogniser.recognise(noteLength);
 
         NotepadWrapper.writeNoteData(noteTitle + ".txt", content);
-        jervisSpeak("Task completed, sir");
+        jervisSpeak("Task completed, " + sSalutation);
 
         speechRecogniser.startRecognition();
     }
@@ -505,7 +515,7 @@ public class Jervis {
      * @throws java.io.IOException
     ***************************************************************************/
     public static void jervisOpenLocation() throws LineUnavailableException, IOException{
-        jervisSpeak("Sure, sir, what is the location name?");
+        jervisSpeak("Sure, "  + sSalutation + ", what is the location name?");
         speechRecogniser.stopRecognition();
         speechRecogniser.setRecogniser(eCMD_GRMR_RCGNSR);
         speechRecogniser.startRecognition();
@@ -542,7 +552,7 @@ public class Jervis {
      * @throws javax.sound.sampled.LineUnavailableException
     ***************************************************************************/
     public static void jervisOpenWebsite() throws LineUnavailableException{
-        jervisSpeak("What is the address sir?");
+        jervisSpeak("What is the address "  + sSalutation + " ?");
         speechRecogniser.stopRecognition();
 
         String url = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
@@ -554,7 +564,7 @@ public class Jervis {
             Desktop.getDesktop().browse(new URL("http://" + url).toURI());
         } catch (URISyntaxException | IOException e) {}
         
-        jervisSpeak("The website should pop up, sir");
+        jervisSpeak("The website should pop up, " + sSalutation);
         speechRecogniser.startRecognition();
     }
     
@@ -566,7 +576,7 @@ public class Jervis {
      * @throws javax.sound.sampled.LineUnavailableException
     ***************************************************************************/
     public static void jervisTranslate() throws LineUnavailableException{
-        jervisSpeak("I am listening for the source text sir");
+        jervisSpeak("I am listening for the source text"  + sSalutation);
         speechRecogniser.stopRecognition();
 
         String sourceText = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
@@ -584,7 +594,7 @@ public class Jervis {
      * @throws javax.sound.sampled.LineUnavailableException
     ***************************************************************************/
     public static void jervisRememberLocation() throws IOException, LineUnavailableException{
-        jervisSpeak("Please state your location, sir");
+        jervisSpeak("Please state your location, "  + sSalutation);
 
         speechRecogniser.stopRecognition();
 
@@ -604,7 +614,7 @@ public class Jervis {
                 serialOutputLock.unlock();
             }
 
-        jervisSpeak("Your new location is " + location + " ,sir");
+        jervisSpeak("Your new location is " + location + sSalutation);
 
         speechRecogniser.startRecognition(); 
     }
@@ -622,7 +632,7 @@ public class Jervis {
     public static void jervisRememberEmail() throws IOException, LineUnavailableException,
             IOException, FileNotFoundException, FileNotFoundException{
         
-        jervisSpeak("Please state your email sir");
+        jervisSpeak("Please state your email " + sSalutation);
 
         speechRecogniser.stopRecognition();
 
@@ -643,6 +653,8 @@ public class Jervis {
             }
 
         speechRecogniser.startRecognition(); 
+        
+        jervisSpeak("I will remember your email as " + email + sSalutation);
     }
     
     /*  jervisRememberProfession ***********************************************
@@ -656,7 +668,7 @@ public class Jervis {
     ***************************************************************************/
     public static void jervisRememberProfession() throws IOException, LineUnavailableException {
         
-        jervisSpeak("Please state your profession sir");
+        jervisSpeak("Please state your profession " + sSalutation);
 
         speechRecogniser.stopRecognition();
 
@@ -676,6 +688,8 @@ public class Jervis {
                 serialOutputLock.unlock();
             }
 
+        jervisSpeak("Ok, I will remember that you are " + profession + sSalutation);
+        
         speechRecogniser.startRecognition();
     }
     
@@ -692,21 +706,34 @@ public class Jervis {
         
         speechRecogniser.stopRecognition();
 
-        String sex = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+        String sex = WatsonSpeechRecogniser.recognise(NoteLength.eWord).replace(" ", "");
 
-        Owner editedOwner = Owner.newBuilder()
-                .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                .setSex(sex) 
-                .build();
+        if(sex.equals("male")  || sex.equals("female")|| sex.equals("Male")  ||
+            sex.equals("Female")){
 
-        serialOutputLock.lock();
-            try {
-                serialOutput = new FileOutputStream("JervisStorage.ser");
-                editedOwner.writeTo(serialOutput);
-                serialOutput.close();
-            } finally {
-                serialOutputLock.unlock();
-            }
+            Owner editedOwner = Owner.newBuilder()
+                    .mergeFrom(new FileInputStream("JervisStorage.ser"))
+                    .setSex(sex) 
+                    .build();
+
+            serialOutputLock.lock();
+                try {
+                    serialOutput = new FileOutputStream("JervisStorage.ser");
+                    editedOwner.writeTo(serialOutput);
+                    serialOutput.close();
+                } finally {
+                    serialOutputLock.unlock();
+                }
+            if(sex.equals("female"))
+                sSalutation = "madam";
+            else
+                sSalutation = "sir";
+        }
+        else{
+            jervisSpeak("The sex is invalid, you can be either male or female");
+        }
+            
+        jervisSpeak("Ok, I will remember that you are a " + sex  + sSalutation);
 
         speechRecogniser.startRecognition();
     }
@@ -722,7 +749,7 @@ public class Jervis {
     ***************************************************************************/
     public static void jervisRememberName() throws LineUnavailableException, IOException{
         
-            jervisSpeak("Please say your name sir");
+            jervisSpeak("Please say your name " + sSalutation);
 
             speechRecogniser.stopRecognition();
 
@@ -741,6 +768,8 @@ public class Jervis {
                 } finally {
                     serialOutputLock.unlock();
                 }
+                
+            jervisSpeak("Ok, I will remember you as " + name + sSalutation);
 
             speechRecogniser.startRecognition();
     }
@@ -760,7 +789,7 @@ public class Jervis {
         
         speechRecogniser.stopRecognition();
         speechRecogniser.setRecogniser(ePLACE_GRMR_RCGNSR);
-        jervisSpeak("Please state the city sir");
+        jervisSpeak("Please state the city " + sSalutation);
         speechRecogniser.startRecognition();
 
         if(myLocation)
@@ -797,7 +826,7 @@ public class Jervis {
     public static void jervisStateName() throws IOException, InterruptedException, LineUnavailableException{
         if(!owner.hasName() || owner.getName().equals(" ")){
             
-            jervisSpeak("I do not know your name sir, please say your name");
+            jervisSpeak("I do not know your name "  + sSalutation + ", please say your name");
 
             speechRecogniser.stopRecognition();
             String name = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
@@ -819,7 +848,7 @@ public class Jervis {
             speechRecogniser.startRecognition(); 
         }
         else{
-            jervisSpeak("Your name is" + owner.getName() + "sir");
+            jervisSpeak("Your name is" + owner.getName() + sSalutation);
             Thread.sleep(300);
         }
     }
@@ -835,7 +864,7 @@ public class Jervis {
     public static void jervisStateSex() throws IOException, LineUnavailableException, InterruptedException{
         if(!owner.hasSex() || owner.getSex().equals(" ")){
             
-            jervisSpeak("I do not know your sex sir, please say it now");
+            jervisSpeak("I do not know your sex, please say it now");
 
             speechRecogniser.stopRecognition();
             String sSex = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
@@ -865,7 +894,7 @@ public class Jervis {
             speechRecogniser.startRecognition();
         }
         else{
-            jervisSpeak("You are a" + owner.getSex() + "sir");
+            jervisSpeak("You are a" + owner.getSex() + sSalutation);
             Thread.sleep(300);
         }
     }
@@ -883,7 +912,7 @@ public class Jervis {
         
         if(!owner.hasProfession() || owner.getProfession().equals(" ")){
             
-            jervisSpeak("I do not know your profession sir, please say it now");
+            jervisSpeak("I do not know your profession "  + sSalutation + ", please say it now");
 
             speechRecogniser.stopRecognition();
             String sProfession = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
@@ -904,7 +933,7 @@ public class Jervis {
             speechRecogniser.startRecognition(); 
         }
         else{
-            jervisSpeak("You are " + owner.getProfession() + "sir");
+            jervisSpeak("You are " + owner.getProfession() + sSalutation);
             Thread.sleep(300);
         }
     }
@@ -920,7 +949,7 @@ public class Jervis {
     public static void jervisStateEmail() throws IOException, LineUnavailableException, InterruptedException{
         if(!owner.hasEmail() || owner.getEmail().equals(" ")){
             
-            jervisSpeak("I do not know your email sir, please say it now");
+            jervisSpeak("I do not know your email " + sSalutation + ", please say it now");
 
             speechRecogniser.stopRecognition();
             String sEmail = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
@@ -944,7 +973,7 @@ public class Jervis {
             speechRecogniser.startRecognition(); 
         }
         else{
-            jervisSpeak("Your email is " + owner.getEmail() + "sir");
+            jervisSpeak("Your email is " + owner.getEmail() + sSalutation);
             Thread.sleep(300);
         }
     }
@@ -961,7 +990,7 @@ public class Jervis {
             IOException, InterruptedException, LineUnavailableException{
         if(!owner.hasLocation() || owner.getLocation().equals(" ")){
             
-            jervisSpeak("I do not know your location sir, please say it now");
+            jervisSpeak("I do not know your location " + sSalutation + ", please say it now");
 
             speechRecogniser.stopRecognition();
             String sLocation = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
@@ -983,7 +1012,7 @@ public class Jervis {
             speechRecogniser.startRecognition(); 
         }
         else{
-            jervisSpeak("Your location is " + owner.getLocation() + "sir");
+            jervisSpeak("Your location is " + owner.getLocation() + sSalutation);
             Thread.sleep(300);
         }
     }
@@ -1000,19 +1029,19 @@ public class Jervis {
         speechRecogniser.stopRecognition();
         speechRecogniser.setRecogniser(eDTE_GRMR_RCGNSR);
 
-        jervisSpeak("What is the title of the event, sir?");
+        jervisSpeak("What is the title of the event, " + sSalutation + " ?");
         String sTitle = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
 
         System.out.println(sTitle);
 
-        jervisSpeak("What is the day and month, sir?");
+        jervisSpeak("What is the day and month, " + sSalutation + " ?");
         speechRecogniser.startRecognition();
         String sDaysMonthsText = speechRecogniser.getResult();
 
         System.out.println(sDaysMonthsText);
 
         speechRecogniser.stopRecognition();
-        jervisSpeak("What is the year of the event, sir?");
+        jervisSpeak("What is the year of the event, " + sSalutation + " ?");
         speechRecogniser.setRecogniser(eYR_GRMR_RCGNSR);
         speechRecogniser.startRecognition();
         String sYearText = speechRecogniser.getResult();
@@ -1020,7 +1049,7 @@ public class Jervis {
         System.out.println(sYearText);
 
         speechRecogniser.stopRecognition();
-        jervisSpeak("What is the time of the event, sir?");
+        jervisSpeak("What is the time of the event, " + sSalutation + " ?");
         speechRecogniser.setRecogniser(eTME_GRMR_RCGNSR);
         speechRecogniser.startRecognition();
         String sHourText = speechRecogniser.getResult();
@@ -1028,7 +1057,7 @@ public class Jervis {
         System.out.println(sHourText);
 
         speechRecogniser.stopRecognition();
-        jervisSpeak("How many minutes before the event shall I remind you, sir?");
+        jervisSpeak("How many minutes before the event shall I remind you, " + sSalutation + " ?");
         speechRecogniser.setRecogniser(eMNT_GRMR_RCGNSR);
         speechRecogniser.startRecognition();
         String sTimeToRemind = speechRecogniser.getResult();
