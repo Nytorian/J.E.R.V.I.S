@@ -136,7 +136,7 @@ public class Jervis {
             Jervis.bAnimationStart = true;
             
             if(getListening()){
-                if (utterance.contains("jervis")){
+                if (utterance.equals("jervis")){
 
                     jervisSpeak(sJervInit[new Random().nextInt(sJervInit.length)] + sSalutation);
 
@@ -166,10 +166,12 @@ public class Jervis {
                         
                         if(utterance.contains("weather places")){
                             jervisSpeak("On it " + sSalutation);
+                            Thread.sleep(1500);
                             weatherGUI weatherGUI = new weatherGUI();
                         }
                         else if(utterance.contains("new commands")){
                             jervisSpeak("On it " + sSalutation);
+                            Thread.sleep(1500);
                             commandGUI cmdGUI = new commandGUI();
                         }
                     }
@@ -210,7 +212,6 @@ public class Jervis {
                             jervisRememberProfession();
                         }
                         else if(utterance.contains("my sex")){
-                            jervisSpeak("Please state your sex " + sSalutation);
                             jervisRememberSex();
                         }
                         else if(utterance.contains("my name")){
@@ -264,6 +265,7 @@ public class Jervis {
                     else if(utterance.contains("set")){
                         if(utterance.contains("new commands")){
                             jervisSpeak("On it " + sSalutation);
+                            Thread.sleep(1500);
                             commandGUI cmdGUI = new commandGUI();
                         }
                         else if(utterance.contains("an event")       ||
@@ -460,9 +462,12 @@ public class Jervis {
      * @throws javax.sound.sampled.LineUnavailableException
     ***************************************************************************/
     public static void jervisResearch() throws InterruptedException, LineUnavailableException{
+        
         speechRecogniser.stopRecognition();
+        
         jervisSpeak("Sure " + sSalutation + ", what shall I look up?");
         Thread.sleep(200);
+        
         String sResearch = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
         InformationFinder.definitionFinder(sResearch);
         speechRecogniser.startRecognition();
@@ -477,6 +482,7 @@ public class Jervis {
      * @throws javax.sound.sampled.LineUnavailableException
     ***************************************************************************/
     public static void jervisNote(String utterance) throws InterruptedException, LineUnavailableException{
+        
         String noteTitle, content;
 
         jervisSpeak("short, medium or long, " + sSalutation);
@@ -515,7 +521,9 @@ public class Jervis {
      * @throws java.io.IOException
     ***************************************************************************/
     public static void jervisOpenLocation() throws LineUnavailableException, IOException{
+        
         jervisSpeak("Sure, "  + sSalutation + ", what is the location name?");
+        
         speechRecogniser.stopRecognition();
         speechRecogniser.setRecogniser(eCMD_GRMR_RCGNSR);
         speechRecogniser.startRecognition();
@@ -636,11 +644,11 @@ public class Jervis {
 
         speechRecogniser.stopRecognition();
 
-        String email = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
+        String email = WatsonSpeechRecogniser.recognise(NoteLength.eSHORT_NOTE);
 
         Owner editedOwner = Owner.newBuilder()
                 .mergeFrom(new FileInputStream("JervisStorage.ser"))
-                .setEmail(email) 
+                .setEmail(email.replace("out", "at")) 
                 .build();
 
         serialOutputLock.lock();
@@ -705,6 +713,7 @@ public class Jervis {
     public static void jervisRememberSex() throws IOException, LineUnavailableException{
         
         speechRecogniser.stopRecognition();
+        jervisSpeak("Please state your sex " + sSalutation);
 
         String sex = WatsonSpeechRecogniser.recognise(NoteLength.eWord).replace(" ", "");
 
@@ -728,12 +737,12 @@ public class Jervis {
                 sSalutation = "madam";
             else
                 sSalutation = "sir";
+            
+            jervisSpeak("Ok, I will remember that you are a " + sex + " "  + sSalutation);
         }
         else{
             jervisSpeak("The sex is invalid, you can be either male or female");
-        }
-            
-        jervisSpeak("Ok, I will remember that you are a " + sex  + sSalutation);
+        }    
 
         speechRecogniser.startRecognition();
     }
@@ -789,27 +798,26 @@ public class Jervis {
         
         speechRecogniser.stopRecognition();
         speechRecogniser.setRecogniser(ePLACE_GRMR_RCGNSR);
-        jervisSpeak("Please state the city " + sSalutation);
-        speechRecogniser.startRecognition();
 
-        if(myLocation)
-            sPlace = speechRecogniser.getResult();
-        
-        else
-            sPlace = speechRecogniser.getResult();
-
-        System.out.println(sPlace);
-
-        speechRecogniser.stopRecognition();
-        if(sPlace.contains("my location")){
+        if(myLocation){
             sPlace = owner.getLocation();
+        }
+        else{
+            jervisSpeak("Please state the city " + sSalutation);
+            Thread.sleep(600);
+            speechRecogniser.startRecognition();
+            
+            sPlace = speechRecogniser.getResult();
+            speechRecogniser.stopRecognition();
+            
+            if(sPlace.equals("my location")){
+                sPlace = owner.getLocation();
+            }
         }
 
         jervisSpeak(InformationFinder
-                .weatherForecast(sPlace)
+                .weatherForecast(sPlace.toLowerCase())
                 .replace("c", "degree in celsius"));
-
-        Thread.sleep(600);
 
         speechRecogniser.setRecogniser(eINIT_GRMR_RCGNSR);
         speechRecogniser.startRecognition();
@@ -894,7 +902,7 @@ public class Jervis {
             speechRecogniser.startRecognition();
         }
         else{
-            jervisSpeak("You are a" + owner.getSex() + sSalutation);
+            jervisSpeak("You are a" + owner.getSex() + " " + sSalutation);
             Thread.sleep(300);
         }
     }
@@ -1026,6 +1034,11 @@ public class Jervis {
     ***************************************************************************/
     public static void jervisEvent() throws LineUnavailableException, IOException{
         
+        String sDaysMonthsNum = "";
+        String sYearNum = "";
+        String sTimeNum = "";
+        String sMinutesToRemindNum = "";
+            
         speechRecogniser.stopRecognition();
         speechRecogniser.setRecogniser(eDTE_GRMR_RCGNSR);
 
@@ -1064,10 +1077,19 @@ public class Jervis {
 
         System.out.println("Text Time to remind: " + sTimeToRemind);//debug                           
 
-        String sDaysMonthsNum = DateGenerator.daysMonthsToNumeric(sDaysMonthsText);
-        String sYearNum = DateGenerator.yearToNumeric(sYearText);
-        String sTimeNum = DateGenerator.timeToNumeric(sHourText);
-         String sMinutesToRemindNum = DateGenerator.minuteToNumeric(sTimeToRemind);       
+        if(!sDaysMonthsText.isEmpty() && !sYearText.isEmpty() && !sHourText.isEmpty()
+                && !sTimeToRemind.isEmpty()){
+            
+            sDaysMonthsNum = DateGenerator.daysMonthsToNumeric(sDaysMonthsText);
+            sYearNum = DateGenerator.yearToNumeric(sYearText);
+            sTimeNum = DateGenerator.timeToNumeric(sHourText);
+            sMinutesToRemindNum = DateGenerator.minuteToNumeric(sTimeToRemind); 
+        }
+        else{
+            jervisSpeak("Unfortunately, I didn't catch one of the parameters, pl"
+                    + "ease try to set an event again");
+            return;
+        }
 
         System.out.println("Numeric sDaysMonthsNum: " + sDaysMonthsNum);//debug
         System.out.println("Numeric sYearNum: " + sYearNum);//debug

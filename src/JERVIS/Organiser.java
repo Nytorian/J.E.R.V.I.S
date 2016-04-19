@@ -81,16 +81,19 @@ public class Organiser implements Runnable{
                             DueEvents.getTime(index),
                             DueEvents.getTimeToRemind(index)
                     );
-
-                    //System.out.println("sTimeToRemind: " + sTimeToRemind);//debug   
-                    //System.out.println("sTimeToRemind: " + sCurrentTime);//debug
                     
-                    if(sTimeToRemind.equals(sCurrentTime)){
-                        Jervis.jervisSpeak("The event " + DueEvents.getTitle(index) + " is due in " + DueEvents.getTimeToRemind(index) );
+                    if(DateGenerator.checkDueEvents(sTimeToRemind, sCurrentTime) 
+                            == DateGenerator.EventCode.eEVENT_DUE){
+                        
+                        Jervis.jervisSpeak("The event " + DueEvents.getTitle(index) 
+                                + " is due in " + DueEvents.getTimeToRemind(index) );
                     }
                     
-                    else if(DateGenerator.checkPastTime(sTimeToRemind, sCurrentTime)){
-                        Jervis.jervisSpeak("The event " + DueEvents.getTitle(index) + " was due at " + DueEvents.getTime(index) );
+                    else if(DateGenerator.checkDueEvents(DueEvents.getTime(index), sCurrentTime) 
+                            == DateGenerator.EventCode.eEVENT_PAST_DUE){
+                        
+                        Jervis.jervisSpeak("The event " + DueEvents.getTitle(index) 
+                                + " was due at " + DueEvents.getTime(index) );
                         
                         DueEvents.removeEvent(index);
                         

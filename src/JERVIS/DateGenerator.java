@@ -23,6 +23,7 @@ public final class DateGenerator {
     
     /* class variable declarations */
     private static String todayDate = "", readTodayDate = "";
+    public static enum EventCode { eNO_EVENT_DUE, eEVENT_DUE, eEVENT_PAST_DUE };
  
     /*  initDateGenerator ******************************************************
     **  02/02/2016  M.Michalski Initial Version
@@ -226,17 +227,17 @@ public final class DateGenerator {
      
         return sTimeProcessed;
     }
-    /*  checkPastTime **********************************************************
+    /*  checkDueEvents **********************************************************
     **  02/04/2016  M.Michalski Initial Version
     ***************************************************************************/
-    /**Description: Checks if the time passed is in the past
+    /**Description: Checks if any events are due or past due
      * @param sScheduleTime
      * @param sCurrentTime
      * @return 
     ***************************************************************************/
-    public static boolean checkPastTime(String sScheduleTime, String sCurrentTime){
+    public static EventCode checkDueEvents(String sScheduleTime, String sCurrentTime){
        
-        boolean sPastTime = false;
+        EventCode eDueEvent = EventCode.eNO_EVENT_DUE;
         int iScheduleHours, iScheduleMinutes, iCurrentHours, iCurrentMinutes;
         
         String[] tmpScheduleTime = sScheduleTime.split(":");
@@ -250,15 +251,16 @@ public final class DateGenerator {
         iCurrentMinutes = Integer.parseInt(tmpCurrentTime[1]);
         
         if(iScheduleHours < iCurrentHours){
-            sPastTime = true;
+            eDueEvent = EventCode.eNO_EVENT_DUE;
         }
-        else if(iScheduleHours == iCurrentHours){
-            if(iScheduleMinutes < iCurrentMinutes){
-                sPastTime = true;
-            }
+        else if((iScheduleHours == iCurrentHours) && (iScheduleMinutes < iCurrentMinutes)){
+            eDueEvent = EventCode.eEVENT_PAST_DUE;
+        }
+        else if((iScheduleHours == iCurrentHours) && (iScheduleMinutes == iCurrentMinutes)){
+            eDueEvent = EventCode.eEVENT_DUE;
         }
      
-        return sPastTime;
+        return eDueEvent;
     }
     /*  getCurrentTime *********************************************************
     **  04/04/2016  M.Michalski Initial Version

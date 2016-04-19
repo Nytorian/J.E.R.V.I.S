@@ -3,7 +3,8 @@
 grammar dialog;
 
 <menu_command> = ( [hey | hello] jervis
-                   | hello                        
+                   | hello
+                   | help [me]
                    | good (morning | afternoon | evening) [jervis]  
                    | how are you                
                    | [what is | what's] my* (((your | my) name) | schedule 

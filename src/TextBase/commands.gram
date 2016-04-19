@@ -11,7 +11,11 @@ grammar commands;
 | Dragon Ball Z Goku vs Vegeta
 | dragon ball z episode one
 | windows
+| poster
+| dragon ball z one
 );
+
+
 
 
 
