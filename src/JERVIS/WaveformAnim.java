@@ -39,12 +39,6 @@ public class WaveformAnim implements Runnable{
     public void run(){
         
         images = new ArrayList<>(30);
-        try {
-            interTaskCom = new RandomAccessFile("interTaskCom.txt", "rw").getChannel()
-                    .map(FileChannel.MapMode.READ_WRITE, 0, 1);
-        } catch (IOException ex) {
-            Logger.getLogger(WaveformAnim.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
         try {
             images.add(ImageIO.read(new File("img/Voice Animation/s0.jpg")));

@@ -107,9 +107,7 @@ public class Jervis {
         voice = vm.getVoice(Voice);
         voice.allocate();
         
-        ExecutorService execServise = Executors.newCachedThreadPool();
-                   
-        System.setProperty("mbrola.base", "D://J.E.R.V.I.S//Downloaded//mbrola//");     
+        ExecutorService execServise = Executors.newCachedThreadPool();   
         
         DateGenerator.initDateGenerator();
         InformationFinder.initInformationFinder();
@@ -417,7 +415,7 @@ public class Jervis {
             editedObject.writeTo(serialOutput);
             serialOutput.close();
             
-            NotepadWrapper.addToGram("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\commands.gram", sCmd);
+            NotepadWrapper.addToGram("src/TextBase/commands.gram", sCmd);
             
             Jervis.jervisSpeak("Please restart me in order for the changes to take place");
             Thread.sleep(1000);
@@ -440,16 +438,16 @@ public class Jervis {
     ***************************************************************************/
     public static void customWeather(String sPlace, String sPostcode) throws InterruptedException, IOException{
         
-        String fileContent = NotepadWrapper.readNoteData("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\postcodes.txt");
+        String fileContent = NotepadWrapper.readNoteData("src/TextBase/postcodes.txt");
         
         fileContent += sPlace + ", " + sPostcode + "," +
                 System.getProperty("line.separator");
         
         NotepadWrapper.writeNoteData(
-                "D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\postcodes.txt",
+                "src/TextBase/postcodes.txt",
                 fileContent);
         
-        NotepadWrapper.addToGram("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\places.gram", sPlace);
+        NotepadWrapper.addToGram("src/TextBase/places.gram", sPlace);
             
         Jervis.jervisSpeak("Please restart me in order for the changes to take place");
         Thread.sleep(1000);
@@ -723,7 +721,7 @@ public class Jervis {
         speechRecogniser.stopRecognition();
         speechRecogniser.setRecogniser(eINIT_GRMR_RCGNSR);
 
-        if(sex.equals("male")  || sex.equals("female")|| sex.equals("Male")  ||
+        if(sex.equals("male") || sex.equals("female") || sex.equals("Male") ||
             sex.equals("Female")){
 
             Owner editedOwner = Owner.newBuilder()
@@ -744,7 +742,7 @@ public class Jervis {
             else
                 sSalutation = "sir";
             
-            jervisSpeak("Ok, I will remember that you are a " + sex + " "  + sSalutation);
+            jervisSpeak("Ok, I will remember that you are a " + sex + " " + sSalutation);
         }
         else{
             jervisSpeak("The sex is invalid, you can be either male or female");
@@ -817,7 +815,7 @@ public class Jervis {
             speechRecogniser.stopRecognition();
             
             if(sPlace.equals("my location")){
-                sPlace = owner.getLocation();
+                sPlace = owner.getLocation().toLowerCase().replace(" ", "");
             }
         }
 
@@ -840,7 +838,7 @@ public class Jervis {
     public static void jervisStateName() throws IOException, InterruptedException, LineUnavailableException{
         if(!owner.hasName() || owner.getName().equals(" ")){
             
-            jervisSpeak("I do not know your name "  + sSalutation + ", please say your name");
+            jervisSpeak("I do not know your name " + sSalutation + ", please say your name");
 
             speechRecogniser.stopRecognition();
             String name = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
@@ -926,7 +924,7 @@ public class Jervis {
         
         if(!owner.hasProfession() || owner.getProfession().equals(" ")){
             
-            jervisSpeak("I do not know your profession "  + sSalutation + ", please say it now");
+            jervisSpeak("I do not know your profession " + sSalutation + ", please say it now");
 
             speechRecogniser.stopRecognition();
             String sProfession = WatsonSpeechRecogniser.recognise(NoteLength.eWord);

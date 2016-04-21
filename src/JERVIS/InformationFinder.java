@@ -34,7 +34,7 @@ public final class InformationFinder {
     ***************************************************************************/
     public static void initInformationFinder() throws IOException{
         
-        sPlacesPostcodes = NotepadWrapper.readNoteData("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\src\\TextBase\\postcodes.txt").split(",");
+        sPlacesPostcodes = NotepadWrapper.readNoteData("src/TextBase/postcodes.txt").split(",");
     }
     
     /*  quotesFinder **********************************************************

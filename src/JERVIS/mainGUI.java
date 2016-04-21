@@ -19,10 +19,11 @@ public class mainGUI extends javax.swing.JFrame {
 
     /**
      * Creates new form mainGUI
+     * @throws java.io.IOException
      */
     public mainGUI() throws IOException {
         initComponents();
-        setIconImage(ImageIO.read(new File("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\img\\JervisMiniBG.png")));
+        setIconImage(ImageIO.read(new File("img/JervisMiniBG.png")));
         setVisible(true);
     }
 

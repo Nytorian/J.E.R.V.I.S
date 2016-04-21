@@ -23,7 +23,7 @@ public class helpGUI extends javax.swing.JFrame {
      */
     public helpGUI() throws IOException {
         initComponents();
-        setIconImage(ImageIO.read(new File("D:\\J.E.R.V.I.S\\J.E.R.V.I.S\\GitHub\\img\\JervisMiniBG.png")));
+        setIconImage(ImageIO.read(new File("img/JervisMiniBG.png")));
         setVisible(true);
     }
 
@@ -104,6 +104,7 @@ public class helpGUI extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 try {
                     new helpGUI().setVisible(true);

@@ -6,17 +6,15 @@ grammar commands;
                 root
 | male
 | female
-| development
-| university
 | downloads
-| movies
-| Dragon Ball Z Goku vs Vegeta
-| dragon ball z episode one
-| windows
-| poster
-| dragon ball z one
+| trance
+| books
 | dragon ball z episode one
 );
+
+
+
+
 
 
 
