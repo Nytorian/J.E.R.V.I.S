@@ -1,8 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/******************************************************************************/
+/**
+@file          weatherGUI.java
+@copyright     Mateusz Michalski
+*
+@author        Mateusz Michalski
+*
+@language      Java JDK 1.8
+*
+@Description:  Used for adding new weather places.
+*******************************************************************************/
 package JERVIS;
 
 import static JERVIS.Jervis.serialOutput;
@@ -17,14 +23,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
-/**
- *
- * @author Mateusz
- */
+
 public class weatherGUI extends javax.swing.JFrame {
 
     /**
      * Creates new form commandGUI
+     * @throws java.io.IOException
      */
     public weatherGUI() throws IOException {
         initComponents();

@@ -1,8 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/******************************************************************************/
+/**
+@file          commandGUI.java
+@copyright     Mateusz Michalski
+*
+@author        Mateusz Michalski
+*
+@language      Java JDK 1.8
+*
+@Description:  Used for adding new commands.
+*******************************************************************************/
 package JERVIS;
 
 import static JERVIS.Jervis.serialOutput;

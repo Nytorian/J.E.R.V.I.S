@@ -44,9 +44,9 @@ public class Jervis {
             
     private static final String Voice = "kevin16";
     private static String sSalutation = "sir";
+    private static String utterance;
     private static VoiceManager vm;
     private static Voice voice;
-    private static String utterance;
     private static Translator enFrTranslator;
     
     private static Owner owner;

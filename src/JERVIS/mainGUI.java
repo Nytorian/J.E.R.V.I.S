@@ -1,8 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/******************************************************************************/
+/**
+@file          mainGUI.java
+@copyright     Mateusz Michalski
+*
+@author        Mateusz Michalski
+*
+@language      Java JDK 1.8
+*
+@Description:  Main Graphical User Interface for Jervis.
+*******************************************************************************/
 package JERVIS;
 
 import java.io.File;
@@ -11,10 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
-/**
- *
- * @author Mateusz
- */
+
 public class mainGUI extends javax.swing.JFrame {
 
     /**

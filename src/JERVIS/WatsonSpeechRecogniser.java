@@ -24,6 +24,8 @@ public class WatsonSpeechRecogniser {
     private static long RECORD_TIME;
     private static final String sUserName = TextBase.SensitiveData.WATSON_STT_LGN;
     private static final String sPassword = TextBase.SensitiveData.WATSON_STT_PSWD;
+    
+    public static String sManualInput;
 
     private static String[] tmp;
     
@@ -70,8 +72,17 @@ public class WatsonSpeechRecogniser {
 
         // startRecording recording
         MicrophoneRecorder.startRecording();
+        
+        SpeechResults transcript;
 
-        SpeechResults transcript = service.recognize(MicrophoneRecorder.wavFile, options);
+        try{
+            transcript = service.recognize(MicrophoneRecorder.wavFile, options);
+        } catch(Exception ex){
+            Jervis.jervisSpeak("Watson Speech to Text engine seems to be down, please provide the input manually");
+            textInputGUI TextInputGUI = new textInputGUI();
+            
+            return sManualInput;
+        }
         
         System.out.println(transcript);//debug 
         String finalResult = "";
