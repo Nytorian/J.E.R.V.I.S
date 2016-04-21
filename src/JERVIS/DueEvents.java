@@ -184,8 +184,6 @@ public class DueEvents {
     public static synchronized void todaySchedule(){
         boolean bEventsDue = false;
         
-        Jervis.jervisSpeak("Today's schedule is the following, sir: ");
-        
         for(int i = 0; i < getDueEventsLength(); i++){
             Jervis.jervisSpeak(getTitle(i));
             Jervis.jervisSpeak("at, " + getTime(i));
@@ -195,7 +193,7 @@ public class DueEvents {
         }
         
         if(!bEventsDue){
-            Jervis.jervisSpeak("Actually no events have been scheduled for today, sir");
+            Jervis.jervisSpeak("No events have been scheduled for today, sir");
         }
     }
 }

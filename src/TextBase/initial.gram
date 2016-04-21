@@ -4,7 +4,6 @@ grammar dialog;
 
 <menu_command> = ( [hey | hello] jervis
                    | hello
-                   | help [me]
                    | good (morning | afternoon | evening) [jervis]  
                    | how are you                
                    | [what is | what's] my* (((your | my) name) | schedule 
@@ -19,7 +18,7 @@ grammar dialog;
                    | [a] medium [please]
                    | [a] long [please]
                    | open [a] (website | location | (help [tab]))
-                   | thank you
+                   | thank you [jervis]
                    | thanks [jervis]
                    | translate [please]
                    | [please] remember [my] ( name | sex | profession | email | location | event )

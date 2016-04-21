@@ -97,13 +97,13 @@ public final class DateGenerator {
         String sDateNumeric = "";
         
         for(int i = 0; i <= DataTables.dateDays[0].length - 1; i++){
-            if(DataTables.dateDays[0][i].startsWith(sTmpDate[0])){
+            if(DataTables.dateDays[0][i].equals(sTmpDate[0])){
                 sDateNumeric = DataTables.dateDays[1][i] + "/";
             }
         }
         
         for(int i = 0; i <= DataTables.dateMonths[0].length - 1; i++){
-            if(DataTables.dateMonths[0][i].startsWith(sTmpDate[1])){
+            if(DataTables.dateMonths[0][i].equals(sTmpDate[1])){
                 sDateNumeric += DataTables.dateMonths[1][i];
             }
         }

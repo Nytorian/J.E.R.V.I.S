@@ -136,7 +136,8 @@ public class Jervis {
             Jervis.bAnimationStart = true;
             
             if(getListening()){
-                if (utterance.equals("jervis")){
+                if (utterance.equals("jervis") ||
+                    utterance.equals("hey jervis")   ){
 
                     jervisSpeak(sJervInit[new Random().nextInt(sJervInit.length)] + sSalutation);
 
@@ -715,7 +716,12 @@ public class Jervis {
         speechRecogniser.stopRecognition();
         jervisSpeak("Please state your sex " + sSalutation);
 
-        String sex = WatsonSpeechRecogniser.recognise(NoteLength.eWord).replace(" ", "");
+        speechRecogniser.setRecogniser(eCMD_GRMR_RCGNSR);
+        speechRecogniser.startRecognition();
+
+        String sex = speechRecogniser.getResult();
+        speechRecogniser.stopRecognition();
+        speechRecogniser.setRecogniser(eINIT_GRMR_RCGNSR);
 
         if(sex.equals("male")  || sex.equals("female")|| sex.equals("Male")  ||
             sex.equals("Female")){

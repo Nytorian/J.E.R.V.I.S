@@ -86,7 +86,12 @@ public class Organiser implements Runnable{
                             == DateGenerator.EventCode.eEVENT_DUE){
                         
                         Jervis.jervisSpeak("The event " + DueEvents.getTitle(index) 
-                                + " is due in " + DueEvents.getTimeToRemind(index) );
+                                + " is due in " + DueEvents.getTimeToRemind(index) + " minutes" );
+                        try {
+                            Thread.sleep(10000);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(Organiser.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     
                     else if(DateGenerator.checkDueEvents(DueEvents.getTime(index), sCurrentTime) 

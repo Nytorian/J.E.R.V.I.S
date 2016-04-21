@@ -12,6 +12,7 @@
 package JERVIS;
 
 import static JERVIS.Jervis.jervisSpeak;
+import TextBase.SensitiveData;
 import java.io.IOException;
 import java.util.Random;
 import org.jsoup.Jsoup;
@@ -51,7 +52,7 @@ public final class InformationFinder {
             String resultText = "";
 
             try {
-                doc = Jsoup.connect("http://www.brainyquote.com/search_results.html?q="+ key)
+                doc = Jsoup.connect(SensitiveData.sQuotes + key)
                           .userAgent("Mozilla")
                           .cookie("auth", "token")
                           .timeout(3000)
@@ -80,7 +81,7 @@ public final class InformationFinder {
             String resultText = "";
 
             try {
-                document = Jsoup.connect("https://en.wikipedia.org/wiki/"+ sQuery)
+                document = Jsoup.connect(SensitiveData.sDefinitions + sQuery)
                           .userAgent("Mozilla")
                           .cookie("auth", "token")
                           .timeout(3000)
@@ -126,7 +127,7 @@ public final class InformationFinder {
         
         for(int i = 0; i < sPlacesPostcodes.length; i++){
             if(sPlacesPostcodes[i].contains(sPlace.replace(" ", ""))){
-                doc = Jsoup.connect("http://www.worldweatheronline.com/v2/weather.aspx?q="+ sPlacesPostcodes[i + 0x1])
+                doc = Jsoup.connect(SensitiveData.sWeather + sPlacesPostcodes[i + 0x1])
                 .userAgent("Mozilla")
                 .cookie("auth", "token")
                 .timeout(3000)

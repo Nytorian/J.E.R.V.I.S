@@ -4,6 +4,8 @@ grammar commands;
 
 <commands> = ( 
                 root
+| male
+| female
 | development
 | university
 | downloads
@@ -13,7 +15,9 @@ grammar commands;
 | windows
 | poster
 | dragon ball z one
+| dragon ball z episode one
 );
+
 
 
 
