@@ -559,7 +559,7 @@ public class Jervis {
      * @throws javax.sound.sampled.LineUnavailableException
     ***************************************************************************/
     public static void jervisOpenWebsite() throws LineUnavailableException{
-        jervisSpeak("What is the address "  + sSalutation + " ?");
+        jervisSpeak("What is the address " + sSalutation + " ?");
         speechRecogniser.stopRecognition();
 
         String url = WatsonSpeechRecogniser.recognise(NoteLength.eWord);
@@ -583,7 +583,7 @@ public class Jervis {
      * @throws javax.sound.sampled.LineUnavailableException
     ***************************************************************************/
     public static void jervisTranslate() throws LineUnavailableException{
-        jervisSpeak("I am listening for the source text"  + sSalutation);
+        jervisSpeak("I am listening for the source text" + sSalutation);
         speechRecogniser.stopRecognition();
 
         String sourceText = WatsonSpeechRecogniser.recognise(NoteLength.eWord);

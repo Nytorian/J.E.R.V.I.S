@@ -57,7 +57,8 @@ public final class InformationFinder {
                           .cookie("auth", "token")
                           .timeout(3000)
                           .get();
-                resultText = doc.select("span[class=bqQuoteLink]").get(new Random().nextInt(3)).text();
+                resultText = doc.select("span[class=bqQuoteLink]").get(new Random().nextInt(5)).text();
+                
             } catch (IOException e) {
             }
             return(resultText);

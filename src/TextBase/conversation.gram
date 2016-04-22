@@ -60,11 +60,13 @@ grammar conversation;
                 | pleased
                 | proud
                 | wonderful
+                | incredible 
 
-
+                | boring
+                | rubbish
                 | awkward
                 | aggressive
-                | agonized
+                | agonised
                 | angry
                 | annoyed
                 | arrogant
@@ -84,6 +86,7 @@ grammar conversation;
                 | guilty
                 | hangover
                 | helpless
+                | horny
                 | horrifying
                 | hurting
                 | hysterical

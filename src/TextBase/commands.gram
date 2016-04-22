@@ -10,7 +10,11 @@ grammar commands;
 | trance
 | books
 | dragon ball z episode one
+| dragon ball z episode two
+| dragon ball z episode three
 );
+
+
 
 
 
