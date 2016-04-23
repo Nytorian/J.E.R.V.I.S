@@ -28,15 +28,12 @@ public class Organiser implements Runnable{
     public static String sCurrentYear;
     public static String sCurrentDayMonth;
     
-    
-    /* run *********************************************************************
+    /* collectEvents ***********************************************************
     ** 29/03/2015  M.Michalski Initial Version
     ***************************************************************************/
-    /** Description: Task for the Organiser thread
+    /** Description: Collects events due within 24h
     ***************************************************************************/
-    @Override
-    public void run(){
-                
+    public static void collectEvents(){
         Calendar now = Calendar.getInstance();
         sCurrentYear = Integer.toString(now.get(Calendar.YEAR));
         
@@ -68,9 +65,24 @@ public class Organiser implements Runnable{
                 }
             } i++;
         }
+    }
+    
+    /* run *********************************************************************
+    ** 29/03/2015  M.Michalski Initial Version
+    ***************************************************************************/
+    /** Description: Task for the Organiser thread
+    ***************************************************************************/
+    @Override
+    public void run(){
+        
+        collectEvents();
         
         while(true){
             String sCurrentTime = DateGenerator.getCurrentTime();
+            
+            if(sCurrentTime.equals("24:1")){
+                collectEvents();
+            }
             
             for(int index = 0; index < DueEvents.getDueEventsLength(); index++){
                 
