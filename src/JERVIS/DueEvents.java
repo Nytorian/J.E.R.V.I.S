@@ -49,7 +49,7 @@ public class DueEvents {
     /**Description: adds title to cache.
      * @param sTitle
     ***************************************************************************/
-    public static synchronized void addTitle(String sTitle){
+    private static synchronized void addTitle(String sTitle){
         DueEvents.title.add(sTitle);
         iSize++;
     }
@@ -71,7 +71,7 @@ public class DueEvents {
     /**Description: adds month to cache.
      * @param sDayMonth
     ***************************************************************************/
-    public static synchronized void addDayMonth(String sDayMonth){
+    private static synchronized void addDayMonth(String sDayMonth){
         dayMonth.add(sDayMonth);
     }
     
@@ -92,7 +92,7 @@ public class DueEvents {
     /**Description: adds year to cache.
      * @param sYear
     ***************************************************************************/
-    public static synchronized void addYear(String sYear){
+    private static synchronized void addYear(String sYear){
         year.add(sYear);
     }
     
@@ -113,7 +113,7 @@ public class DueEvents {
     /**Description: adds time to cache.
      * @param sTime
     ***************************************************************************/
-    public static synchronized void addTime(String sTime){
+    private static synchronized void addTime(String sTime){
         time.add(sTime);
     }
     
@@ -134,7 +134,7 @@ public class DueEvents {
     /**Description: adds time to remind to cache.
      * @param sTimeToRemind
     ***************************************************************************/
-    public static synchronized void addTimeToRemind(String sTimeToRemind){
+    private static synchronized void addTimeToRemind(String sTimeToRemind){
         timeToRemind.add(sTimeToRemind);
     }
     

@@ -33,7 +33,7 @@ public class Organiser implements Runnable{
     ***************************************************************************/
     /** Description: Collects events due within 24h
     ***************************************************************************/
-    public static void collectEvents(){
+    private static void collectEvents(){
         Calendar now = Calendar.getInstance();
         sCurrentYear = Integer.toString(now.get(Calendar.YEAR));
         

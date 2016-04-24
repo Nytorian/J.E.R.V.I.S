@@ -25,10 +25,11 @@ public class MicrophoneRecorder {
     static final long RECORD_LONG   = 15000; //15sec
     
     public static File wavFile = new File("RecordBuffer.wav");
-    public static AudioFileFormat.Type fileType = AudioFileFormat.Type.WAVE;
-    public static AudioInputStream audioInputStream;
-    public static TargetDataLine dataLine;
-    public static AudioFormat audioFormat;
+    
+    private static AudioFileFormat.Type fileType = AudioFileFormat.Type.WAVE;
+    private static AudioInputStream audioInputStream;
+    private static TargetDataLine dataLine;
+    private static AudioFormat audioFormat;
  
     /*  startRecording *********************************************************
     **  16/02/2016  M.Michalski Initial Version
@@ -65,7 +66,7 @@ public class MicrophoneRecorder {
     /**Description: Defines and returns audio format
      * @return 
     ***************************************************************************/  
-    public static AudioFormat getAudioFormat(){
+    private static AudioFormat getAudioFormat(){
         
         float sampleRate  = 16000;
         int sampleSize    = 8;
