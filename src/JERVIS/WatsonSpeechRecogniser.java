@@ -84,7 +84,6 @@ public class WatsonSpeechRecogniser {
             return sManualInput;
         }
         
-        System.out.println(transcript);//debug 
         String finalResult = "";
         
         try (JsonReader reader = Json.createReader(new StringReader(transcript.toString()))){

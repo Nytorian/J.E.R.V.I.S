@@ -24,7 +24,7 @@ public class NotepadWrapper {
     /*  writeNoteData **************************************************************
     **  16/02/2016  M.Michalski Initial Version
     ***************************************************************************/
-    /**Description: Writes specified data to to the notepad file
+    /**Description: Writes passed data to the specified notepad file
      * @param title
      * @param content
     ****************************************************************************/ 
@@ -48,10 +48,10 @@ public class NotepadWrapper {
         }
     }
     
-    /*  writeNoteData **************************************************************
+    /*  readNoteData **************************************************************
     **  16/02/2016  M.Michalski Initial Version
     ***************************************************************************/
-    /**Description: Writes specified data to to the notepad file
+    /**Description: Reads data from the file specified by the argument
      * @param title
      * @return 
      * @throws java.io.FileNotFoundException
@@ -74,7 +74,8 @@ public class NotepadWrapper {
     /*  addToGram **************************************************************
     **  03/04/2016  M.Michalski Initial Version
     ***************************************************************************/
-    /**Description: Writes specified data to a gram file
+    /**Description: Extends specified JSGF file by entires passed as sContent
+     * argument.
      * @param sTitle
      * @param sContent
      * @throws java.io.FileNotFoundException

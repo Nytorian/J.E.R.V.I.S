@@ -54,7 +54,6 @@ public final class InformationFinder {
             try {
                 doc = Jsoup.connect(SensitiveData.sQuotes + key)
                           .userAgent("Mozilla")
-                          .cookie("auth", "token")
                           .timeout(3000)
                           .get();
                 resultText = doc.select("span[class=bqQuoteLink]").get(new Random().nextInt(5)).text();
@@ -99,7 +98,7 @@ public final class InformationFinder {
                     for(Element element : liElements){
                         if(i > 4)
                             break;
-                        resultText = element.text().toLowerCase().replaceAll("\\[()", "").replaceAll("\\]/", "");
+                        resultText = element.text().toLowerCase().replaceAll("\\[\\d+\\]", "");
                         jervisSpeak(resultText);
                         Thread.sleep(400);//Pause between the list
                         i++;
